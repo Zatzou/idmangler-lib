@@ -73,7 +73,6 @@ pub(crate) fn encode_varint(value: i64) -> Vec<u8> {
     let mut numofbytes = 1;
     let mut temp = value >> 7;
     while temp != 0 {
-        println!("{temp}");
         numofbytes += 1;
         temp >>= 7;
     }
