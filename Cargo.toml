@@ -1,5 +1,9 @@
 [package]
 name = "idmangler-lib"
+authors = ["Zatzou"]
+repository = "https://github.com/Zatzou/idmangler-lib"
+readme = "readme.md"
+license = "LGPL-3.0"
 version = "0.1.0"
 edition = "2021"
 
