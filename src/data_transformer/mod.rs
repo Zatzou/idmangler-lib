@@ -67,6 +67,8 @@ pub fn decode<B: Iterator<Item = u8>>(bytes: &mut B) -> Result<Vec<AnyData>, Dec
             3 => out.push(AnyData::IdentificationData(
                 IdentificationData::decode_data(bytes, ver)?,
             )),
+            // TODO: powder decode
+            5 => out.push(AnyData::RerollData(RerollData::decode_data(bytes, ver)?)),
             // TODO
             255 => out.push(AnyData::EndData(EndData::decode_data(bytes, ver)?)),
             _ => return Err(DecodeError::UnknownTransformer(id)),
