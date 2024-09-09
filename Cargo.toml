@@ -1,5 +1,6 @@
 [package]
 name = "idmangler-lib"
+description = "Library for encoding and decoding Wynntils id strings"
 authors = ["Zatzou"]
 repository = "https://github.com/Zatzou/idmangler-lib"
 readme = "readme.md"
