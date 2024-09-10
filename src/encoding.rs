@@ -1,3 +1,7 @@
+//! Encoding utilities provided by this library
+//!
+//! This module provides the encoding and decoding functions for the private-use area encoding used by wynntils.
+
 use crate::data_transformer::DecodeError;
 
 /// Encode bytes into a string using the wynntils byte encoding scheme
@@ -61,6 +65,7 @@ pub fn decode_string(data: &str) -> Vec<u8> {
     out
 }
 
+/// Encode an integer of variable size (up to i64) into bytes using the format which wynntils uses
 pub(crate) fn encode_varint(value: i64) -> Vec<u8> {
     // zigzag encoding magic
     // removes sign bit so values are only positive
@@ -92,6 +97,7 @@ pub(crate) fn encode_varint(value: i64) -> Vec<u8> {
     outbytes
 }
 
+/// Decode a variable sized integer (max i64) from the identification data bytestream
 pub(crate) fn decode_varint<B: Iterator<Item = u8>>(bytes: &mut B) -> Result<i64, DecodeError> {
     let mut value = 0;
 
