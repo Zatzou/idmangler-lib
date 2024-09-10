@@ -10,9 +10,15 @@ use super::{
     DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
+/// Struct for holding the identifications data as its encoded
 #[derive(Debug, Clone)]
 pub struct IdentificationData {
+    /// The identifications
     pub identifications: Vec<Stat>,
+    /// Whether or not extended encoding is used or to be used for encoding.
+    ///
+    /// If extended encoding is used then all values will have their base values and rolls encoded.
+    /// Without extended encoding only the rolls are encoded and pre-identified values are ignored.
     pub extended_encoding: bool,
 }
 

@@ -1,3 +1,5 @@
+//! The main module for transforming data between structs and the encoded format
+
 use enddata::EndData;
 use identdata::IdentificationData;
 use namedata::NameData;
@@ -9,21 +11,32 @@ use typedata::TypeData;
 
 use crate::types::transform::TransformVersion;
 
+/// The transformer for the end data
 pub mod enddata;
+/// The transformer for identification data
 pub mod identdata;
+/// The transformer for item name data
 pub mod namedata;
+/// The transformer for powder data
 pub mod powderdata;
+/// The transformer for reroll data
 pub mod rerolldata;
+/// The transformer for shiny data
 pub mod shinydata;
+/// The transformer for start data
 pub mod startdata;
+/// The transformer for the item type data
 pub mod typedata;
 
+/// Trait for providing the id of the transformer
 pub trait TransformId {
     /// Get the id of this transformer
     fn get_id() -> u8;
 }
 
+/// Trait for using a transformer to encode data into bytes
 pub trait DataEncoder: TransformId {
+    /// Function for encoding the full data block of this data
     fn encode(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         // skip encoding data which should not be encoded
         if !self.should_encode_data(ver) {
@@ -39,6 +52,7 @@ pub trait DataEncoder: TransformId {
         Ok(())
     }
 
+    /// Function for encoding the payload of this data
     fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError>;
 
     /// Whether or not this encoder should actually encode anything
@@ -47,12 +61,15 @@ pub trait DataEncoder: TransformId {
     }
 }
 
+/// Trait for decoding data from bytes
 pub trait DataDecoder<B: Iterator<Item = u8>>: TransformId {
+    /// Decode the data from a given byte stream
     fn decode_data(bytes: &mut B, ver: TransformVersion) -> Result<Self, DecodeError>
     where
         Self: Sized;
 }
 
+/// Function for fully decoding an idstring given its bytes.
 pub fn decode<B: Iterator<Item = u8>>(bytes: &mut B) -> Result<Vec<AnyData>, DecodeError> {
     let mut out = Vec::new();
 
@@ -122,6 +139,7 @@ pub enum DecodeError {
     UnexpectedEndOfBytes,
 }
 
+/// Enum representing the ids of the transformers
 pub enum DataTransformerTypes {
     StartDataTransformer = 0,
     TypeDataTransformer = 1,

@@ -2,6 +2,7 @@ use crate::types::transform::TransformVersion;
 
 use super::{DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId};
 
+/// The start data of the encoding. The start data holds the version of the encoding to be used
 #[derive(Debug, Clone)]
 pub struct StartData(pub TransformVersion);
 

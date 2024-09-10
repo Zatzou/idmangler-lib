@@ -3,7 +3,11 @@ use crate::{encoding::encode_varint, types::transform::TransformVersion};
 use super::{DataEncoder, DataTransformerTypes, EncodeError, TransformId};
 
 pub struct ShinyData {
+    /// The id of the Shiny stat
+    ///
+    /// The ids can be found on <https://github.com/Wynntils/Static-Storage/blob/main/Data-Storage/shiny_stats.json>
     pub id: u8,
+    /// The value of the given shiny stat
     pub val: i64,
 }
 

@@ -4,7 +4,9 @@ use super::{DataEncoder, DataTransformerTypes, EncodeError, TransformId};
 
 #[derive(Debug, Clone)]
 pub struct PowderData {
+    /// The number of powder slots on this item
     pub powder_slots: u8,
+    /// The powders on this item along with the tier of the powders (currently unused as wynntils does not encode this data)
     pub powders: Vec<(Powders, u8)>,
 }
 
