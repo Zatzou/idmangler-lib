@@ -9,7 +9,7 @@ use super::{
 pub struct RerollData(pub u8);
 
 impl TransformId for RerollData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::RerollDataTransformer as u8;
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::RerollData as u8;
 }
 
 impl DataEncoder for RerollData {

@@ -12,7 +12,7 @@ pub struct PowderData {
 }
 
 impl TransformId for PowderData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::PowderDataTransformer as u8;
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::PowderData as u8;
 }
 
 impl DataEncoder for PowderData {

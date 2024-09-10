@@ -20,7 +20,7 @@ pub struct IdentificationData {
 }
 
 impl TransformId for IdentificationData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::IdentificationDataTransformer as u8;
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::IdentificationData as u8;
 }
 
 impl DataEncoder for IdentificationData {

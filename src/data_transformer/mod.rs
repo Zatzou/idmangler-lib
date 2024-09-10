@@ -42,7 +42,7 @@ pub(crate) trait TransformId {
     const TRANSFORMER_ID: u8;
 }
 
-/// Trait for using a transformer to encode data into bytes
+/// Trait for encoding data into bytes
 #[allow(private_bounds)]
 pub trait DataEncoder: TransformId {
     /// Function for encoding the full data block of this data
@@ -82,8 +82,8 @@ pub trait DataDecoder: TransformId {
         Self: Sized;
 }
 
-/// Function for fully decoding an idstring given its bytes.
-pub fn decode(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
+/// Decode the bytes contained within an idstring
+pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
     let mut out = Vec::new();
 
     let mut iter = bytes.iter().copied();
@@ -158,25 +158,26 @@ pub enum DecodeError {
 /// Enum representing the ids of the transformers
 #[allow(unused)] // TODO: implement rest of the transformers
 enum DataTransformerTypes {
-    StartDataTransformer = 0,
-    TypeDataTransformer = 1,
-    NameDataTransformer = 2,
-    IdentificationDataTransformer = 3,
-    PowderDataTransformer = 4,
-    RerollDataTransformer = 5,
-    ShinyDataTransformer = 6,
-    CustomGearTypeTransformer = 7,
-    DurabilityDataTransformer = 8,
-    RequirementsDataTransformer = 9,
-    DamageDataTransformer = 10,
-    DefenseDataTransformer = 11,
-    CustomIdentificationDataTransformer = 12,
-    CustomConsumableTypeDataTransformer = 13,
-    UsesDataTransformer = 14,
-    EffectsDataTransformer = 15,
-    EndDataTransformer = 255,
+    StartData = 0,
+    TypeData = 1,
+    NameData = 2,
+    IdentificationData = 3,
+    PowderData = 4,
+    RerollData = 5,
+    ShinyData = 6,
+    CustomGearType = 7,
+    DurabilityData = 8,
+    RequirementsData = 9,
+    DamageData = 10,
+    DefenseData = 11,
+    CustomIdentificationData = 12,
+    CustomConsumableTypeData = 13,
+    UsesData = 14,
+    EffectsData = 15,
+    EndData = 255,
 }
 
+/// Represents any possible item data type
 #[derive(Debug)]
 pub enum AnyData {
     StartData(StartData),
@@ -185,6 +186,7 @@ pub enum AnyData {
     IdentificationData(IdentificationData),
     PowderData(PowderData),
     RerollData(RerollData),
+    ShinyData(ShinyData),
     // TODO
     EndData(EndData),
 }

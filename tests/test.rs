@@ -1,10 +1,8 @@
 use idmangler_lib::{
-    data_transformer::{
-        DataEncoder, EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData,
-        StartData, TypeData,
-    },
     encoding::encode_string,
     types::{ItemType, Powders, RollType, Stat, TransformVersion},
+    DataEncoder, EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData,
+    StartData, TypeData,
 };
 
 #[test]

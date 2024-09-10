@@ -9,7 +9,7 @@ use super::{
 pub struct NameData(pub String);
 
 impl TransformId for NameData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::NameDataTransformer as u8;
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::NameData as u8;
 }
 
 impl DataEncoder for NameData {

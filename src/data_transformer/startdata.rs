@@ -7,7 +7,7 @@ use super::{DataEncoder, DataTransformerTypes, DecodeError, EncodeError, Transfo
 pub struct StartData(pub TransformVersion);
 
 impl TransformId for StartData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::StartDataTransformer as u8;
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::StartData as u8;
 }
 
 impl DataEncoder for StartData {
@@ -27,7 +27,7 @@ impl StartData {
     ) -> Result<TransformVersion, DecodeError> {
         let idbyte = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
-        if idbyte != DataTransformerTypes::StartDataTransformer as u8 {
+        if idbyte != DataTransformerTypes::StartData as u8 {
             return Err(DecodeError::NoStartBlock);
         }
 
