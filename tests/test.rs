@@ -1,0 +1,187 @@
+use idmangler_lib::{
+    data_transformer::{
+        enddata::EndData, identdata::IdentificationData, namedata::NameData,
+        powderdata::PowderData, rerolldata::RerollData, shinydata::ShinyData, startdata::StartData,
+        typedata::TypeData, DataEncoder,
+    },
+    encoding::encode_string,
+    types::{
+        itemtype::ItemType,
+        powder::Powders,
+        stat::{RollType, Stat},
+        transform::TransformVersion,
+    },
+};
+
+#[test]
+fn encode_simple_item() {
+    let mut out = Vec::new();
+    let ver = TransformVersion::Version1;
+
+    // start data
+    StartData(ver).encode(ver, &mut out).unwrap();
+
+    // type data
+    TypeData(ItemType::Gear).encode(ver, &mut out).unwrap();
+
+    // name data
+    NameData(String::from("Breezehands"))
+        .encode(ver, &mut out)
+        .unwrap();
+
+    // identifications
+    IdentificationData {
+        identifications: vec![
+            Stat {
+                kind: 81,
+                base: Some(5),
+                roll: RollType::PreIdentified,
+            },
+            Stat {
+                kind: 45,
+                base: Some(1),
+                roll: RollType::PreIdentified,
+            },
+        ],
+        extended_encoding: true,
+    }
+    .encode(ver, &mut out)
+    .unwrap();
+
+    // end data
+    EndData.encode(ver, &mut out).unwrap();
+
+    // do the final encode
+    let outstr = encode_string(&out);
+
+    // compare to an item encoded by wynntils
+    assert_eq!(&outstr, "󰀀󰄀󰉂󷉥󶕺󶕨󶅮󶑳󰀃󰀁󰉑󰨭󰋿");
+}
+
+#[test]
+fn encode_complex_item() {
+    let mut out = Vec::new();
+    let ver = TransformVersion::Version1;
+
+    // start data
+    StartData(ver).encode(ver, &mut out).unwrap();
+
+    // type data
+    TypeData(ItemType::Gear).encode(ver, &mut out).unwrap();
+
+    // name data
+    NameData(String::from("Immolation"))
+        .encode(ver, &mut out)
+        .unwrap();
+
+    // identifications
+    IdentificationData {
+        identifications: vec![
+            Stat {
+                kind: 24,
+                base: None,
+                roll: RollType::Value(81),
+            },
+            Stat {
+                kind: 23,
+                base: None,
+                roll: RollType::Value(73),
+            },
+            Stat {
+                kind: 18,
+                base: None,
+                roll: RollType::Value(75),
+            },
+            Stat {
+                kind: 4,
+                base: None,
+                roll: RollType::Value(102),
+            },
+            Stat {
+                kind: 2,
+                base: None,
+                roll: RollType::Value(48),
+            },
+        ],
+        extended_encoding: false,
+    }
+    .encode(ver, &mut out)
+    .unwrap();
+
+    // powders
+    PowderData {
+        powder_slots: 3,
+        powders: vec![(Powders::AIR, 0), (Powders::FIRE, 0), (Powders::FIRE, 0)],
+    }
+    .encode(ver, &mut out)
+    .unwrap();
+
+    // Rerolls
+    RerollData(4).encode(ver, &mut out).unwrap();
+
+    // Shiny
+    ShinyData { id: 6, val: 0 }.encode(ver, &mut out).unwrap();
+
+    // end data
+    EndData.encode(ver, &mut out).unwrap();
+
+    let outstr = encode_string(&out);
+
+    assert_eq!(&outstr, "󰀀󰄀󰉉󶵭󶽬󶅴󶥯󶸀󰌅󰀘󵄗󴤒󴬄󶘂󳀄󰌃󿘰󰔄󰘆󰃿");
+}
+
+#[test]
+fn encode_negval_ids() {
+    let mut out = Vec::new();
+    let ver = TransformVersion::Version1;
+
+    // start data
+    StartData(ver).encode(ver, &mut out).unwrap();
+
+    // type data
+    TypeData(ItemType::Gear).encode(ver, &mut out).unwrap();
+
+    // name data
+    NameData(String::from("Ghostly Cap"))
+        .encode(ver, &mut out)
+        .unwrap();
+
+    // identifications
+    IdentificationData {
+        identifications: vec![
+            Stat {
+                kind: 35,
+                base: Some(4),
+                roll: RollType::Value(125),
+            },
+            Stat {
+                kind: 61,
+                base: Some(65),
+                roll: RollType::Value(44),
+            },
+            Stat {
+                kind: 33,
+                base: Some(-6),
+                roll: RollType::Value(126),
+            },
+        ],
+        extended_encoding: true,
+    }
+    .encode(ver, &mut out)
+    .unwrap();
+
+    // Wynntils encodes an empty powderdata
+    PowderData {
+        powder_slots: 2,
+        powders: Vec::new(),
+    }
+    .encode(ver, &mut out)
+    .unwrap();
+
+    // end data
+    EndData.encode(ver, &mut out).unwrap();
+
+    let outstr = encode_string(&out);
+
+    assert_eq!(&outstr, "󰀀󰄀󰉇󶡯󷍴󶱹󲁃󶅰󰀃󰌁󰀣󰡽󳶂󰄬󲄋󷸄󰈀􏿮");
+}
