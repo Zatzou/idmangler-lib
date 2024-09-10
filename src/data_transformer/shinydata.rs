@@ -2,6 +2,8 @@ use crate::{encoding::encode_varint, types::TransformVersion};
 
 use super::{DataEncoder, DataTransformerTypes, EncodeError, TransformId};
 
+/// The transformer for shiny data
+#[derive(Debug, Clone)]
 pub struct ShinyData {
     /// The id of the Shiny stat
     ///

@@ -4,6 +4,7 @@ use super::{
     DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
+/// The transformer for the end data
 #[derive(Debug, Clone)]
 pub struct EndData;
 

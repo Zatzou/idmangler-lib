@@ -7,7 +7,7 @@ use super::{
     DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
-/// Struct for holding the identifications data as its encoded
+/// The transformer for identification data
 #[derive(Debug, Clone)]
 pub struct IdentificationData {
     /// The identifications

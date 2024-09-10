@@ -2,6 +2,7 @@ use crate::types::{Powders, TransformVersion};
 
 use super::{DataEncoder, DataTransformerTypes, EncodeError, TransformId};
 
+/// The transformer for powder data
 #[derive(Debug, Clone)]
 pub struct PowderData {
     /// The number of powder slots on this item

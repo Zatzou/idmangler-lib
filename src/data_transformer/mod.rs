@@ -1,32 +1,40 @@
 //! The main module for transforming data between structs and the encoded format
 
-use enddata::EndData;
-use identdata::IdentificationData;
-use namedata::NameData;
-use powderdata::PowderData;
-use rerolldata::RerollData;
-use startdata::StartData;
 use thiserror::Error;
-use typedata::TypeData;
 
 use crate::types::TransformVersion;
 
-/// The transformer for the end data
-pub mod enddata;
-/// The transformer for identification data
-pub mod identdata;
-/// The transformer for item name data
-pub mod namedata;
-/// The transformer for powder data
-pub mod powderdata;
-/// The transformer for reroll data
-pub mod rerolldata;
-/// The transformer for shiny data
-pub mod shinydata;
-/// The transformer for start data
-pub mod startdata;
-/// The transformer for the item type data
-pub mod typedata;
+mod enddata;
+#[doc(inline)]
+pub use enddata::EndData;
+
+mod identdata;
+#[doc(inline)]
+pub use identdata::IdentificationData;
+
+mod namedata;
+#[doc(inline)]
+pub use namedata::NameData;
+
+mod powderdata;
+#[doc(inline)]
+pub use powderdata::PowderData;
+
+mod rerolldata;
+#[doc(inline)]
+pub use rerolldata::RerollData;
+
+mod shinydata;
+#[doc(inline)]
+pub use shinydata::ShinyData;
+
+mod startdata;
+#[doc(inline)]
+pub use startdata::StartData;
+
+mod typedata;
+#[doc(inline)]
+pub use typedata::TypeData;
 
 /// Trait for providing the id of the transformer
 pub trait TransformId {

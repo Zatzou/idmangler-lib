@@ -4,6 +4,7 @@ use super::{
     DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
+/// The transformer for item name data
 #[derive(Debug, Clone)]
 pub struct NameData(pub String);
 
