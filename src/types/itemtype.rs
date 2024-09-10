@@ -1,3 +1,4 @@
+/// Enum for encoding the type of an item the idstring represents
 #[repr(u8)]
 #[derive(Clone, Copy, Debug)]
 pub enum ItemType {
