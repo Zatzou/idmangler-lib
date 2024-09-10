@@ -1,9 +1,6 @@
 use crate::{
     encoding::{decode_varint, encode_varint},
-    types::{
-        stat::{RollType, Stat},
-        transform::TransformVersion,
-    },
+    types::{RollType, Stat, TransformVersion},
 };
 
 use super::{

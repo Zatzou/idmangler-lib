@@ -5,12 +5,7 @@ use idmangler_lib::{
         typedata::TypeData, DataEncoder,
     },
     encoding::encode_string,
-    types::{
-        itemtype::ItemType,
-        powder::Powders,
-        stat::{RollType, Stat},
-        transform::TransformVersion,
-    },
+    types::{ItemType, Powders, RollType, Stat, TransformVersion},
 };
 
 #[test]

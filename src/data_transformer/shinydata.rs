@@ -1,4 +1,4 @@
-use crate::{encoding::encode_varint, types::transform::TransformVersion};
+use crate::{encoding::encode_varint, types::TransformVersion};
 
 use super::{DataEncoder, DataTransformerTypes, EncodeError, TransformId};
 
@@ -16,11 +16,7 @@ impl TransformId for ShinyData {
 }
 
 impl DataEncoder for ShinyData {
-    fn encode_data(
-        &self,
-        ver: crate::types::transform::TransformVersion,
-        out: &mut Vec<u8>,
-    ) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
             TransformVersion::Version1 => {
                 out.push(self.id);

@@ -9,7 +9,7 @@ use startdata::StartData;
 use thiserror::Error;
 use typedata::TypeData;
 
-use crate::types::transform::TransformVersion;
+use crate::types::TransformVersion;
 
 /// The transformer for the end data
 pub mod enddata;

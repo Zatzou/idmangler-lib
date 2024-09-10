@@ -1,4 +1,4 @@
-use crate::types::{powder::Powders, transform::TransformVersion};
+use crate::types::{Powders, TransformVersion};
 
 use super::{DataEncoder, DataTransformerTypes, EncodeError, TransformId};
 

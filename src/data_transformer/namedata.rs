@@ -1,4 +1,4 @@
-use crate::types::transform::TransformVersion;
+use crate::types::TransformVersion;
 
 use super::{
     DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,

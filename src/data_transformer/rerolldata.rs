@@ -1,4 +1,4 @@
-use crate::types::transform::TransformVersion;
+use crate::types::TransformVersion;
 
 use super::{
     DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
@@ -14,7 +14,7 @@ impl TransformId for RerollData {
 impl DataEncoder for RerollData {
     fn encode_data(
         &self,
-        ver: crate::types::transform::TransformVersion,
+        ver: crate::types::TransformVersion,
         out: &mut Vec<u8>,
     ) -> Result<(), EncodeError> {
         match ver {
