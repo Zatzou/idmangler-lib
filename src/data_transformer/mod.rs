@@ -37,12 +37,13 @@ mod typedata;
 pub use typedata::TypeData;
 
 /// Trait for providing the id of the transformer
-pub trait TransformId {
+pub(crate) trait TransformId {
     /// The id of this transformer
     const TRANSFORMER_ID: u8;
 }
 
 /// Trait for using a transformer to encode data into bytes
+#[allow(private_bounds)]
 pub trait DataEncoder: TransformId {
     /// Function for encoding the full data block of this data
     fn encode(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
@@ -70,6 +71,7 @@ pub trait DataEncoder: TransformId {
 }
 
 /// Trait for decoding data from bytes
+#[allow(private_bounds)]
 pub trait DataDecoder<B: Iterator<Item = u8>>: TransformId {
     /// Decode the data from a given byte stream
     fn decode_data(bytes: &mut B, ver: TransformVersion) -> Result<Self, DecodeError>
@@ -148,7 +150,8 @@ pub enum DecodeError {
 }
 
 /// Enum representing the ids of the transformers
-pub enum DataTransformerTypes {
+#[allow(unused)] // TODO: implement rest of the transformers
+enum DataTransformerTypes {
     StartDataTransformer = 0,
     TypeDataTransformer = 1,
     NameDataTransformer = 2,
