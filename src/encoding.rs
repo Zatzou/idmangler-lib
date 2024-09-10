@@ -6,7 +6,7 @@ use crate::data_transformer::DecodeError;
 
 /// Encode bytes into a string using the wynntils byte encoding scheme
 ///
-/// https://github.com/Wynntils/Wynntils/blob/main/common/src/main/java/com/wynntils/utils/EncodedByteBuffer.java#L87
+/// <https://github.com/Wynntils/Wynntils/blob/main/common/src/main/java/com/wynntils/utils/EncodedByteBuffer.java#L87>
 pub fn encode_string(data: &[u8]) -> String {
     let mut out = String::new();
 
@@ -31,7 +31,7 @@ pub fn encode_string(data: &[u8]) -> String {
 ///
 /// This function does not check whether or not the encoded data is valid
 ///
-/// https://github.com/Wynntils/Wynntils/blob/main/common/src/main/java/com/wynntils/utils/EncodedByteBuffer.java#L33
+/// <https://github.com/Wynntils/Wynntils/blob/main/common/src/main/java/com/wynntils/utils/EncodedByteBuffer.java#L33>
 pub fn decode_string(data: &str) -> Vec<u8> {
     let mut out = Vec::new();
 
