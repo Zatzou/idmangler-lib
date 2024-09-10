@@ -30,8 +30,8 @@ pub mod typedata;
 
 /// Trait for providing the id of the transformer
 pub trait TransformId {
-    /// Get the id of this transformer
-    fn get_id() -> u8;
+    /// The id of this transformer
+    const TRANSFORMER_ID: u8;
 }
 
 /// Trait for using a transformer to encode data into bytes
@@ -44,7 +44,7 @@ pub trait DataEncoder: TransformId {
         }
 
         // encode the id
-        out.push(Self::get_id());
+        out.push(Self::TRANSFORMER_ID);
 
         // encode the data
         self.encode_data(ver, out)?;

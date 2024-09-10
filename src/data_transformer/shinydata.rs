@@ -12,9 +12,7 @@ pub struct ShinyData {
 }
 
 impl TransformId for ShinyData {
-    fn get_id() -> u8 {
-        DataTransformerTypes::ShinyDataTransformer as u8
-    }
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::ShinyDataTransformer as u8;
 }
 
 impl DataEncoder for ShinyData {

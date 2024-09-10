@@ -8,9 +8,7 @@ use super::{
 pub struct EndData;
 
 impl TransformId for EndData {
-    fn get_id() -> u8 {
-        DataTransformerTypes::EndDataTransformer as u8
-    }
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::EndDataTransformer as u8;
 }
 
 impl DataEncoder for EndData {

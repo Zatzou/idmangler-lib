@@ -8,9 +8,7 @@ use super::{
 pub struct TypeData(pub ItemType);
 
 impl TransformId for TypeData {
-    fn get_id() -> u8 {
-        DataTransformerTypes::TypeDataTransformer as u8
-    }
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::TypeDataTransformer as u8;
 }
 
 impl DataEncoder for TypeData {

@@ -7,9 +7,7 @@ use super::{DataEncoder, DataTransformerTypes, DecodeError, EncodeError, Transfo
 pub struct StartData(pub TransformVersion);
 
 impl TransformId for StartData {
-    fn get_id() -> u8 {
-        DataTransformerTypes::StartDataTransformer as u8
-    }
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::StartDataTransformer as u8;
 }
 
 impl DataEncoder for StartData {
