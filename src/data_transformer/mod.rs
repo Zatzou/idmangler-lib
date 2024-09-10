@@ -72,16 +72,22 @@ pub trait DataEncoder: TransformId {
 
 /// Trait for decoding data from bytes
 #[allow(private_bounds)]
-pub trait DataDecoder<B: Iterator<Item = u8>>: TransformId {
+pub trait DataDecoder: TransformId {
     /// Decode the data from a given byte stream
-    fn decode_data(bytes: &mut B, ver: TransformVersion) -> Result<Self, DecodeError>
+    fn decode_data(
+        bytes: &mut impl Iterator<Item = u8>,
+        ver: TransformVersion,
+    ) -> Result<Self, DecodeError>
     where
         Self: Sized;
 }
 
 /// Function for fully decoding an idstring given its bytes.
-pub fn decode<B: Iterator<Item = u8>>(bytes: &mut B) -> Result<Vec<AnyData>, DecodeError> {
+pub fn decode(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
     let mut out = Vec::new();
+
+    let mut iter = bytes.iter().copied();
+    let bytes = &mut iter;
 
     // decode the start byte and version
     let ver = StartData::decode_start_bytes(bytes)?;

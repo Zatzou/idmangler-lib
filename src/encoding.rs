@@ -98,7 +98,7 @@ pub(crate) fn encode_varint(value: i64) -> Vec<u8> {
 }
 
 /// Decode a variable sized integer (max i64) from the identification data bytestream
-pub(crate) fn decode_varint<B: Iterator<Item = u8>>(bytes: &mut B) -> Result<i64, DecodeError> {
+pub(crate) fn decode_varint(bytes: &mut impl Iterator<Item = u8>) -> Result<i64, DecodeError> {
     let mut value = 0;
 
     let mut data = Vec::new();

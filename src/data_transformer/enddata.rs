@@ -19,8 +19,11 @@ impl DataEncoder for EndData {
     }
 }
 
-impl<B: Iterator<Item = u8>> DataDecoder<B> for EndData {
-    fn decode_data(_bytes: &mut B, _ver: TransformVersion) -> Result<Self, DecodeError>
+impl DataDecoder for EndData {
+    fn decode_data(
+        _bytes: &mut impl Iterator<Item = u8>,
+        _ver: TransformVersion,
+    ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {

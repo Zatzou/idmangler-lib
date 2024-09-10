@@ -32,8 +32,11 @@ impl DataEncoder for NameData {
     }
 }
 
-impl<B: Iterator<Item = u8>> DataDecoder<B> for NameData {
-    fn decode_data(bytes: &mut B, ver: TransformVersion) -> Result<Self, DecodeError>
+impl DataDecoder for NameData {
+    fn decode_data(
+        bytes: &mut impl Iterator<Item = u8>,
+        ver: TransformVersion,
+    ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {

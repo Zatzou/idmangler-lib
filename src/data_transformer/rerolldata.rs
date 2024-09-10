@@ -26,8 +26,11 @@ impl DataEncoder for RerollData {
     }
 }
 
-impl<B: Iterator<Item = u8>> DataDecoder<B> for RerollData {
-    fn decode_data(bytes: &mut B, ver: TransformVersion) -> Result<Self, DecodeError>
+impl DataDecoder for RerollData {
+    fn decode_data(
+        bytes: &mut impl Iterator<Item = u8>,
+        ver: TransformVersion,
+    ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
