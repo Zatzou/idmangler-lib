@@ -4,7 +4,7 @@ use crate::{
 };
 
 use super::{
-    DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
 /// The transformer for identification data
@@ -174,5 +174,11 @@ impl DataDecoder for IdentificationData {
                 })
             }
         }
+    }
+}
+
+impl From<IdentificationData> for AnyData {
+    fn from(value: IdentificationData) -> Self {
+        Self::IdentificationData(value)
     }
 }

@@ -1,7 +1,7 @@
 use crate::types::TransformVersion;
 
 use super::{
-    DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
 /// The transformer for the end data
@@ -29,5 +29,11 @@ impl DataDecoder for EndData {
     {
         // end data is always empty
         Ok(Self)
+    }
+}
+
+impl From<EndData> for AnyData {
+    fn from(value: EndData) -> Self {
+        AnyData::EndData(value)
     }
 }

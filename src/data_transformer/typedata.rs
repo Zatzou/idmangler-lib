@@ -1,7 +1,7 @@
 use crate::types::{ItemType, TransformVersion};
 
 use super::{
-    DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
 /// The transformer for the item type data
@@ -37,5 +37,11 @@ impl DataDecoder for TypeData {
                 Ok(Self(ItemType::try_from(b)?))
             }
         }
+    }
+}
+
+impl From<TypeData> for AnyData {
+    fn from(value: TypeData) -> Self {
+        Self::TypeData(value)
     }
 }

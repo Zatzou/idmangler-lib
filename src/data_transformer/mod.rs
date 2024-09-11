@@ -72,7 +72,7 @@ pub trait DataEncoder: TransformId {
 
 /// Trait for decoding data from bytes
 #[allow(private_bounds)]
-pub trait DataDecoder: TransformId {
+pub trait DataDecoder: TransformId + Into<AnyData> {
     /// Decode the data from a given byte stream
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
@@ -98,16 +98,14 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
     while let Some(id) = bytes.next() {
         match id {
             0 => return Err(DecodeError::StartReparse),
-            1 => out.push(AnyData::TypeData(TypeData::decode_data(bytes, ver)?)),
-            2 => out.push(AnyData::NameData(NameData::decode_data(bytes, ver)?)),
-            3 => out.push(AnyData::IdentificationData(
-                IdentificationData::decode_data(bytes, ver)?,
-            )),
-            4 => out.push(AnyData::PowderData(PowderData::decode_data(bytes, ver)?)),
-            5 => out.push(AnyData::RerollData(RerollData::decode_data(bytes, ver)?)),
-            6 => out.push(AnyData::ShinyData(ShinyData::decode_data(bytes, ver)?)),
+            1 => out.push(TypeData::decode_data(bytes, ver)?.into()),
+            2 => out.push(NameData::decode_data(bytes, ver)?.into()),
+            3 => out.push(IdentificationData::decode_data(bytes, ver)?.into()),
+            4 => out.push(PowderData::decode_data(bytes, ver)?.into()),
+            5 => out.push(RerollData::decode_data(bytes, ver)?.into()),
+            6 => out.push(ShinyData::decode_data(bytes, ver)?.into()),
             // TODO
-            255 => out.push(AnyData::EndData(EndData::decode_data(bytes, ver)?)),
+            255 => out.push(EndData::decode_data(bytes, ver)?.into()),
             _ => return Err(DecodeError::UnknownTransformer(id)),
         }
     }

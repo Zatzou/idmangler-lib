@@ -1,7 +1,7 @@
 use crate::types::{Powders, TransformVersion};
 
 use super::{
-    DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
 /// The transformer for powder data
@@ -94,5 +94,11 @@ impl DataDecoder for PowderData {
                 })
             }
         }
+    }
+}
+
+impl From<PowderData> for AnyData {
+    fn from(value: PowderData) -> Self {
+        Self::PowderData(value)
     }
 }

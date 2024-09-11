@@ -4,7 +4,7 @@ use crate::{
 };
 
 use super::{
-    DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
 /// The transformer for shiny data
@@ -51,5 +51,11 @@ impl DataDecoder for ShinyData {
                 Ok(Self { id, val })
             }
         }
+    }
+}
+
+impl From<ShinyData> for AnyData {
+    fn from(value: ShinyData) -> Self {
+        Self::ShinyData(value)
     }
 }

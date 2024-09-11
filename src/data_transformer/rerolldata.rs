@@ -1,7 +1,7 @@
 use crate::types::TransformVersion;
 
 use super::{
-    DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
 /// The transformer for reroll data
@@ -39,5 +39,11 @@ impl DataDecoder for RerollData {
                 Ok(Self(bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?))
             }
         }
+    }
+}
+
+impl From<RerollData> for AnyData {
+    fn from(value: RerollData) -> Self {
+        Self::RerollData(value)
     }
 }

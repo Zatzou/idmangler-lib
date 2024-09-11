@@ -1,7 +1,7 @@
 use crate::types::TransformVersion;
 
 use super::{
-    DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
 /// The transformer for item name data
@@ -50,5 +50,11 @@ impl DataDecoder for NameData {
                 ))
             }
         }
+    }
+}
+
+impl From<NameData> for AnyData {
+    fn from(value: NameData) -> Self {
+        Self::NameData(value)
     }
 }
