@@ -102,6 +102,7 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
             )),
             // TODO: powder decode
             5 => out.push(AnyData::RerollData(RerollData::decode_data(bytes, ver)?)),
+            6 => out.push(AnyData::ShinyData(ShinyData::decode_data(bytes, ver)?)),
             // TODO
             255 => out.push(AnyData::EndData(EndData::decode_data(bytes, ver)?)),
             _ => return Err(DecodeError::UnknownTransformer(id)),
