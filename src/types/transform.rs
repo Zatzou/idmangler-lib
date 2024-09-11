@@ -1,3 +1,5 @@
+use crate::DecodeError;
+
 /// This enum represents the version of the encoding being used
 ///
 /// At the current time the only version of the encoding is the first version
@@ -14,12 +16,12 @@ impl TransformVersion {
 }
 
 impl TryFrom<u8> for TransformVersion {
-    type Error = ();
+    type Error = DecodeError;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
         match value {
             0 => Ok(Self::Version1),
-            _ => Err(()),
+            _ => Err(DecodeError::UnknownVersion(value)),
         }
     }
 }

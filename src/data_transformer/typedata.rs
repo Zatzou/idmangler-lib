@@ -34,9 +34,7 @@ impl DataDecoder for TypeData {
             TransformVersion::Version1 => {
                 let b = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
-                Ok(Self(
-                    ItemType::try_from(b).map_err(|_| DecodeError::InvalidType(b))?,
-                ))
+                Ok(Self(ItemType::try_from(b)?))
             }
         }
     }

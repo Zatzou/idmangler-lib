@@ -149,7 +149,7 @@ pub enum DecodeError {
     BadString,
     /// An invalid type was found
     #[error("Invalid type of id:`{0}` was decoded")]
-    InvalidType(u8),
+    InvalidUItemType(u8),
 
     /// An invalid powder was encountered
     #[error("Invalid powder of id:`{0}` was decoded")]
