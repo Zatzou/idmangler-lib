@@ -92,6 +92,9 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
     // decode the start byte and version
     let ver = StartData::decode_start_bytes(bytes)?;
 
+    // push the start data to the output
+    out.push(AnyData::StartData(StartData(ver)));
+
     while let Some(id) = bytes.next() {
         match id {
             0 => return Err(DecodeError::StartReparse),
