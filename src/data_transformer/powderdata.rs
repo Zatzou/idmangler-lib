@@ -1,6 +1,8 @@
 use crate::types::{Powders, TransformVersion};
 
-use super::{DataEncoder, DataTransformerTypes, EncodeError, TransformId};
+use super::{
+    DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+};
 
 /// The transformer for powder data
 #[derive(Debug, Clone)]
@@ -52,5 +54,45 @@ impl DataEncoder for PowderData {
         }
 
         Ok(())
+    }
+}
+
+impl DataDecoder for PowderData {
+    fn decode_data(
+        bytes: &mut impl Iterator<Item = u8>,
+        ver: TransformVersion,
+    ) -> Result<Self, super::DecodeError>
+    where
+        Self: Sized,
+    {
+        match ver {
+            TransformVersion::Version1 => {
+                let slots = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
+                let powder_count = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)? as usize;
+
+                let bits_needed = powder_count * 5;
+                let total_bytes = (bits_needed + 7) / 8;
+
+                let bytes: Vec<u8> = bytes.take(total_bytes).collect();
+                let mut powders = Vec::new();
+
+                for powder_idx in 0..powder_count {
+                    let mut powder = 0u8;
+
+                    for i in 0..5 {
+                        let idx = (powder_idx * 5) + i;
+                        let bit = bytes[idx / 8] >> (7 - (idx % 8)) & 0b1;
+                        powder |= bit << (4 - i);
+                    }
+
+                    powders.push((Powders::try_from(powder / 6)?, powder % 6))
+                }
+
+                Ok(Self {
+                    powder_slots: slots,
+                    powders,
+                })
+            }
+        }
     }
 }

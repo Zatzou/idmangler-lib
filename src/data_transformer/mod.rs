@@ -100,6 +100,7 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
             3 => out.push(AnyData::IdentificationData(
                 IdentificationData::decode_data(bytes, ver)?,
             )),
+            4 => out.push(AnyData::PowderData(PowderData::decode_data(bytes, ver)?)),
             // TODO: powder decode
             5 => out.push(AnyData::RerollData(RerollData::decode_data(bytes, ver)?)),
             6 => out.push(AnyData::ShinyData(ShinyData::decode_data(bytes, ver)?)),
@@ -150,6 +151,10 @@ pub enum DecodeError {
     /// An invalid type was found
     #[error("Invalid type of id:`{0}` was decoded")]
     InvalidType(u8),
+
+    /// An invalid powder was encountered
+    #[error("Invalid powder of id:`{0}` was decoded")]
+    InvalidPowder(u8),
 
     /// The decoder unexpectedly ran out of bytes to decode while decoding
     #[error("Unexpectedly hit end of bytestream while decoding")]
