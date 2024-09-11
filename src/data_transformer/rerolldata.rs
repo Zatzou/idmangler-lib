@@ -5,7 +5,7 @@ use super::{
 };
 
 /// The transformer for reroll data
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct RerollData(pub u8);
 
 impl TransformId for RerollData {

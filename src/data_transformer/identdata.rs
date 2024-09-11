@@ -8,7 +8,7 @@ use super::{
 };
 
 /// The transformer for identification data
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct IdentificationData {
     /// The identifications
     pub identifications: Vec<Stat>,

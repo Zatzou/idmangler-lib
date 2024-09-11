@@ -5,7 +5,7 @@ use super::{
 };
 
 /// The transformer for the end data
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct EndData;
 
 impl TransformId for EndData {

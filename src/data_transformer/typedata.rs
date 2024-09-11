@@ -5,7 +5,7 @@ use super::{
 };
 
 /// The transformer for the item type data
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub struct TypeData(pub ItemType);
 
 impl TransformId for TypeData {

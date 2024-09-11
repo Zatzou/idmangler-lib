@@ -1,5 +1,5 @@
 /// Structure representing an identification stat as it is encoded within the wynntils format
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct Stat {
     /// The id of the identification
     pub kind: u8,
@@ -16,7 +16,7 @@ pub struct Stat {
 }
 
 /// Enum representing the possible rolls of an [`Stat`]
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum RollType {
     /// The identification has a roll between 0% and 255% of the base value.
     Value(u8),

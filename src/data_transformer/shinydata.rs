@@ -8,7 +8,7 @@ use super::{
 };
 
 /// The transformer for shiny data
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct ShinyData {
     /// The id of the Shiny stat
     ///

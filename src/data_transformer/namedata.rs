@@ -5,7 +5,7 @@ use super::{
 };
 
 /// The transformer for item name data
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct NameData(pub String);
 
 impl TransformId for NameData {

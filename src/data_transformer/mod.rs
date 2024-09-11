@@ -183,7 +183,7 @@ enum DataTransformerTypes {
 }
 
 /// Represents any possible item data type
-#[derive(Debug)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub enum AnyData {
     StartData(StartData),
     TypeData(TypeData),

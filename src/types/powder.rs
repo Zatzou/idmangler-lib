@@ -1,7 +1,7 @@
 use crate::DecodeError;
 
 /// Powder types
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum Powders {
     EARTH = 1,
     THUNDER = 2,

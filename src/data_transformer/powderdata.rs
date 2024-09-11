@@ -5,7 +5,7 @@ use super::{
 };
 
 /// The transformer for powder data
-#[derive(Debug, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct PowderData {
     /// The number of powder slots on this item
     pub powder_slots: u8,

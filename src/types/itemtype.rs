@@ -2,7 +2,7 @@ use crate::DecodeError;
 
 /// Enum for encoding the type of an item the idstring represents
 #[repr(u8)]
-#[derive(Clone, Copy, Debug)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum ItemType {
     Gear = 0,
     Tome = 1,
