@@ -17,7 +17,7 @@ impl DataEncoder for NameData {
         match ver {
             TransformVersion::Version1 => {
                 // check that the string is valid ascii
-                if self.0.chars().any(|c| !c.is_ascii()) {
+                if !self.0.is_ascii() {
                     return Err(EncodeError::NonAsciiString);
                 }
 
