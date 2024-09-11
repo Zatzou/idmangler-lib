@@ -22,9 +22,9 @@ Basic gear item encoding:
 Basic gear item decoding:
 - [x] Name data
 - [x] Identification data
-- [ ] Powder data
+- [x] Powder data
 - [x] Reroll data
-- [ ] Shiny data
+- [x] Shiny data
 
 Crafted gear is at the moment entirely unimplemented
 
