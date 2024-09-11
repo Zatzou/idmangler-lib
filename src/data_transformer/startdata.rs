@@ -1,6 +1,6 @@
 use crate::types::TransformVersion;
 
-use super::{DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId};
+use super::{AnyData, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId};
 
 /// The start data of the encoding. The start data holds the version of the encoding to be used
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
@@ -34,5 +34,11 @@ impl StartData {
         let verbyte = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
         TransformVersion::try_from(verbyte)
+    }
+}
+
+impl From<StartData> for AnyData {
+    fn from(value: StartData) -> Self {
+        Self::StartData(value)
     }
 }
