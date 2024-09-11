@@ -101,7 +101,6 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
                 IdentificationData::decode_data(bytes, ver)?,
             )),
             4 => out.push(AnyData::PowderData(PowderData::decode_data(bytes, ver)?)),
-            // TODO: powder decode
             5 => out.push(AnyData::RerollData(RerollData::decode_data(bytes, ver)?)),
             6 => out.push(AnyData::ShinyData(ShinyData::decode_data(bytes, ver)?)),
             // TODO
