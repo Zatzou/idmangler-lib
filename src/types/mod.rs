@@ -1,5 +1,6 @@
 //! Other types used within the encoding process
 
+mod geartype;
 mod itemtype;
 mod powder;
 mod stat;
@@ -18,3 +19,6 @@ pub use stat::Stat;
 
 #[doc(inline)]
 pub use transform::TransformVersion;
+
+#[doc(inline)]
+pub use geartype::GearType;

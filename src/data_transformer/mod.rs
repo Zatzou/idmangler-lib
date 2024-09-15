@@ -36,6 +36,10 @@ mod typedata;
 #[doc(inline)]
 pub use typedata::TypeData;
 
+mod customtypedata;
+#[doc(inline)]
+pub use customtypedata::CustomTypeData;
+
 /// Trait for providing the id of the transformer
 pub(crate) trait TransformId {
     /// The id of this transformer
@@ -156,6 +160,9 @@ pub enum DecodeError {
     #[error("Invalid powder of id:`{0}` was decoded")]
     InvalidPowder(u8),
 
+    #[error("Invalid gear type id:`{0}` was decoded")]
+    BadGearType(u8),
+
     /// The decoder unexpectedly ran out of bytes to decode while decoding
     #[error("Unexpectedly hit end of bytestream while decoding")]
     UnexpectedEndOfBytes,
@@ -193,6 +200,8 @@ pub enum AnyData {
     PowderData(PowderData),
     RerollData(RerollData),
     ShinyData(ShinyData),
+
+    CustomTypeData(CustomTypeData),
     // TODO
     EndData(EndData),
 }
