@@ -123,6 +123,7 @@ pub enum EncodeError {
     /// Encoder was given a string with non ascii characters.
     #[error("Cannot encode non ascii string")]
     NonAsciiString,
+
     /// More than 255 identifications were passed for encoding
     #[error("Cannot encode more than 255 identifications per item")]
     TooManyIdentifications,
@@ -131,6 +132,10 @@ pub enum EncodeError {
     /// An id is required to have an basevalue if the extended encoding is used for idents
     #[error("Identification id: {0} was not given a base value while using extended encoding")]
     NoBasevalueGiven(u8),
+
+    /// More than 255 powders were passed for encoding
+    #[error("Cannot encode more than 255 powders per item")]
+    TooManyPowders,
 }
 
 /// Potential errors thrown while decoding id strings

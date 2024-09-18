@@ -21,6 +21,10 @@ impl DataEncoder for PowderData {
     fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
             TransformVersion::Version1 => {
+                if self.powders.len() > 255 {
+                    return Err(EncodeError::TooManyPowders);
+                }
+
                 let bits_needed = self.powders.len() * 5;
                 let total_bits = (bits_needed + 7) / 8;
 
