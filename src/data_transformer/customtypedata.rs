@@ -1,12 +1,14 @@
 use crate::types::{GearType, TransformVersion};
 
-use super::{AnyData, DataDecoder, DataEncoder, DecodeError, EncodeError, TransformId};
+use super::{
+    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct CustomTypeData(pub GearType);
 
 impl TransformId for CustomTypeData {
-    const TRANSFORMER_ID: u8 = 7;
+    const TRANSFORMER_ID: u8 = DataTransformerTypes::CustomGearType as u8;
 }
 
 impl DataEncoder for CustomTypeData {
