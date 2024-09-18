@@ -40,6 +40,10 @@ mod customtypedata;
 #[doc(inline)]
 pub use customtypedata::CustomTypeData;
 
+mod durabilitydata;
+#[doc(inline)]
+pub use durabilitydata::DurabilityData;
+
 /// Trait for providing the id of the transformer
 pub(crate) trait TransformId {
     /// The id of this transformer
@@ -108,6 +112,9 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
             4 => out.push(PowderData::decode_data(bytes, ver)?.into()),
             5 => out.push(RerollData::decode_data(bytes, ver)?.into()),
             6 => out.push(ShinyData::decode_data(bytes, ver)?.into()),
+
+            7 => out.push(CustomTypeData::decode_data(bytes, ver)?.into()),
+            8 => out.push(DurabilityData::decode_data(bytes, ver)?.into()),
             // TODO
             255 => out.push(EndData::decode_data(bytes, ver)?.into()),
             _ => return Err(DecodeError::UnknownTransformer(id)),
@@ -136,6 +143,10 @@ pub enum EncodeError {
     /// More than 255 powders were passed for encoding
     #[error("Cannot encode more than 255 powders per item")]
     TooManyPowders,
+
+    /// Effect strength should be a percentage between 0 and 100
+    #[error("Effect strength of {0} is too high, it should be a percentage between 0 and 100")]
+    EffectStrengthTooHigh(u8),
 }
 
 /// Potential errors thrown while decoding id strings
@@ -207,6 +218,7 @@ pub enum AnyData {
     ShinyData(ShinyData),
 
     CustomTypeData(CustomTypeData),
+    DurabilityData(DurabilityData),
     // TODO
     EndData(EndData),
 }
