@@ -18,6 +18,8 @@ pub use itemtype::ItemType;
 pub use powder::Powders;
 
 #[doc(inline)]
+pub use stat::CustomStat;
+#[doc(inline)]
 pub use stat::RollType;
 #[doc(inline)]
 pub use stat::Stat;
