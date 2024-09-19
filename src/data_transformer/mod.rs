@@ -262,7 +262,6 @@ pub enum DecodeError {
 }
 
 /// Enum representing the ids of the transformers
-#[allow(unused)] // TODO: implement rest of the transformers
 enum DataTransformerTypes {
     StartData = 0,
     TypeData = 1,
