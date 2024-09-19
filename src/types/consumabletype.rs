@@ -2,6 +2,7 @@ use thiserror::Error;
 
 use crate::DecodeError;
 
+/// Enum representing the possible types of consumables
 #[repr(u8)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum ConsumableType {

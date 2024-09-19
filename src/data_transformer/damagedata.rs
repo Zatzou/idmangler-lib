@@ -9,9 +9,12 @@ use super::{
     AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
+/// Damages of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct DamageData {
+    /// Attack speed of the item
     attack_speed: AttackSpeed,
+    /// The damage values of the item
     damages: Vec<(DamageType, Range<i32>)>,
 }
 

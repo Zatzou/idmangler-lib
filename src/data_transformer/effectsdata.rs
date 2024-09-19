@@ -7,6 +7,7 @@ use super::{
     AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
+/// Effects of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct EffectsData {
     pub effects: Vec<Effect>,

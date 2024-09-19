@@ -4,9 +4,12 @@ use super::{
     DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
+/// Sets the number of uses of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct UsesData {
+    /// Uses currently remaining on the item
     pub current: u8,
+    /// Maximum uses of the item
     pub max: u8,
 }
 

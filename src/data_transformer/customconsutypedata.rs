@@ -4,6 +4,7 @@ use super::{
     AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
 };
 
+/// Sets the type of a crafted consumable
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct CustomConsumableTypeData(pub ConsumableType);
 

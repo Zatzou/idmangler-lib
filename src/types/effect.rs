@@ -2,12 +2,16 @@ use thiserror::Error;
 
 use crate::DecodeError;
 
+/// Struct representing an effect on an item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub struct Effect {
+    /// Type of the effect
     pub kind: EffectType,
+    /// Value of the effect
     pub value: i32,
 }
 
+/// Enum representing the possible types of effects
 #[repr(u8)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum EffectType {
