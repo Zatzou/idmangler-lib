@@ -52,6 +52,10 @@ mod damagedata;
 #[doc(inline)]
 pub use damagedata::DamageData;
 
+mod defensedata;
+#[doc(inline)]
+pub use defensedata::DefenseData;
+
 /// Trait for providing the id of the transformer
 pub(crate) trait TransformId {
     /// The id of this transformer
@@ -125,6 +129,7 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
             8 => out.push(DurabilityData::decode_data(bytes, ver)?.into()),
             9 => out.push(RequirementsData::decode_data(bytes, ver)?.into()),
             10 => out.push(DamageData::decode_data(bytes, ver)?.into()),
+            11 => out.push(DefenseData::decode_data(bytes, ver)?.into()),
             // TODO
             255 => out.push(EndData::decode_data(bytes, ver)?.into()),
             _ => return Err(DecodeError::UnknownTransformer(id)),
@@ -165,6 +170,10 @@ pub enum EncodeError {
     /// More than 255 damage values were passed for encoding
     #[error("Cannot encode more than 255 damage values per item")]
     TooManyDamageValues,
+
+    /// More than 255 defense values were passed for encoding
+    #[error("Cannot encode more than 255 defense values per item")]
+    TooManyDefences,
 }
 
 /// Potential errors thrown while decoding id strings
@@ -211,6 +220,10 @@ pub enum DecodeError {
     #[error("Invalid damage type id:`{0}`")]
     BadDamageType(u8),
 
+    /// An invalid element id was encountered
+    #[error("Invalid element id:`{0}`")]
+    BadElement(u8),
+
     /// The decoder unexpectedly ran out of bytes to decode while decoding
     #[error("Unexpectedly hit end of bytestream while decoding")]
     UnexpectedEndOfBytes,
@@ -253,6 +266,7 @@ pub enum AnyData {
     DurabilityData(DurabilityData),
     RequirementsData(RequirementsData),
     DamageData(DamageData),
+    DefenseData(DefenseData),
     // TODO
     EndData(EndData),
 }

@@ -3,6 +3,7 @@
 mod attackspeed;
 mod classtype;
 mod damagetype;
+mod element;
 mod geartype;
 mod itemtype;
 mod powder;
@@ -38,3 +39,6 @@ pub use attackspeed::AttackSpeed;
 
 #[doc(inline)]
 pub use damagetype::DamageType;
+
+#[doc(inline)]
+pub use element::Element;
