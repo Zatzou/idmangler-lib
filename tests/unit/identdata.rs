@@ -1,0 +1,74 @@
+use idmangler_lib::{
+    types::{RollType, Stat, TransformVersion},
+    DataDecoder, DataEncoder, IdentificationData,
+};
+
+#[test]
+fn identdata_roundtrip() {
+    for extended in [true, false] {
+        let mut out = Vec::new();
+        let mut idents = Vec::new();
+
+        for i in 0..255 {
+            idents.push(Stat {
+                kind: i,
+                base: if extended { Some(100) } else { None },
+                roll: RollType::Value(i),
+            });
+        }
+
+        let identdata = IdentificationData {
+            extended_encoding: extended,
+            identifications: idents,
+        };
+
+        identdata
+            .encode(TransformVersion::Version1, &mut out)
+            .unwrap();
+
+        let mut iter = out.iter().copied().skip(1);
+        let decoded =
+            IdentificationData::decode_data(&mut iter, TransformVersion::Version1).unwrap();
+
+        assert_eq!(identdata, decoded);
+    }
+}
+
+#[test]
+fn identdata_noencode() {
+    let identdata = IdentificationData {
+        extended_encoding: false,
+        identifications: vec![Stat {
+            kind: 0,
+            base: None,
+            roll: RollType::PreIdentified,
+        }],
+    };
+
+    assert_eq!(
+        identdata.should_encode_data(TransformVersion::Version1),
+        false
+    );
+}
+
+#[test]
+fn bad_identdata() {
+    // first byte is the number of identifications, but array contains less than 100 so this should fail
+    let mut iter = [100, 0, 0, 0].iter().copied();
+    assert!(IdentificationData::decode_data(&mut iter, TransformVersion::Version1).is_err());
+
+    // extended coding always requires base to be present
+    let mut out = Vec::new();
+    let identdata = IdentificationData {
+        extended_encoding: true,
+        identifications: vec![Stat {
+            kind: 0,
+            base: None,
+            roll: RollType::PreIdentified,
+        }],
+    };
+
+    assert!(identdata
+        .encode(TransformVersion::Version1, &mut out)
+        .is_err());
+}

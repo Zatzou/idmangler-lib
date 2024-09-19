@@ -116,5 +116,34 @@ pub(crate) fn decode_varint(bytes: &mut impl Iterator<Item = u8>) -> Result<i64,
         value |= ((n & 0b01111111) as i64) << (7 * i);
     }
 
-    Ok((value >> 1) ^ -(value & 1))
+    Ok((value as u64 >> 1) as i64 ^ -(value & 1))
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn roundtrip_varints() {
+        for i in [
+            0,
+            1,
+            -1,
+            42,
+            -42,
+            1000,
+            -1000,
+            i16::MAX as i64,
+            i16::MIN as i64,
+            i32::MAX as i64,
+            i32::MIN as i64,
+            i64::MAX,
+            i64::MIN,
+        ] {
+            let bytes = encode_varint(i);
+            let n = decode_varint(&mut bytes.into_iter()).unwrap();
+
+            assert_eq!(i, n);
+        }
+    }
 }
