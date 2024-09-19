@@ -4,8 +4,10 @@ pub mod types;
 
 #[doc(inline)]
 pub use data_transformer::{
-    decode_bytes, AnyData, DataDecoder, DataEncoder, DecodeError, EncodeError, EndData,
-    IdentificationData, NameData, PowderData, RerollData, ShinyData, StartData, TypeData,
+    decode_bytes, AnyData, CustomConsumableTypeData, CustomIdentificationData, CustomTypeData,
+    DamageData, DataDecoder, DataEncoder, DecodeError, DefenseData, DurabilityData, EffectsData,
+    EncodeError, EndData, IdentificationData, NameData, PowderData, RequirementsData, RerollData,
+    ShinyData, StartData, TypeData, UsesData,
 };
 use encoding::decode_string;
 
