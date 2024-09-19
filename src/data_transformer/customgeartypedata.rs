@@ -5,13 +5,13 @@ use super::{
 };
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
-pub struct CustomTypeData(pub GearType);
+pub struct CustomGearTypeData(pub GearType);
 
-impl TransformId for CustomTypeData {
+impl TransformId for CustomGearTypeData {
     const TRANSFORMER_ID: u8 = DataTransformerTypes::CustomGearType as u8;
 }
 
-impl DataEncoder for CustomTypeData {
+impl DataEncoder for CustomGearTypeData {
     fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
             TransformVersion::Version1 => {
@@ -22,7 +22,7 @@ impl DataEncoder for CustomTypeData {
     }
 }
 
-impl DataDecoder for CustomTypeData {
+impl DataDecoder for CustomGearTypeData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
         ver: TransformVersion,
@@ -40,8 +40,8 @@ impl DataDecoder for CustomTypeData {
     }
 }
 
-impl From<CustomTypeData> for AnyData {
-    fn from(data: CustomTypeData) -> Self {
+impl From<CustomGearTypeData> for AnyData {
+    fn from(data: CustomGearTypeData) -> Self {
         AnyData::CustomTypeData(data)
     }
 }

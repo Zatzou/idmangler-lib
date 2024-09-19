@@ -4,7 +4,7 @@ pub mod types;
 
 #[doc(inline)]
 pub use data_transformer::{
-    decode_bytes, AnyData, CustomConsumableTypeData, CustomIdentificationData, CustomTypeData,
+    decode_bytes, AnyData, CustomConsumableTypeData, CustomGearTypeData, CustomIdentificationData,
     DamageData, DataDecoder, DataEncoder, DecodeError, DefenseData, DurabilityData, EffectsData,
     EncodeError, EndData, IdentificationData, NameData, PowderData, RequirementsData, RerollData,
     ShinyData, StartData, TypeData, UsesData,

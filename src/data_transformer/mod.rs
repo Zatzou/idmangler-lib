@@ -36,9 +36,9 @@ mod typedata;
 #[doc(inline)]
 pub use typedata::TypeData;
 
-mod customtypedata;
+mod customgeartypedata;
 #[doc(inline)]
-pub use customtypedata::CustomTypeData;
+pub use customgeartypedata::CustomGearTypeData;
 
 mod durabilitydata;
 #[doc(inline)]
@@ -141,7 +141,7 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
             5 => out.push(RerollData::decode_data(bytes, ver)?.into()),
             6 => out.push(ShinyData::decode_data(bytes, ver)?.into()),
 
-            7 => out.push(CustomTypeData::decode_data(bytes, ver)?.into()),
+            7 => out.push(CustomGearTypeData::decode_data(bytes, ver)?.into()),
             8 => out.push(DurabilityData::decode_data(bytes, ver)?.into()),
             9 => out.push(RequirementsData::decode_data(bytes, ver)?.into()),
             10 => out.push(DamageData::decode_data(bytes, ver)?.into()),
@@ -293,7 +293,7 @@ pub enum AnyData {
     RerollData(RerollData),
     ShinyData(ShinyData),
 
-    CustomTypeData(CustomTypeData),
+    CustomTypeData(CustomGearTypeData),
     DurabilityData(DurabilityData),
     RequirementsData(RequirementsData),
     DamageData(DamageData),
