@@ -1,8 +1,10 @@
 //! Other types used within the encoding process
 
+mod classtype;
 mod geartype;
 mod itemtype;
 mod powder;
+mod skilltype;
 mod stat;
 mod transform;
 
@@ -22,3 +24,9 @@ pub use transform::TransformVersion;
 
 #[doc(inline)]
 pub use geartype::GearType;
+
+#[doc(inline)]
+pub use classtype::ClassType;
+
+#[doc(inline)]
+pub use skilltype::SkillType;

@@ -44,6 +44,10 @@ mod durabilitydata;
 #[doc(inline)]
 pub use durabilitydata::DurabilityData;
 
+mod requirementsdata;
+#[doc(inline)]
+pub use requirementsdata::RequirementsData;
+
 /// Trait for providing the id of the transformer
 pub(crate) trait TransformId {
     /// The id of this transformer
@@ -115,6 +119,7 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
 
             7 => out.push(CustomTypeData::decode_data(bytes, ver)?.into()),
             8 => out.push(DurabilityData::decode_data(bytes, ver)?.into()),
+            9 => out.push(RequirementsData::decode_data(bytes, ver)?.into()),
             // TODO
             255 => out.push(EndData::decode_data(bytes, ver)?.into()),
             _ => return Err(DecodeError::UnknownTransformer(id)),
@@ -147,6 +152,10 @@ pub enum EncodeError {
     /// Effect strength should be a percentage between 0 and 100
     #[error("Effect strength of {0} is too high, it should be a percentage between 0 and 100")]
     EffectStrengthTooHigh(u8),
+
+    /// More than 255 skills were passed for encoding
+    #[error("Cannot encode more than 255 skills per item")]
+    TooManySkills,
 }
 
 /// Potential errors thrown while decoding id strings
@@ -178,6 +187,14 @@ pub enum DecodeError {
 
     #[error("Invalid gear type id:`{0}` was decoded")]
     BadGearType(u8),
+
+    /// An invalid class type was encountered
+    #[error("Invalid class type id:`{0}`")]
+    BadClassType(u8),
+
+    /// An invalid skill type was encountered
+    #[error("Invalid skill type id:`{0}`")]
+    BadSkillType(u8),
 
     /// The decoder unexpectedly ran out of bytes to decode while decoding
     #[error("Unexpectedly hit end of bytestream while decoding")]
@@ -219,6 +236,7 @@ pub enum AnyData {
 
     CustomTypeData(CustomTypeData),
     DurabilityData(DurabilityData),
+    RequirementsData(RequirementsData),
     // TODO
     EndData(EndData),
 }
