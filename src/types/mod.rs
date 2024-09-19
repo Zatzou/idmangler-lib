@@ -2,6 +2,7 @@
 
 mod attackspeed;
 mod classtype;
+mod consumabletype;
 mod damagetype;
 mod element;
 mod geartype;
@@ -44,3 +45,6 @@ pub use damagetype::DamageType;
 
 #[doc(inline)]
 pub use element::Element;
+
+#[doc(inline)]
+pub use consumabletype::ConsumableType;
