@@ -221,11 +221,11 @@ pub enum DecodeError {
     BadString,
     /// An invalid type was found
     #[error("Invalid type of id:`{0}` was decoded")]
-    InvalidUItemType(u8),
+    BadItemType(u8),
 
     /// An invalid powder was encountered
     #[error("Invalid powder of id:`{0}` was decoded")]
-    InvalidPowder(u8),
+    BadPowderType(u8),
 
     #[error("Invalid gear type id:`{0}` was decoded")]
     BadGearType(u8),

@@ -33,7 +33,7 @@ impl StartData {
 
         let verbyte = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
-        TransformVersion::try_from(verbyte)
+        Ok(TransformVersion::try_from(verbyte)?)
     }
 }
 

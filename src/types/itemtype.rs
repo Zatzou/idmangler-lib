@@ -1,3 +1,5 @@
+use thiserror::Error;
+
 use crate::DecodeError;
 
 /// Enum for encoding the type of an item the idstring represents
@@ -17,8 +19,18 @@ impl From<ItemType> for u8 {
     }
 }
 
+#[derive(Error, Debug)]
+#[error("Invalid item type id:`{0}`")]
+pub struct BadItemType(pub u8);
+
+impl From<BadItemType> for DecodeError {
+    fn from(value: BadItemType) -> Self {
+        DecodeError::BadItemType(value.0)
+    }
+}
+
 impl TryFrom<u8> for ItemType {
-    type Error = DecodeError;
+    type Error = BadItemType;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
         match value {
@@ -28,7 +40,7 @@ impl TryFrom<u8> for ItemType {
             3 => Ok(Self::CraftedGear),
             4 => Ok(Self::CraftedConsu),
 
-            _ => Err(DecodeError::InvalidUItemType(value)),
+            _ => Err(BadItemType(value)),
         }
     }
 }

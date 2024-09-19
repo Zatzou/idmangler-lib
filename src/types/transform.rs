@@ -1,3 +1,5 @@
+use thiserror::Error;
+
 use crate::DecodeError;
 
 /// This enum represents the version of the encoding being used
@@ -15,13 +17,23 @@ impl TransformVersion {
     }
 }
 
+#[derive(Error, Debug)]
+#[error("Unknown transform version: {0}")]
+pub struct UnknownTransformVersion(pub u8);
+
+impl From<UnknownTransformVersion> for DecodeError {
+    fn from(value: UnknownTransformVersion) -> Self {
+        DecodeError::UnknownVersion(value.0)
+    }
+}
+
 impl TryFrom<u8> for TransformVersion {
-    type Error = DecodeError;
+    type Error = UnknownTransformVersion;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
         match value {
             0 => Ok(Self::Version1),
-            _ => Err(DecodeError::UnknownVersion(value)),
+            _ => Err(UnknownTransformVersion(value)),
         }
     }
 }
