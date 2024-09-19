@@ -64,6 +64,14 @@ mod customconsutypedata;
 #[doc(inline)]
 pub use customconsutypedata::CustomConsumableTypeData;
 
+mod usesdata;
+#[doc(inline)]
+pub use usesdata::UsesData;
+
+mod effectsdata;
+#[doc(inline)]
+pub use effectsdata::EffectsData;
+
 /// Trait for providing the id of the transformer
 pub(crate) trait TransformId {
     /// The id of this transformer
@@ -140,7 +148,9 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
             11 => out.push(DefenseData::decode_data(bytes, ver)?.into()),
             12 => out.push(CustomIdentificationData::decode_data(bytes, ver)?.into()),
             13 => out.push(CustomConsumableTypeData::decode_data(bytes, ver)?.into()),
-            // TODO
+            14 => out.push(UsesData::decode_data(bytes, ver)?.into()),
+            15 => out.push(EffectsData::decode_data(bytes, ver)?.into()),
+
             255 => out.push(EndData::decode_data(bytes, ver)?.into()),
             _ => return Err(DecodeError::UnknownTransformer(id)),
         }
@@ -180,6 +190,10 @@ pub enum EncodeError {
     /// More than 255 damage values were passed for encoding
     #[error("Cannot encode more than 255 damage values per item")]
     TooManyDamageValues,
+
+    /// More than 255 effects were passed for encoding
+    #[error("Cannot encode more than 255 effects per item")]
+    TooManyEffects,
 
     /// More than 255 defense values were passed for encoding
     #[error("Cannot encode more than 255 defense values per item")]
@@ -238,6 +252,10 @@ pub enum DecodeError {
     #[error("Invalid consumable type id:`{0}`")]
     BadConsumableType(u8),
 
+    /// An invalid effect type was encountered
+    #[error("Invalid effect type id:`{0}`")]
+    BadEffectType(u8),
+
     /// The decoder unexpectedly ran out of bytes to decode while decoding
     #[error("Unexpectedly hit end of bytestream while decoding")]
     UnexpectedEndOfBytes,
@@ -283,6 +301,8 @@ pub enum AnyData {
     DefenseData(DefenseData),
     CustomIdentificationData(CustomIdentificationData),
     CustomConsumableTypeData(CustomConsumableTypeData),
-    // TODO
+    UsesData(UsesData),
+    EffectsData(EffectsData),
+
     EndData(EndData),
 }
