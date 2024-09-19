@@ -1,6 +1,8 @@
 //! Other types used within the encoding process
 
+mod attackspeed;
 mod classtype;
+mod damagetype;
 mod geartype;
 mod itemtype;
 mod powder;
@@ -30,3 +32,9 @@ pub use classtype::ClassType;
 
 #[doc(inline)]
 pub use skilltype::SkillType;
+
+#[doc(inline)]
+pub use attackspeed::AttackSpeed;
+
+#[doc(inline)]
+pub use damagetype::DamageType;

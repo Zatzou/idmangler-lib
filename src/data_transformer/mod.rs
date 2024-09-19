@@ -48,6 +48,10 @@ mod requirementsdata;
 #[doc(inline)]
 pub use requirementsdata::RequirementsData;
 
+mod damagedata;
+#[doc(inline)]
+pub use damagedata::DamageData;
+
 /// Trait for providing the id of the transformer
 pub(crate) trait TransformId {
     /// The id of this transformer
@@ -120,6 +124,7 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
             7 => out.push(CustomTypeData::decode_data(bytes, ver)?.into()),
             8 => out.push(DurabilityData::decode_data(bytes, ver)?.into()),
             9 => out.push(RequirementsData::decode_data(bytes, ver)?.into()),
+            10 => out.push(DamageData::decode_data(bytes, ver)?.into()),
             // TODO
             255 => out.push(EndData::decode_data(bytes, ver)?.into()),
             _ => return Err(DecodeError::UnknownTransformer(id)),
@@ -156,6 +161,10 @@ pub enum EncodeError {
     /// More than 255 skills were passed for encoding
     #[error("Cannot encode more than 255 skills per item")]
     TooManySkills,
+
+    /// More than 255 damage values were passed for encoding
+    #[error("Cannot encode more than 255 damage values per item")]
+    TooManyDamageValues,
 }
 
 /// Potential errors thrown while decoding id strings
@@ -191,10 +200,16 @@ pub enum DecodeError {
     /// An invalid class type was encountered
     #[error("Invalid class type id:`{0}`")]
     BadClassType(u8),
-
     /// An invalid skill type was encountered
     #[error("Invalid skill type id:`{0}`")]
     BadSkillType(u8),
+
+    /// An invalid attack speed was encountered
+    #[error("Invalid attack speed id:`{0}`")]
+    BadAttackSpeed(i8),
+    /// An invalid damage type was encountered
+    #[error("Invalid damage type id:`{0}`")]
+    BadDamageType(u8),
 
     /// The decoder unexpectedly ran out of bytes to decode while decoding
     #[error("Unexpectedly hit end of bytestream while decoding")]
@@ -224,7 +239,7 @@ enum DataTransformerTypes {
 }
 
 /// Represents any possible item data type
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub enum AnyData {
     StartData(StartData),
     TypeData(TypeData),
@@ -237,6 +252,7 @@ pub enum AnyData {
     CustomTypeData(CustomTypeData),
     DurabilityData(DurabilityData),
     RequirementsData(RequirementsData),
+    DamageData(DamageData),
     // TODO
     EndData(EndData),
 }
