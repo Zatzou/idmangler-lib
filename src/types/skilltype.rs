@@ -7,7 +7,7 @@ use crate::DecodeError;
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum SkillType {
     // TODO: check that these are correct as wynntils has conflicting info about the order
-    Strenght = 0,
+    Strength = 0,
     Dexterity = 1,
     Intelligence = 2,
     Defence = 3,
@@ -35,7 +35,7 @@ impl TryFrom<u8> for SkillType {
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
         match value {
-            0 => Ok(Self::Strenght),
+            0 => Ok(Self::Strength),
             1 => Ok(Self::Dexterity),
             2 => Ok(Self::Intelligence),
             3 => Ok(Self::Defence),
