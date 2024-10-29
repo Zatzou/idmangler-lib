@@ -5,11 +5,11 @@ use crate::DecodeError;
 /// Powder types
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum Powders {
-    EARTH = 1,
-    THUNDER = 2,
-    WATER = 3,
-    FIRE = 4,
-    AIR = 5,
+    EARTH = 0,
+    THUNDER = 1,
+    WATER = 2,
+    FIRE = 3,
+    AIR = 4,
 }
 
 #[derive(Error, Debug)]
@@ -27,11 +27,11 @@ impl TryFrom<u8> for Powders {
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
         match value {
-            1 => Ok(Self::EARTH),
-            2 => Ok(Self::THUNDER),
-            3 => Ok(Self::WATER),
-            4 => Ok(Self::FIRE),
-            5 => Ok(Self::AIR),
+            0 => Ok(Self::EARTH),
+            1 => Ok(Self::THUNDER),
+            2 => Ok(Self::WATER),
+            3 => Ok(Self::FIRE),
+            4 => Ok(Self::AIR),
             _ => Err(BadPowderType(value)),
         }
     }

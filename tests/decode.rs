@@ -82,7 +82,11 @@ fn complex_item() {
             .into(),
             PowderData {
                 powder_slots: 3,
-                powders: vec![(Powders::AIR, 0), (Powders::FIRE, 0), (Powders::FIRE, 0)],
+                powders: vec![
+                    Some((Powders::AIR, 6)),
+                    Some((Powders::FIRE, 6)),
+                    Some((Powders::FIRE, 6))
+                ],
             }
             .into(),
             RerollData(4).into(),

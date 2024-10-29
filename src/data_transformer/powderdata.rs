@@ -10,7 +10,7 @@ pub struct PowderData {
     /// The number of powder slots on this item
     pub powder_slots: u8,
     /// The powders on this item along with the tier of the powders (currently unused as wynntils does not encode this data)
-    pub powders: Vec<(Powders, u8)>,
+    pub powders: Vec<Option<(Powders, u8)>>,
 }
 
 impl TransformId for PowderData {
@@ -31,9 +31,16 @@ impl DataEncoder for PowderData {
                 let mut powder_data = vec![0u8; total_bits];
 
                 for (i, pow) in self.powders.iter().enumerate() {
-                    let elem = pow.0 as u8;
-                    // TODO: figure out if wynntils fixes this and make the tier be encoded correctly
-                    let tier = 0; //pow.1;
+                    let (elem, tier) = if let Some(pow) = pow {
+                        if pow.1 < 1 || pow.1 > 6 {
+                            return Err(EncodeError::InvalidPowderTier(pow.1));
+                        }
+
+                        (pow.0 as u8, pow.1)
+                    } else {
+                        // Empty powder slots can be represented as 0 tiered earth powders as this produces the required 0b00000 value
+                        (0, 0)
+                    };
 
                     // calculate the 5 bit powder value
                     let powder_num = (elem * 6 + tier) & 0b00011111;
@@ -89,7 +96,16 @@ impl DataDecoder for PowderData {
                         powder |= bit << (4 - i);
                     }
 
-                    powders.push((Powders::try_from(powder / 6)?, powder % 6))
+                    if powder == 0 {
+                        powders.push(None);
+                    } else {
+                        let (elem, tier) = if powder % 6 == 0 {
+                            ((powder / 6) - 1, 6)
+                        } else {
+                            ((powder / 6), powder % 6)
+                        };
+                        powders.push(Some((Powders::try_from(elem)?, tier)))
+                    }
                 }
 
                 Ok(Self {

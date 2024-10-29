@@ -1,5 +1,5 @@
 use idmangler_lib::{
-    encoding::encode_string,
+    encoding::{decode_string, encode_string},
     types::{ItemType, Powders, RollType, Stat, TransformVersion},
     DataEncoder, EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData,
     StartData, TypeData,
@@ -103,7 +103,11 @@ fn complex_item() {
     // powders
     PowderData {
         powder_slots: 3,
-        powders: vec![(Powders::AIR, 0), (Powders::FIRE, 0), (Powders::FIRE, 0)],
+        powders: vec![
+            Some((Powders::AIR, 6)),
+            Some((Powders::FIRE, 6)),
+            Some((Powders::FIRE, 6)),
+        ],
     }
     .encode(ver, &mut out)
     .unwrap();
@@ -119,6 +123,7 @@ fn complex_item() {
 
     let outstr = encode_string(&out);
 
+    assert_eq!(out, decode_string("󰀀󰄀󰉉󶵭󶽬󶅴󶥯󶸀󰌅󰀘󵄗󴤒󴬄󶘂󳀄󰌃󿘰󰔄󰘆󰃿"));
     assert_eq!(&outstr, "󰀀󰄀󰉉󶵭󶽬󶅴󶥯󶸀󰌅󰀘󵄗󴤒󴬄󶘂󳀄󰌃󿘰󰔄󰘆󰃿");
 }
 
