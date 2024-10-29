@@ -13,9 +13,9 @@ use super::{
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct DamageData {
     /// Attack speed of the item
-    attack_speed: AttackSpeed,
+    pub attack_speed: AttackSpeed,
     /// The damage values of the item
-    damages: Vec<(DamageType, Range<i32>)>,
+    pub damages: Vec<(DamageType, Range<i32>)>,
 }
 
 impl TransformId for DamageData {
