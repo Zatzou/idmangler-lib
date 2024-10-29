@@ -2,16 +2,16 @@ use thiserror::Error;
 
 use crate::DecodeError;
 
-#[repr(i8)]
+#[repr(u8)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum AttackSpeed {
-    SuperFast = 3,
-    VeryFast = 2,
-    Fast = 1,
-    Normal = 0,
-    Slow = -1,
-    VerySlow = -2,
-    SuperSlow = -3,
+    SuperFast = 0,
+    VeryFast = 1,
+    Fast = 2,
+    Normal = 3,
+    Slow = 4,
+    VerySlow = 5,
+    SuperSlow = 6,
 }
 
 impl From<AttackSpeed> for u8 {
@@ -35,13 +35,13 @@ impl TryFrom<u8> for AttackSpeed {
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
         match value as i8 {
-            3 => Ok(Self::SuperFast),
-            2 => Ok(Self::VeryFast),
-            1 => Ok(Self::Fast),
-            0 => Ok(Self::Normal),
-            -1 => Ok(Self::Slow),
-            -2 => Ok(Self::VerySlow),
-            -3 => Ok(Self::SuperSlow),
+            0 => Ok(Self::SuperFast),
+            1 => Ok(Self::VeryFast),
+            2 => Ok(Self::Fast),
+            3 => Ok(Self::Normal),
+            4 => Ok(Self::Slow),
+            5 => Ok(Self::VerySlow),
+            6 => Ok(Self::SuperSlow),
 
             _ => Err(BadAttackSpeed(value as i8)),
         }
