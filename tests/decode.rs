@@ -1,6 +1,6 @@
 use idmangler_lib::{
     decode,
-    types::{ItemType, Powders, RollType, Stat, TransformVersion},
+    types::{Element, ItemType, RollType, Stat, TransformVersion},
     EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData, StartData, TypeData,
 };
 
@@ -83,9 +83,9 @@ fn complex_item() {
             PowderData {
                 powder_slots: 3,
                 powders: vec![
-                    Some((Powders::AIR, 6)),
-                    Some((Powders::FIRE, 6)),
-                    Some((Powders::FIRE, 6))
+                    Some((Element::Air, 6)),
+                    Some((Element::Fire, 6)),
+                    Some((Element::Fire, 6))
                 ],
             }
             .into(),

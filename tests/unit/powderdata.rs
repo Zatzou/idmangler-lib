@@ -1,5 +1,5 @@
 use idmangler_lib::{
-    types::{Powders, TransformVersion},
+    types::{Element, TransformVersion},
     DataDecoder, DataEncoder, PowderData,
 };
 
@@ -9,11 +9,11 @@ fn powderdata_roundtrip() {
     let mut pow = Vec::new();
 
     for i in 0..51 {
-        pow.push(Some((Powders::AIR, (i % 6) + 1)));
-        pow.push(Some((Powders::EARTH, (i % 6) + 1)));
-        pow.push(Some((Powders::FIRE, (i % 6) + 1)));
-        pow.push(Some((Powders::THUNDER, (i % 6) + 1)));
-        pow.push(Some((Powders::WATER, (i % 6) + 1)));
+        pow.push(Some((Element::Air, (i % 6) + 1)));
+        pow.push(Some((Element::Earth, (i % 6) + 1)));
+        pow.push(Some((Element::Fire, (i % 6) + 1)));
+        pow.push(Some((Element::Thunder, (i % 6) + 1)));
+        pow.push(Some((Element::Water, (i % 6) + 1)));
     }
 
     let powders = PowderData {

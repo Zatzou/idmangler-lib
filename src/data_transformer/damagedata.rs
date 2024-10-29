@@ -2,7 +2,7 @@ use std::ops::Range;
 
 use crate::{
     encoding::{decode_varint, encode_varint},
-    types::{AttackSpeed, DamageType, TransformVersion},
+    types::{AttackSpeed, Element, TransformVersion},
 };
 
 use super::{
@@ -15,7 +15,9 @@ pub struct DamageData {
     /// Attack speed of the item
     pub attack_speed: AttackSpeed,
     /// The damage values of the item
-    pub damages: Vec<(DamageType, Range<i32>)>,
+    ///
+    /// A None elemental value represents neutral damage
+    pub damages: Vec<(Option<Element>, Range<i32>)>,
 }
 
 impl TransformId for DamageData {
@@ -38,7 +40,11 @@ impl DataEncoder for DamageData {
 
                 for (damage_type, damage_value) in self.damages.iter() {
                     // damage type
-                    out.push((*damage_type).into());
+                    out.push(if let Some(e) = damage_type {
+                        *e as u8
+                    } else {
+                        5
+                    });
 
                     // damage value range
                     out.append(&mut encode_varint(damage_value.start as i64));
@@ -71,8 +77,12 @@ impl DataDecoder for DamageData {
 
                 for _ in 0..num_damages {
                     // damage type
-                    let damage_type =
-                        DamageType::try_from(bytes.next().ok_or(DecodeError::BadDamageType(0))?)?;
+                    let dtbyte = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
+                    let damage_type = if dtbyte == 5 {
+                        None
+                    } else {
+                        Some(Element::try_from(dtbyte)?)
+                    };
 
                     // damage value range
                     let start = decode_varint(bytes)? as i32;

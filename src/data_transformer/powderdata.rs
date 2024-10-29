@@ -1,4 +1,4 @@
-use crate::types::{Powders, TransformVersion};
+use crate::types::{Element, TransformVersion};
 
 use super::{
     AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
@@ -10,7 +10,7 @@ pub struct PowderData {
     /// The number of powder slots on this item
     pub powder_slots: u8,
     /// The powders on this item along with the tier of the powders (currently unused as wynntils does not encode this data)
-    pub powders: Vec<Option<(Powders, u8)>>,
+    pub powders: Vec<Option<(Element, u8)>>,
 }
 
 impl TransformId for PowderData {
@@ -104,7 +104,7 @@ impl DataDecoder for PowderData {
                         } else {
                             ((powder / 6), powder % 6)
                         };
-                        powders.push(Some((Powders::try_from(elem)?, tier)))
+                        powders.push(Some((Element::try_from(elem)?, tier)))
                     }
                 }
 
