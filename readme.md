@@ -8,8 +8,6 @@ This project is currently still under development but everything required for ba
 
 No guarantees are made for project stability before the 1.0 version.
 
-Crafted gear is implemented, but untested currently.
-
 
 ## License
 
