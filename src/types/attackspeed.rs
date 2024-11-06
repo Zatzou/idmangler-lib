@@ -43,7 +43,7 @@ impl TryFrom<u8> for AttackSpeed {
             5 => Ok(Self::VerySlow),
             6 => Ok(Self::SuperSlow),
 
-            _ => Err(BadAttackSpeed(value as u8)),
+            _ => Err(BadAttackSpeed(value)),
         }
     }
 }

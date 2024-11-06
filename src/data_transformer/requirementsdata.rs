@@ -32,7 +32,7 @@ impl DataEncoder for RequirementsData {
                 out.push(self.level);
 
                 // class requirement
-                let class = self.class.map(|c| c.into()).unwrap_or(0);
+                let class = self.class.map_or(0, Into::into);
                 out.push(class);
 
                 if self.skills.len() > 255 {

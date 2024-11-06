@@ -102,8 +102,6 @@ impl IdentificationData {
                 }
 
                 bytes.push(roll_val);
-            } else {
-                continue;
             }
         }
 
@@ -155,7 +153,6 @@ impl DataDecoder for IdentificationData {
                             base: baseval,
                             roll: RollType::PreIdentified,
                         });
-                        continue;
                     } else {
                         // decode the roll
                         let introll = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
@@ -164,7 +161,7 @@ impl DataDecoder for IdentificationData {
                             kind: id,
                             base: baseval,
                             roll: RollType::Value(introll),
-                        })
+                        });
                     }
                 }
 

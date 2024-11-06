@@ -104,7 +104,7 @@ impl DataDecoder for PowderData {
                         } else {
                             ((powder / 6), powder % 6)
                         };
-                        powders.push(Some((Element::try_from(elem)?, tier)))
+                        powders.push(Some((Element::try_from(elem)?, tier)));
                     }
                 }
 
