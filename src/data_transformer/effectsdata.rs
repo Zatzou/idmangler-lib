@@ -64,7 +64,7 @@ impl DataDecoder for EffectsData {
                     let value = decode_varint(bytes)?;
 
                     effects.push(Effect {
-                        kind: kind,
+                        kind,
                         value: value as i32,
                     });
                 }
