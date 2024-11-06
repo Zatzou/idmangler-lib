@@ -22,7 +22,7 @@ impl From<AttackSpeed> for u8 {
 
 #[derive(Error, Debug)]
 #[error("Invalid attack speed id:`{0}`")]
-pub struct BadAttackSpeed(pub i8);
+pub struct BadAttackSpeed(pub u8);
 
 impl From<BadAttackSpeed> for DecodeError {
     fn from(value: BadAttackSpeed) -> Self {
@@ -34,7 +34,7 @@ impl TryFrom<u8> for AttackSpeed {
     type Error = BadAttackSpeed;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
-        match value as i8 {
+        match value {
             0 => Ok(Self::SuperFast),
             1 => Ok(Self::VeryFast),
             2 => Ok(Self::Fast),
@@ -43,7 +43,7 @@ impl TryFrom<u8> for AttackSpeed {
             5 => Ok(Self::VerySlow),
             6 => Ok(Self::SuperSlow),
 
-            _ => Err(BadAttackSpeed(value as i8)),
+            _ => Err(BadAttackSpeed(value as u8)),
         }
     }
 }

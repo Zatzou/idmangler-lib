@@ -242,7 +242,7 @@ pub enum DecodeError {
 
     /// An invalid attack speed was encountered
     #[error("Invalid attack speed id:`{0}`")]
-    BadAttackSpeed(i8),
+    BadAttackSpeed(u8),
     /// An invalid damage type was encountered
     #[error("Invalid damage type id:`{0}`")]
     BadDamageType(u8),
