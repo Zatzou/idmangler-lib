@@ -9,7 +9,7 @@ mod geartype;
 mod itemtype;
 mod skilltype;
 mod stat;
-mod transform;
+mod version;
 
 #[doc(inline)]
 pub use itemtype::ItemType;
@@ -22,7 +22,7 @@ pub use stat::RollType;
 pub use stat::Stat;
 
 #[doc(inline)]
-pub use transform::TransformVersion;
+pub use version::EncodingVersion;
 
 #[doc(inline)]
 pub use geartype::GearType;

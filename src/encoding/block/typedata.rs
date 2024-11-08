@@ -1,21 +1,25 @@
-use crate::types::{ItemType, TransformVersion};
-
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+use crate::{
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::{ItemType, EncodingVersion},
 };
+
+use super::DataBlockId;
 
 /// The transformer for the item type data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub struct TypeData(pub ItemType);
 
 impl TransformId for TypeData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::TypeData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::TypeData as u8;
 }
 
 impl DataEncoder for TypeData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => out.push(self.0.into()),
+            EncodingVersion::Version1 => out.push(self.0.into()),
         }
 
         Ok(())
@@ -25,13 +29,13 @@ impl DataEncoder for TypeData {
 impl DataDecoder for TypeData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 let b = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
                 Ok(Self(ItemType::try_from(b)?))

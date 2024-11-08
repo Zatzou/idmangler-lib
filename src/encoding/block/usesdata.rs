@@ -1,8 +1,12 @@
-use crate::types::TransformVersion;
-
-use super::{
-    DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+use crate::{
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::EncodingVersion,
 };
+
+use super::DataBlockId;
 
 /// Sets the number of uses of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
@@ -14,13 +18,13 @@ pub struct UsesData {
 }
 
 impl TransformId for UsesData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::UsesData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::UsesData as u8;
 }
 
 impl DataEncoder for UsesData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 // first the current amount left
                 out.push(self.current);
                 // then the max amount
@@ -35,13 +39,13 @@ impl DataEncoder for UsesData {
 impl DataDecoder for UsesData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 let current = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let max = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
@@ -51,7 +55,7 @@ impl DataDecoder for UsesData {
     }
 }
 
-impl From<UsesData> for super::AnyData {
+impl From<UsesData> for AnyData {
     fn from(value: UsesData) -> Self {
         Self::UsesData(value)
     }

@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use crate::DecodeError;
+use crate::encoding::DecodeError;
 
 /// Enum for encoding the type of an item the idstring represents
 #[repr(u8)]

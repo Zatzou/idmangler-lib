@@ -1,13 +1,15 @@
 use std::ops::Range;
 
 use crate::{
-    encoding::{decode_varint, encode_varint},
-    types::{AttackSpeed, Element, TransformVersion},
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        varint::{decode_varint, encode_varint},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::{AttackSpeed, Element, EncodingVersion},
 };
 
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
-};
+use super::DataBlockId;
 
 /// Damages of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -21,13 +23,13 @@ pub struct DamageData {
 }
 
 impl TransformId for DamageData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::DamageData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::DamageData as u8;
 }
 
 impl DataEncoder for DamageData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 // attack speed
                 out.push(self.attack_speed as u8);
 
@@ -60,13 +62,13 @@ impl DataEncoder for DamageData {
 impl DataDecoder for DamageData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 // attack speed
                 let attack_speed =
                     AttackSpeed::try_from(bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?)?;

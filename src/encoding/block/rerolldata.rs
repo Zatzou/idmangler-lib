@@ -1,25 +1,25 @@
-use crate::types::TransformVersion;
-
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+use crate::{
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::EncodingVersion,
 };
+
+use super::DataBlockId;
 
 /// The transformer for reroll data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct RerollData(pub u8);
 
 impl TransformId for RerollData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::RerollData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::RerollData as u8;
 }
 
 impl DataEncoder for RerollData {
-    fn encode_data(
-        &self,
-        ver: crate::types::TransformVersion,
-        out: &mut Vec<u8>,
-    ) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => out.push(self.0),
+            EncodingVersion::Version1 => out.push(self.0),
         }
 
         Ok(())
@@ -29,13 +29,13 @@ impl DataEncoder for RerollData {
 impl DataDecoder for RerollData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 Ok(Self(bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?))
             }
         }

@@ -1,17 +1,17 @@
 use thiserror::Error;
 
-use crate::DecodeError;
+use crate::encoding::DecodeError;
 
 /// This enum represents the version of the encoding being used
 ///
 /// At the current time the only version of the encoding is the first version
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
-pub enum TransformVersion {
+pub enum EncodingVersion {
     /// Represents the version 1 of the wynntils encoding scheme
     Version1 = 0,
 }
 
-impl TransformVersion {
+impl EncodingVersion {
     pub fn version(&self) -> u8 {
         *self as u8
     }
@@ -27,7 +27,7 @@ impl From<UnknownTransformVersion> for DecodeError {
     }
 }
 
-impl TryFrom<u8> for TransformVersion {
+impl TryFrom<u8> for EncodingVersion {
     type Error = UnknownTransformVersion;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {

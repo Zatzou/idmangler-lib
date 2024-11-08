@@ -1,6 +1,6 @@
 use idmangler_lib::{
-    types::{Element, TransformVersion},
-    DataDecoder, DataEncoder, PowderData,
+    encoding::{block::PowderData, DataDecoder, DataEncoder},
+    types::{Element, EncodingVersion},
 };
 
 #[test]
@@ -21,12 +21,10 @@ fn powderdata_roundtrip() {
         powders: pow,
     };
 
-    powders
-        .encode(TransformVersion::Version1, &mut out)
-        .unwrap();
+    powders.encode(EncodingVersion::Version1, &mut out).unwrap();
 
     let mut iter = out.iter().copied().skip(1);
-    let decoded = PowderData::decode_data(&mut iter, TransformVersion::Version1).unwrap();
+    let decoded = PowderData::decode_data(&mut iter, EncodingVersion::Version1).unwrap();
 
     assert_eq!(powders, decoded);
 }

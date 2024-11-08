@@ -1,11 +1,13 @@
 use crate::{
-    encoding::{decode_varint, encode_varint},
-    types::{RollType, Stat, TransformVersion},
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        varint::{decode_varint, encode_varint},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::{EncodingVersion, RollType, Stat},
 };
 
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
-};
+use super::DataBlockId;
 
 /// The transformer for identification data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
@@ -20,13 +22,13 @@ pub struct IdentificationData {
 }
 
 impl TransformId for IdentificationData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::IdentificationData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::IdentificationData as u8;
 }
 
 impl DataEncoder for IdentificationData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 if self.identifications.len() > 255 {
                     return Err(EncodeError::TooManyIdentifications);
                 }
@@ -47,9 +49,9 @@ impl DataEncoder for IdentificationData {
         }
     }
 
-    fn should_encode_data(&self, ver: TransformVersion) -> bool {
+    fn should_encode_data(&self, ver: EncodingVersion) -> bool {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 if self.extended_encoding {
                     !self.identifications.is_empty()
                 } else {
@@ -112,13 +114,13 @@ impl IdentificationData {
 impl DataDecoder for IdentificationData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 let mut idents = Vec::new();
 
                 // first byte is the number of identifications

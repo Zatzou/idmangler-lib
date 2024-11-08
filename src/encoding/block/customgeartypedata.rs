@@ -1,21 +1,25 @@
-use crate::types::{GearType, TransformVersion};
-
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+use crate::{
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::{GearType, EncodingVersion},
 };
+
+use super::DataBlockId;
 
 /// Sets the gear type of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct CustomGearTypeData(pub GearType);
 
 impl TransformId for CustomGearTypeData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::CustomGearType as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::CustomGearType as u8;
 }
 
 impl DataEncoder for CustomGearTypeData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 out.push(self.0.get_encode_id());
                 Ok(())
             }
@@ -26,13 +30,13 @@ impl DataEncoder for CustomGearTypeData {
 impl DataDecoder for CustomGearTypeData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let gear = GearType::try_from(id)?;
                 Ok(Self(gear))

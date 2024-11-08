@@ -1,6 +1,6 @@
 use idmangler_lib::{
-    types::{ItemType, TransformVersion},
-    DataDecoder, DataEncoder, DecodeError, TypeData,
+    encoding::{block::TypeData, DataDecoder, DataEncoder, DecodeError},
+    types::{EncodingVersion, ItemType},
 };
 
 #[test]
@@ -16,11 +16,11 @@ fn typedata_roundtrip() {
         let mut buf = Vec::new();
 
         // encode the data
-        td.encode(TransformVersion::Version1, &mut buf).unwrap();
+        td.encode(EncodingVersion::Version1, &mut buf).unwrap();
 
         // decode the data
         let mut iter = buf.iter().copied().skip(1); // skip the transformer id as we are not doing full decodes
-        let td2 = TypeData::decode_data(&mut iter, TransformVersion::Version1).unwrap();
+        let td2 = TypeData::decode_data(&mut iter, EncodingVersion::Version1).unwrap();
 
         // check the results
         assert_eq!(td, td2);
@@ -32,7 +32,7 @@ fn typedata_roundtrip() {
 fn decode_bad_typedata() {
     let bytes: Vec<u8> = Vec::from([255]);
 
-    let ver = TypeData::decode_data(&mut bytes.iter().copied(), TransformVersion::Version1);
+    let ver = TypeData::decode_data(&mut bytes.iter().copied(), EncodingVersion::Version1);
 
     match ver {
         Ok(_) => panic!("Expected an error"),

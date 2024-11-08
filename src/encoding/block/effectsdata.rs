@@ -1,11 +1,13 @@
 use crate::{
-    encoding::{decode_varint, encode_varint},
-    types::{Effect, EffectType, TransformVersion},
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        varint::{decode_varint, encode_varint},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::{Effect, EffectType, EncodingVersion},
 };
 
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
-};
+use super::DataBlockId;
 
 /// Effects of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
@@ -14,13 +16,13 @@ pub struct EffectsData {
 }
 
 impl TransformId for EffectsData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::EffectsData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::EffectsData as u8;
 }
 
 impl DataEncoder for EffectsData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 if self.effects.len() > 255 {
                     return Err(EncodeError::TooManyEffects);
                 }
@@ -45,13 +47,13 @@ impl DataEncoder for EffectsData {
 impl DataDecoder for EffectsData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 let effect_count = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
                 let mut effects = Vec::with_capacity(effect_count as usize);

@@ -1,19 +1,25 @@
-use crate::types::TransformVersion;
+use crate::{
+    encoding::{
+        traits::{DataEncoder, TransformId},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::EncodingVersion,
+};
 
-use super::{AnyData, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId};
+use super::DataBlockId;
 
 /// The start data of the encoding. The start data holds the version of the encoding to be used
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
-pub struct StartData(pub TransformVersion);
+pub struct StartData(pub EncodingVersion);
 
 impl TransformId for StartData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::StartData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::StartData as u8;
 }
 
 impl DataEncoder for StartData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => out.push(self.0.version()),
+            EncodingVersion::Version1 => out.push(self.0.version()),
         }
 
         Ok(())
@@ -24,16 +30,16 @@ impl StartData {
     /// Special case function for parsing the start bytes
     pub(crate) fn decode_start_bytes<B: Iterator<Item = u8>>(
         bytes: &mut B,
-    ) -> Result<TransformVersion, DecodeError> {
+    ) -> Result<EncodingVersion, DecodeError> {
         let idbyte = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
-        if idbyte != DataTransformerTypes::StartData as u8 {
+        if idbyte != DataBlockId::StartData as u8 {
             return Err(DecodeError::NoStartBlock);
         }
 
         let verbyte = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
-        Ok(TransformVersion::try_from(verbyte)?)
+        Ok(EncodingVersion::try_from(verbyte)?)
     }
 }
 

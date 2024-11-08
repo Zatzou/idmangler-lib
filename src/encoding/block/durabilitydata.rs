@@ -1,11 +1,13 @@
 use crate::{
-    encoding::{decode_varint, encode_varint},
-    types::TransformVersion,
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        varint::{decode_varint, encode_varint},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::EncodingVersion,
 };
 
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
-};
+use super::DataBlockId;
 
 /// Durability data of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
@@ -19,13 +21,13 @@ pub struct DurabilityData {
 }
 
 impl TransformId for DurabilityData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::DurabilityData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::DurabilityData as u8;
 }
 
 impl DataEncoder for DurabilityData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 // Wynntils does not check this invariant during decoding. So lets just ignore it for fun
                 // if self.effect_strenght > 100 {
                 //     return Err(EncodeError::EffectStrengthTooHigh(self.effect_strenght));
@@ -46,13 +48,13 @@ impl DataEncoder for DurabilityData {
 impl DataDecoder for DurabilityData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 let effect_strenght = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
                 let max = decode_varint(bytes)? as i32;

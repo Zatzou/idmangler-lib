@@ -1,11 +1,13 @@
 use crate::{
-    encoding::{decode_varint, encode_varint},
-    types::{Element, TransformVersion},
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        varint::{decode_varint, encode_varint},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::{Element, EncodingVersion},
 };
 
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
-};
+use super::DataBlockId;
 
 /// Defense values of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
@@ -17,13 +19,13 @@ pub struct DefenseData {
 }
 
 impl TransformId for DefenseData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::DefenseData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::DefenseData as u8;
 }
 
 impl DataEncoder for DefenseData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 // health value
                 out.append(&mut encode_varint(self.health as i64));
 
@@ -47,7 +49,7 @@ impl DataEncoder for DefenseData {
         todo!()
     }
 
-    fn should_encode_data(&self, _ver: TransformVersion) -> bool {
+    fn should_encode_data(&self, _ver: EncodingVersion) -> bool {
         self.health != 0 || !self.defences.is_empty()
     }
 }
@@ -55,13 +57,13 @@ impl DataEncoder for DefenseData {
 impl DataDecoder for DefenseData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 // health value
                 let health = decode_varint(bytes)? as i32;
 

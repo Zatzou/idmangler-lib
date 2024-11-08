@@ -1,7 +1,10 @@
 use idmangler_lib::{
     decode,
-    types::{Element, ItemType, RollType, Stat, TransformVersion},
-    EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData, StartData, TypeData,
+    encoding::block::{
+        EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData, StartData,
+        TypeData,
+    },
+    types::{Element, EncodingVersion, ItemType, RollType, Stat},
 };
 
 #[test]
@@ -13,7 +16,7 @@ fn simple_item() {
     assert_eq!(
         decode,
         vec![
-            StartData(TransformVersion::Version1).into(),
+            StartData(EncodingVersion::Version1).into(),
             TypeData(ItemType::Gear).into(),
             NameData(String::from("Breezehands")).into(),
             IdentificationData {
@@ -46,7 +49,7 @@ fn complex_item() {
     assert_eq!(
         decode,
         vec![
-            StartData(TransformVersion::Version1).into(),
+            StartData(EncodingVersion::Version1).into(),
             TypeData(ItemType::Gear).into(),
             NameData(String::from("Immolation")).into(),
             IdentificationData {
@@ -105,7 +108,7 @@ fn negative_ids() {
     assert_eq!(
         decode,
         vec![
-            StartData(TransformVersion::Version1).into(),
+            StartData(EncodingVersion::Version1).into(),
             TypeData(ItemType::Gear).into(),
             NameData(String::from("Ghostly Cap")).into(),
             IdentificationData {

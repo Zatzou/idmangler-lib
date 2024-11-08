@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use crate::DecodeError;
+use crate::encoding::DecodeError;
 
 /// Enum representing the possible types of consumables
 #[repr(u8)]

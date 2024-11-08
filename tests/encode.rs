@@ -1,14 +1,19 @@
 use idmangler_lib::{
-    encoding::{decode_string, encode_string},
-    types::{Element, ItemType, RollType, Stat, TransformVersion},
-    DataEncoder, EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData,
-    StartData, TypeData,
+    encoding::{
+        block::{
+            EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData, StartData,
+            TypeData,
+        },
+        string::{decode_string, encode_string},
+        DataEncoder,
+    },
+    types::{Element, EncodingVersion, ItemType, RollType, Stat},
 };
 
 #[test]
 fn simple_item() {
     let mut out = Vec::new();
-    let ver = TransformVersion::Version1;
+    let ver = EncodingVersion::Version1;
 
     // start data
     StartData(ver).encode(ver, &mut out).unwrap();
@@ -53,7 +58,7 @@ fn simple_item() {
 #[test]
 fn complex_item() {
     let mut out = Vec::new();
-    let ver = TransformVersion::Version1;
+    let ver = EncodingVersion::Version1;
 
     // start data
     StartData(ver).encode(ver, &mut out).unwrap();
@@ -130,7 +135,7 @@ fn complex_item() {
 #[test]
 fn negative_ids() {
     let mut out = Vec::new();
-    let ver = TransformVersion::Version1;
+    let ver = EncodingVersion::Version1;
 
     // start data
     StartData(ver).encode(ver, &mut out).unwrap();

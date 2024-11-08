@@ -1,11 +1,13 @@
 use crate::{
-    encoding::{decode_varint, encode_varint},
-    types::TransformVersion,
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        varint::{decode_varint, encode_varint},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::EncodingVersion,
 };
 
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
-};
+use super::DataBlockId;
 
 /// The transformer for shiny data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
@@ -19,13 +21,13 @@ pub struct ShinyData {
 }
 
 impl TransformId for ShinyData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::ShinyData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::ShinyData as u8;
 }
 
 impl DataEncoder for ShinyData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 out.push(self.id);
                 out.append(&mut encode_varint(self.val));
             }
@@ -38,13 +40,13 @@ impl DataEncoder for ShinyData {
 impl DataDecoder for ShinyData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let val = decode_varint(bytes)?;
 

@@ -1,4 +1,4 @@
-use idmangler_lib::encoding::{decode_string, encode_string};
+use idmangler_lib::encoding::string::{decode_string, encode_string};
 
 #[test]
 fn roundtrip_allbytes() {

@@ -1,8 +1,12 @@
-use crate::types::{Element, TransformVersion};
-
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
+use crate::{
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::{Element, EncodingVersion},
 };
+
+use super::DataBlockId;
 
 /// The transformer for powder data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
@@ -14,13 +18,13 @@ pub struct PowderData {
 }
 
 impl TransformId for PowderData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::PowderData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::PowderData as u8;
 }
 
 impl DataEncoder for PowderData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 if self.powders.len() > 255 {
                     return Err(EncodeError::TooManyPowders);
                 }
@@ -71,13 +75,13 @@ impl DataEncoder for PowderData {
 impl DataDecoder for PowderData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
-    ) -> Result<Self, super::DecodeError>
+        ver: EncodingVersion,
+    ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 let slots = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let powder_count = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)? as usize;
 

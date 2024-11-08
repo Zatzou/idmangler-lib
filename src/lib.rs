@@ -1,15 +1,7 @@
-mod data_transformer;
+use encoding::{decode_bytes, string::decode_string, AnyData, DecodeError};
+
 pub mod encoding;
 pub mod types;
-
-#[doc(inline)]
-pub use data_transformer::{
-    decode_bytes, AnyData, CustomConsumableTypeData, CustomGearTypeData, CustomIdentificationData,
-    DamageData, DataDecoder, DataEncoder, DecodeError, DefenseData, DurabilityData, EffectsData,
-    EncodeError, EndData, IdentificationData, NameData, PowderData, RequirementsData, RerollData,
-    ShinyData, StartData, TypeData, UsesData,
-};
-use encoding::decode_string;
 
 /// Decode a given idstring
 pub fn decode(input: &str) -> Result<Vec<AnyData>, DecodeError> {

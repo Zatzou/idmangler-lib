@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use crate::DecodeError;
+use crate::encoding::DecodeError;
 
 #[repr(u8)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]

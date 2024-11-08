@@ -1,11 +1,13 @@
 use crate::{
-    encoding::{decode_varint, encode_varint},
-    types::{ClassType, SkillType, TransformVersion},
+    encoding::{
+        traits::{DataDecoder, DataEncoder, TransformId},
+        varint::{decode_varint, encode_varint},
+        AnyData, DecodeError, EncodeError,
+    },
+    types::{ClassType, EncodingVersion, SkillType},
 };
 
-use super::{
-    AnyData, DataDecoder, DataEncoder, DataTransformerTypes, DecodeError, EncodeError, TransformId,
-};
+use super::DataBlockId;
 
 /// Requirements of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
@@ -21,13 +23,13 @@ pub struct RequirementsData {
 }
 
 impl TransformId for RequirementsData {
-    const TRANSFORMER_ID: u8 = DataTransformerTypes::RequirementsData as u8;
+    const TRANSFORMER_ID: u8 = DataBlockId::RequirementsData as u8;
 }
 
 impl DataEncoder for RequirementsData {
-    fn encode_data(&self, ver: TransformVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
+    fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 // level requirement
                 out.push(self.level);
 
@@ -59,13 +61,13 @@ impl DataEncoder for RequirementsData {
 impl DataDecoder for RequirementsData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
-        ver: TransformVersion,
+        ver: EncodingVersion,
     ) -> Result<Self, DecodeError>
     where
         Self: Sized,
     {
         match ver {
-            TransformVersion::Version1 => {
+            EncodingVersion::Version1 => {
                 let level = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
                 let class = match bytes.next() {

@@ -1,11 +1,12 @@
 use idmangler_lib::{
-    decode_bytes, types::TransformVersion, AnyData, DataEncoder, DecodeError, StartData,
+    encoding::{block::StartData, decode_bytes, AnyData, DataEncoder, DecodeError},
+    types::EncodingVersion,
 };
 
 #[test]
 fn encode_startdata() {
     let mut out = Vec::new();
-    let ver = TransformVersion::Version1;
+    let ver = EncodingVersion::Version1;
 
     StartData(ver).encode(ver, &mut out).unwrap();
 
@@ -21,7 +22,7 @@ fn decode_startdata() {
 
     assert_eq!(
         ver,
-        &AnyData::StartData(StartData(TransformVersion::Version1))
+        &AnyData::StartData(StartData(EncodingVersion::Version1))
     );
 }
 
