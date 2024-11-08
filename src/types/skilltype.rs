@@ -4,7 +4,6 @@ use thiserror::Error;
 #[repr(u8)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum SkillType {
-    // TODO: check that these are correct as wynntils has conflicting info about the order
     Strength = 0,
     Dexterity = 1,
     Intelligence = 2,
