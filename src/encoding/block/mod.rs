@@ -68,7 +68,7 @@ mod usesdata;
 #[doc(inline)]
 pub use usesdata::UsesData;
 
-/// Enum representing the ids of the transformers
+/// Enum representing the ids of the blocks
 enum DataBlockId {
     StartData = 0,
     TypeData = 1,

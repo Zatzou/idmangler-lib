@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         AnyData, DecodeError, EncodeError,
     },
     types::EncodingVersion,
@@ -8,12 +8,12 @@ use crate::{
 
 use super::DataBlockId;
 
-/// The transformer for reroll data
+/// The block for reroll data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct RerollData(pub u8);
 
-impl TransformId for RerollData {
-    const TRANSFORMER_ID: u8 = DataBlockId::RerollData as u8;
+impl BlockId for RerollData {
+    const BLOCK_ID: u8 = DataBlockId::RerollData as u8;
 }
 
 impl DataEncoder for RerollData {

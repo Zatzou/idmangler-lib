@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         varint::{decode_varint, encode_varint},
         AnyData, DecodeError, EncodeError,
     },
@@ -9,7 +9,7 @@ use crate::{
 
 use super::DataBlockId;
 
-/// The transformer for identification data
+/// The block for identification data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct IdentificationData {
     /// The identifications
@@ -21,8 +21,8 @@ pub struct IdentificationData {
     pub extended_encoding: bool,
 }
 
-impl TransformId for IdentificationData {
-    const TRANSFORMER_ID: u8 = DataBlockId::IdentificationData as u8;
+impl BlockId for IdentificationData {
+    const BLOCK_ID: u8 = DataBlockId::IdentificationData as u8;
 }
 
 impl DataEncoder for IdentificationData {

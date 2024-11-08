@@ -19,7 +19,7 @@ fn typedata_roundtrip() {
         td.encode(EncodingVersion::Version1, &mut buf).unwrap();
 
         // decode the data
-        let mut iter = buf.iter().copied().skip(1); // skip the transformer id as we are not doing full decodes
+        let mut iter = buf.iter().copied().skip(1); // skip the block id as we are not doing full decodes
         let td2 = TypeData::decode_data(&mut iter, EncodingVersion::Version1).unwrap();
 
         // check the results

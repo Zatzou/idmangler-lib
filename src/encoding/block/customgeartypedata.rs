@@ -1,9 +1,9 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         AnyData, DecodeError, EncodeError,
     },
-    types::{GearType, EncodingVersion},
+    types::{EncodingVersion, GearType},
 };
 
 use super::DataBlockId;
@@ -12,8 +12,8 @@ use super::DataBlockId;
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct CustomGearTypeData(pub GearType);
 
-impl TransformId for CustomGearTypeData {
-    const TRANSFORMER_ID: u8 = DataBlockId::CustomGearType as u8;
+impl BlockId for CustomGearTypeData {
+    const BLOCK_ID: u8 = DataBlockId::CustomGearType as u8;
 }
 
 impl DataEncoder for CustomGearTypeData {

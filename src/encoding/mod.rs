@@ -54,7 +54,7 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
             15 => out.push(EffectsData::decode_data(bytes, ver)?.into()),
 
             255 => out.push(EndData::decode_data(bytes, ver)?.into()),
-            _ => return Err(DecodeError::UnknownTransformer(id)),
+            _ => return Err(DecodeError::UnknownBlock(id)),
         }
     }
 

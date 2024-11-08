@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{DataDecoder, DataEncoder, BlockId},
         varint::{decode_varint, encode_varint},
         AnyData, DecodeError, EncodeError,
     },
@@ -22,8 +22,8 @@ pub struct RequirementsData {
     pub skills: Vec<(SkillType, i32)>,
 }
 
-impl TransformId for RequirementsData {
-    const TRANSFORMER_ID: u8 = DataBlockId::RequirementsData as u8;
+impl BlockId for RequirementsData {
+    const BLOCK_ID: u8 = DataBlockId::RequirementsData as u8;
 }
 
 impl DataEncoder for RequirementsData {

@@ -1,19 +1,19 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         AnyData, DecodeError, EncodeError,
     },
-    types::{ItemType, EncodingVersion},
+    types::{EncodingVersion, ItemType},
 };
 
 use super::DataBlockId;
 
-/// The transformer for the item type data
+/// The block for the item type data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub struct TypeData(pub ItemType);
 
-impl TransformId for TypeData {
-    const TRANSFORMER_ID: u8 = DataBlockId::TypeData as u8;
+impl BlockId for TypeData {
+    const BLOCK_ID: u8 = DataBlockId::TypeData as u8;
 }
 
 impl DataEncoder for TypeData {

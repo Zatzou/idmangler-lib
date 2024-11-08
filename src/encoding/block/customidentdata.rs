@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         varint::{decode_varint, encode_varint},
         AnyData, DecodeError, EncodeError,
     },
@@ -15,8 +15,8 @@ pub struct CustomIdentificationData {
     pub idents: Vec<CustomStat>,
 }
 
-impl TransformId for CustomIdentificationData {
-    const TRANSFORMER_ID: u8 = DataBlockId::CustomIdentificationData as u8;
+impl BlockId for CustomIdentificationData {
+    const BLOCK_ID: u8 = DataBlockId::CustomIdentificationData as u8;
 }
 
 impl DataEncoder for CustomIdentificationData {

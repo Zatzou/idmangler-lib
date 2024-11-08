@@ -18,22 +18,22 @@ impl EncodingVersion {
 }
 
 #[derive(Error, Debug)]
-#[error("Unknown transform version: {0}")]
-pub struct UnknownTransformVersion(pub u8);
+#[error("Unknown encoding version: {0}")]
+pub struct UnknownEncodingVersion(pub u8);
 
-impl From<UnknownTransformVersion> for DecodeError {
-    fn from(value: UnknownTransformVersion) -> Self {
+impl From<UnknownEncodingVersion> for DecodeError {
+    fn from(value: UnknownEncodingVersion) -> Self {
         DecodeError::UnknownVersion(value.0)
     }
 }
 
 impl TryFrom<u8> for EncodingVersion {
-    type Error = UnknownTransformVersion;
+    type Error = UnknownEncodingVersion;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
         match value {
             0 => Ok(Self::Version1),
-            _ => Err(UnknownTransformVersion(value)),
+            _ => Err(UnknownEncodingVersion(value)),
         }
     }
 }

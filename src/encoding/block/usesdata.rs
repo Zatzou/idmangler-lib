@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{DataDecoder, DataEncoder, BlockId},
         AnyData, DecodeError, EncodeError,
     },
     types::EncodingVersion,
@@ -17,8 +17,8 @@ pub struct UsesData {
     pub max: u8,
 }
 
-impl TransformId for UsesData {
-    const TRANSFORMER_ID: u8 = DataBlockId::UsesData as u8;
+impl BlockId for UsesData {
+    const BLOCK_ID: u8 = DataBlockId::UsesData as u8;
 }
 
 impl DataEncoder for UsesData {

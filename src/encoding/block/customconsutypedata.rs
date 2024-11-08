@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         AnyData, DecodeError, EncodeError,
     },
     types::{ConsumableType, EncodingVersion},
@@ -12,8 +12,8 @@ use super::DataBlockId;
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct CustomConsumableTypeData(pub ConsumableType);
 
-impl TransformId for CustomConsumableTypeData {
-    const TRANSFORMER_ID: u8 = DataBlockId::CustomConsumableTypeData as u8;
+impl BlockId for CustomConsumableTypeData {
+    const BLOCK_ID: u8 = DataBlockId::CustomConsumableTypeData as u8;
 }
 
 impl DataEncoder for CustomConsumableTypeData {

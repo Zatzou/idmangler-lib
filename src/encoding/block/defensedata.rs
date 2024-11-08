@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{DataDecoder, DataEncoder, BlockId},
         varint::{decode_varint, encode_varint},
         AnyData, DecodeError, EncodeError,
     },
@@ -18,8 +18,8 @@ pub struct DefenseData {
     defences: Vec<(Element, i32)>,
 }
 
-impl TransformId for DefenseData {
-    const TRANSFORMER_ID: u8 = DataBlockId::DefenseData as u8;
+impl BlockId for DefenseData {
+    const BLOCK_ID: u8 = DataBlockId::DefenseData as u8;
 }
 
 impl DataEncoder for DefenseData {

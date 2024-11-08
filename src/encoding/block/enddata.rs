@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         AnyData, DecodeError, EncodeError,
     },
     types::EncodingVersion,
@@ -8,12 +8,12 @@ use crate::{
 
 use super::DataBlockId;
 
-/// The transformer for the end data
+/// The block for the end data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct EndData;
 
-impl TransformId for EndData {
-    const TRANSFORMER_ID: u8 = DataBlockId::EndData as u8;
+impl BlockId for EndData {
+    const BLOCK_ID: u8 = DataBlockId::EndData as u8;
 }
 
 impl DataEncoder for EndData {

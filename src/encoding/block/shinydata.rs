@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         varint::{decode_varint, encode_varint},
         AnyData, DecodeError, EncodeError,
     },
@@ -9,7 +9,7 @@ use crate::{
 
 use super::DataBlockId;
 
-/// The transformer for shiny data
+/// The block for shiny data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct ShinyData {
     /// The id of the Shiny stat
@@ -20,8 +20,8 @@ pub struct ShinyData {
     pub val: i64,
 }
 
-impl TransformId for ShinyData {
-    const TRANSFORMER_ID: u8 = DataBlockId::ShinyData as u8;
+impl BlockId for ShinyData {
+    const BLOCK_ID: u8 = DataBlockId::ShinyData as u8;
 }
 
 impl DataEncoder for ShinyData {

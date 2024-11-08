@@ -56,9 +56,9 @@ pub enum DecodeError {
     /// Decoder found a second start block in the data
     #[error("Second start block found in data")]
     StartReparse,
-    /// Decoder hit an unknown transformer which it could not decode
-    #[error("Unknown transformer id:`{0}` was found")]
-    UnknownTransformer(u8),
+    /// Decoder hit an unknown block which it could not decode
+    #[error("Unknown block id:`{0}` was found")]
+    UnknownBlock(u8),
 
     /// An invalid non ascii/utf-8 string was decoded by the parser
     #[error("Decoder decoded a bad string")]

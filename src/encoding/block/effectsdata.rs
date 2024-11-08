@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{DataDecoder, DataEncoder, BlockId},
         varint::{decode_varint, encode_varint},
         AnyData, DecodeError, EncodeError,
     },
@@ -15,8 +15,8 @@ pub struct EffectsData {
     pub effects: Vec<Effect>,
 }
 
-impl TransformId for EffectsData {
-    const TRANSFORMER_ID: u8 = DataBlockId::EffectsData as u8;
+impl BlockId for EffectsData {
+    const BLOCK_ID: u8 = DataBlockId::EffectsData as u8;
 }
 
 impl DataEncoder for EffectsData {

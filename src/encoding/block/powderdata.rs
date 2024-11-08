@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         AnyData, DecodeError, EncodeError,
     },
     types::{Element, EncodingVersion},
@@ -8,7 +8,7 @@ use crate::{
 
 use super::DataBlockId;
 
-/// The transformer for powder data
+/// The block for powder data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct PowderData {
     /// The number of powder slots on this item
@@ -17,8 +17,8 @@ pub struct PowderData {
     pub powders: Vec<Option<(Element, u8)>>,
 }
 
-impl TransformId for PowderData {
-    const TRANSFORMER_ID: u8 = DataBlockId::PowderData as u8;
+impl BlockId for PowderData {
+    const BLOCK_ID: u8 = DataBlockId::PowderData as u8;
 }
 
 impl DataEncoder for PowderData {

@@ -2,7 +2,7 @@ use std::ops::Range;
 
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         varint::{decode_varint, encode_varint},
         AnyData, DecodeError, EncodeError,
     },
@@ -22,8 +22,8 @@ pub struct DamageData {
     pub damages: Vec<(Option<Element>, Range<i32>)>,
 }
 
-impl TransformId for DamageData {
-    const TRANSFORMER_ID: u8 = DataBlockId::DamageData as u8;
+impl BlockId for DamageData {
+    const BLOCK_ID: u8 = DataBlockId::DamageData as u8;
 }
 
 impl DataEncoder for DamageData {

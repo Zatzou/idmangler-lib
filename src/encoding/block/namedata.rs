@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{BlockId, DataDecoder, DataEncoder},
         AnyData, DecodeError, EncodeError,
     },
     types::EncodingVersion,
@@ -8,12 +8,12 @@ use crate::{
 
 use super::DataBlockId;
 
-/// The transformer for item name data
+/// The block for item name data
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
 pub struct NameData(pub String);
 
-impl TransformId for NameData {
-    const TRANSFORMER_ID: u8 = DataBlockId::NameData as u8;
+impl BlockId for NameData {
+    const BLOCK_ID: u8 = DataBlockId::NameData as u8;
 }
 
 impl DataEncoder for NameData {

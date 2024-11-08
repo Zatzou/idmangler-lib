@@ -1,6 +1,6 @@
 use crate::{
     encoding::{
-        traits::{DataDecoder, DataEncoder, TransformId},
+        traits::{DataDecoder, DataEncoder, BlockId},
         varint::{decode_varint, encode_varint},
         AnyData, DecodeError, EncodeError,
     },
@@ -20,8 +20,8 @@ pub struct DurabilityData {
     pub max: i32,
 }
 
-impl TransformId for DurabilityData {
-    const TRANSFORMER_ID: u8 = DataBlockId::DurabilityData as u8;
+impl BlockId for DurabilityData {
+    const BLOCK_ID: u8 = DataBlockId::DurabilityData as u8;
 }
 
 impl DataEncoder for DurabilityData {
