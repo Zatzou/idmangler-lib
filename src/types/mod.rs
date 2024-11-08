@@ -5,6 +5,7 @@ mod classtype;
 mod consumabletype;
 mod effect;
 mod element;
+pub mod errors;
 mod geartype;
 mod itemtype;
 mod skilltype;
