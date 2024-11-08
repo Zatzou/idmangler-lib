@@ -1,7 +1,5 @@
 use thiserror::Error;
 
-use crate::encoding::DecodeError;
-
 /// Enum representing the types of skillpoints
 #[repr(u8)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
@@ -23,12 +21,6 @@ impl From<SkillType> for u8 {
 #[derive(Error, Debug)]
 #[error("Invalid skill type id:`{0}`")]
 pub struct BadSkillType(pub u8);
-
-impl From<BadSkillType> for DecodeError {
-    fn from(value: BadSkillType) -> Self {
-        DecodeError::BadSkillType(value.0)
-    }
-}
 
 impl TryFrom<u8> for SkillType {
     type Error = BadSkillType;

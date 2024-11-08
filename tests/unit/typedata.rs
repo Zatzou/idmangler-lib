@@ -37,7 +37,7 @@ fn decode_bad_typedata() {
     match ver {
         Ok(_) => panic!("Expected an error"),
         Err(e) => match e {
-            DecodeError::BadItemType(d) => assert_eq!(d, 255),
+            DecodeError::BadItemType(d) => assert_eq!(d.0, 255),
             _ => panic!("Expected an BadItemType error, got {:?}", e),
         },
     }

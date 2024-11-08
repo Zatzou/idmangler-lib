@@ -1,7 +1,5 @@
 use thiserror::Error;
 
-use crate::encoding::DecodeError;
-
 /// This enum represents the version of the encoding being used
 ///
 /// At the current time the only version of the encoding is the first version
@@ -20,12 +18,6 @@ impl EncodingVersion {
 #[derive(Error, Debug)]
 #[error("Unknown encoding version: {0}")]
 pub struct UnknownEncodingVersion(pub u8);
-
-impl From<UnknownEncodingVersion> for DecodeError {
-    fn from(value: UnknownEncodingVersion) -> Self {
-        DecodeError::UnknownVersion(value.0)
-    }
-}
 
 impl TryFrom<u8> for EncodingVersion {
     type Error = UnknownEncodingVersion;

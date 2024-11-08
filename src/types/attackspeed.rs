@@ -1,7 +1,5 @@
 use thiserror::Error;
 
-use crate::encoding::DecodeError;
-
 #[repr(u8)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum AttackSpeed {
@@ -23,12 +21,6 @@ impl From<AttackSpeed> for u8 {
 #[derive(Error, Debug)]
 #[error("Invalid attack speed id:`{0}`")]
 pub struct BadAttackSpeed(pub u8);
-
-impl From<BadAttackSpeed> for DecodeError {
-    fn from(value: BadAttackSpeed) -> Self {
-        DecodeError::BadAttackSpeed(value.0)
-    }
-}
 
 impl TryFrom<u8> for AttackSpeed {
     type Error = BadAttackSpeed;

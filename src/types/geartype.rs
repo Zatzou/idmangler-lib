@@ -1,7 +1,5 @@
 use thiserror::Error;
 
-use crate::encoding::DecodeError;
-
 /// Enum representing the possible types of gear items
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub enum GearType {
@@ -58,12 +56,6 @@ impl GearType {
 #[derive(Error, Debug)]
 #[error("Invalid gear type id:`{0}` was decoded")]
 pub struct BadGearType(pub u8);
-
-impl From<BadGearType> for DecodeError {
-    fn from(value: BadGearType) -> Self {
-        DecodeError::BadGearType(value.0)
-    }
-}
 
 impl TryFrom<u8> for GearType {
     type Error = BadGearType;

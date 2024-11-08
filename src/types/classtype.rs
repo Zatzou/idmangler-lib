@@ -1,7 +1,5 @@
 use thiserror::Error;
 
-use crate::encoding::DecodeError;
-
 /// Enum representing the types of classes
 #[repr(u8)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
@@ -22,12 +20,6 @@ impl From<ClassType> for u8 {
 #[derive(Error, Debug)]
 #[error("Invalid class type id:`{0}`")]
 pub struct BadClassType(pub u8);
-
-impl From<BadClassType> for DecodeError {
-    fn from(value: BadClassType) -> Self {
-        DecodeError::BadClassType(value.0)
-    }
-}
 
 impl TryFrom<u8> for ClassType {
     type Error = BadClassType;

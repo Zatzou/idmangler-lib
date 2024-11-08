@@ -35,7 +35,7 @@ fn decode_bad_startdata() {
     match ver {
         Ok(_) => panic!("Expected an error"),
         Err(e) => match e {
-            DecodeError::UnknownVersion(d) => assert_eq!(d, 255),
+            DecodeError::UnknownVersion(d) => assert_eq!(d.0, 255),
             _ => panic!("Expected an UnknownVersion error, got {:?}", e),
         },
     }

@@ -1,7 +1,5 @@
 use thiserror::Error;
 
-use crate::encoding::DecodeError;
-
 /// Struct representing an effect on an item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
 pub struct Effect {
@@ -29,12 +27,6 @@ impl From<EffectType> for u8 {
 #[derive(Error, Debug)]
 #[error("Invalid effect type: `{0}`")]
 pub struct BadEffectType(u8);
-
-impl From<BadEffectType> for DecodeError {
-    fn from(value: BadEffectType) -> Self {
-        DecodeError::BadEffectType(value.0)
-    }
-}
 
 impl TryFrom<u8> for EffectType {
     type Error = BadEffectType;

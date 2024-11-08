@@ -1,5 +1,10 @@
 use thiserror::Error;
 
+use crate::types::errors::{
+    BadAttackSpeed, BadClassType, BadConsumableType, BadEffectType, BadElement, BadGearType,
+    BadItemType, BadSkillType, UnknownEncodingVersion,
+};
+
 /// Potential errors thrown during encoding of id strings
 #[derive(Error, Debug)]
 pub enum EncodeError {
@@ -51,8 +56,8 @@ pub enum DecodeError {
     #[error("No start block found")]
     NoStartBlock,
     /// Encoding of an unknown potentially future version was hit
-    #[error("Unknown encoding version: `{0}`")]
-    UnknownVersion(u8),
+    #[error("Unknown encoding version: `{}`", 0.0)]
+    UnknownVersion(#[from] UnknownEncodingVersion),
     /// Decoder found a second start block in the data
     #[error("Second start block found in data")]
     StartReparse,
@@ -64,41 +69,34 @@ pub enum DecodeError {
     #[error("Decoder decoded a bad string")]
     BadString,
     /// An invalid type was found
-    #[error("Invalid type of id:`{0}` was decoded")]
-    BadItemType(u8),
+    #[error("Invalid type of id:`{}` was decoded", 0.0)]
+    BadItemType(#[from] BadItemType),
 
-    /// An invalid powder was encountered
-    #[error("Invalid powder of id:`{0}` was decoded")]
-    BadPowderType(u8),
-
-    #[error("Invalid gear type id:`{0}` was decoded")]
-    BadGearType(u8),
+    #[error("Invalid gear type id:`{}` was decoded", 0.0)]
+    BadGearType(#[from] BadGearType),
 
     /// An invalid class type was encountered
-    #[error("Invalid class type id:`{0}`")]
-    BadClassType(u8),
+    #[error("Invalid class type id:`{}`", 0.0)]
+    BadClassType(#[from] BadClassType),
     /// An invalid skill type was encountered
-    #[error("Invalid skill type id:`{0}`")]
-    BadSkillType(u8),
+    #[error("Invalid skill type id:`{}`", 0.0)]
+    BadSkillType(#[from] BadSkillType),
 
     /// An invalid attack speed was encountered
-    #[error("Invalid attack speed id:`{0}`")]
-    BadAttackSpeed(u8),
-    /// An invalid damage type was encountered
-    #[error("Invalid damage type id:`{0}`")]
-    BadDamageType(u8),
+    #[error("Invalid attack speed id:`{}`", 0.0)]
+    BadAttackSpeed(#[from] BadAttackSpeed),
 
     /// An invalid element id was encountered
-    #[error("Invalid element id:`{0}`")]
-    BadElement(u8),
+    #[error("Invalid element id:`{}`", 0.0)]
+    BadElement(#[from] BadElement),
 
     /// An invalid consumable type was encountered
-    #[error("Invalid consumable type id:`{0}`")]
-    BadConsumableType(u8),
+    #[error("Invalid consumable type id:`{}`", 0.0)]
+    BadConsumableType(#[from] BadConsumableType),
 
     /// An invalid effect type was encountered
-    #[error("Invalid effect type id:`{0}`")]
-    BadEffectType(u8),
+    #[error("Invalid effect type id:`{}`", 0.0)]
+    BadEffectType(#[from] BadEffectType),
 
     /// The decoder unexpectedly ran out of bytes to decode while decoding
     #[error("Unexpectedly hit end of bytestream while decoding")]

@@ -1,7 +1,5 @@
 use thiserror::Error;
 
-use crate::encoding::DecodeError;
-
 /// Enum representing the elements
 #[repr(u8)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
@@ -22,12 +20,6 @@ impl From<Element> for u8 {
 #[derive(Error, Debug)]
 #[error("Invalid element id:`{0}`")]
 pub struct BadElement(pub u8);
-
-impl From<BadElement> for DecodeError {
-    fn from(value: BadElement) -> Self {
-        DecodeError::BadElement(value.0)
-    }
-}
 
 impl TryFrom<u8> for Element {
     type Error = BadElement;
