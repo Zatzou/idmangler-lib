@@ -11,7 +11,7 @@ pub struct PowderData {
     /// The number of powder slots on this item
     pub powder_slots: u8,
     /// The powders on this item along with the tier of the powders (currently unused as wynntils does not encode this data)
-    pub powders: Vec<Option<(Element, u8)>>,
+    pub powders: Vec<(Element, u8)>,
 }
 
 impl BlockId for PowderData {
@@ -32,15 +32,12 @@ impl DataEncoder for PowderData {
                 let mut powder_data = vec![0u8; total_bits];
 
                 for (i, pow) in self.powders.iter().enumerate() {
-                    let (elem, tier) = if let Some(pow) = pow {
+                    let (elem, tier) = {
                         if pow.1 < 1 || pow.1 > 6 {
                             return Err(EncodeError::InvalidPowderTier(pow.1));
                         }
 
                         (pow.0 as u8, pow.1)
-                    } else {
-                        // Empty powder slots can be represented as 0 tiered earth powders as this produces the required 0b00000 value
-                        (0, 0)
                     };
 
                     // calculate the 5 bit powder value
@@ -98,14 +95,15 @@ impl DataDecoder for PowderData {
                     }
 
                     if powder == 0 {
-                        powders.push(None);
+                        // ignore empty powders
+                        continue;
                     } else {
                         let (elem, tier) = if powder % 6 == 0 {
                             ((powder / 6) - 1, 6)
                         } else {
                             ((powder / 6), powder % 6)
                         };
-                        powders.push(Some((Element::try_from(elem)?, tier)));
+                        powders.push((Element::try_from(elem)?, tier));
                     }
                 }
 

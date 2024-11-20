@@ -10,11 +10,11 @@ fn powderdata_roundtrip() {
     let mut pow = Vec::new();
 
     for i in 0..51 {
-        pow.push(Some((Element::Air, (i % 6) + 1)));
-        pow.push(Some((Element::Earth, (i % 6) + 1)));
-        pow.push(Some((Element::Fire, (i % 6) + 1)));
-        pow.push(Some((Element::Thunder, (i % 6) + 1)));
-        pow.push(Some((Element::Water, (i % 6) + 1)));
+        pow.push((Element::Air, (i % 6) + 1));
+        pow.push((Element::Earth, (i % 6) + 1));
+        pow.push((Element::Fire, (i % 6) + 1));
+        pow.push((Element::Thunder, (i % 6) + 1));
+        pow.push((Element::Water, (i % 6) + 1));
     }
 
     let powders = PowderData {
