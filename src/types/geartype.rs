@@ -2,7 +2,7 @@ use thiserror::Error;
 
 /// Enum representing the possible types of gear items
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
-pub enum GearType {
+pub enum CraftedGearType {
     Spear,
     Wand,
     Dagger,
@@ -29,26 +29,26 @@ pub enum GearType {
     // Charm,
 }
 
-impl GearType {
+impl CraftedGearType {
     pub fn get_encode_id(&self) -> u8 {
         match self {
-            GearType::Spear => 0,
-            GearType::Wand => 1,
-            GearType::Dagger => 2,
-            GearType::Bow => 3,
-            GearType::Relik => 4,
+            CraftedGearType::Spear => 0,
+            CraftedGearType::Wand => 1,
+            CraftedGearType::Dagger => 2,
+            CraftedGearType::Bow => 3,
+            CraftedGearType::Relik => 4,
 
-            GearType::Weapon => 12,
-            GearType::Accessory => 13,
+            CraftedGearType::Weapon => 12,
+            CraftedGearType::Accessory => 13,
 
-            GearType::Ring => 5,
-            GearType::Bracelet => 6,
-            GearType::Necklace => 7,
+            CraftedGearType::Ring => 5,
+            CraftedGearType::Bracelet => 6,
+            CraftedGearType::Necklace => 7,
 
-            GearType::Helmet => 8,
-            GearType::Chestplate => 9,
-            GearType::Leggings => 10,
-            GearType::Boots => 11,
+            CraftedGearType::Helmet => 8,
+            CraftedGearType::Chestplate => 9,
+            CraftedGearType::Leggings => 10,
+            CraftedGearType::Boots => 11,
         }
     }
 }
@@ -57,28 +57,28 @@ impl GearType {
 #[error("Invalid gear type id:`{0}` was decoded")]
 pub struct BadGearType(pub u8);
 
-impl TryFrom<u8> for GearType {
+impl TryFrom<u8> for CraftedGearType {
     type Error = BadGearType;
 
     fn try_from(value: u8) -> Result<Self, Self::Error> {
         match value {
-            0 => Ok(GearType::Spear),
-            1 => Ok(GearType::Wand),
-            2 => Ok(GearType::Dagger),
-            3 => Ok(GearType::Bow),
-            4 => Ok(GearType::Relik),
+            0 => Ok(CraftedGearType::Spear),
+            1 => Ok(CraftedGearType::Wand),
+            2 => Ok(CraftedGearType::Dagger),
+            3 => Ok(CraftedGearType::Bow),
+            4 => Ok(CraftedGearType::Relik),
 
-            12 => Ok(GearType::Weapon),
-            13 => Ok(GearType::Accessory),
+            12 => Ok(CraftedGearType::Weapon),
+            13 => Ok(CraftedGearType::Accessory),
 
-            5 => Ok(GearType::Ring),
-            6 => Ok(GearType::Bracelet),
-            7 => Ok(GearType::Necklace),
+            5 => Ok(CraftedGearType::Ring),
+            6 => Ok(CraftedGearType::Bracelet),
+            7 => Ok(CraftedGearType::Necklace),
 
-            8 => Ok(GearType::Helmet),
-            9 => Ok(GearType::Chestplate),
-            10 => Ok(GearType::Leggings),
-            11 => Ok(GearType::Boots),
+            8 => Ok(CraftedGearType::Helmet),
+            9 => Ok(CraftedGearType::Chestplate),
+            10 => Ok(CraftedGearType::Leggings),
+            11 => Ok(CraftedGearType::Boots),
 
             _ => Err(BadGearType(value)),
         }

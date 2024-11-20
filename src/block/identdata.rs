@@ -1,8 +1,7 @@
 use crate::{
     encoding::{
-        traits::{BlockId, DataDecoder, DataEncoder},
         varint::{decode_varint, encode_varint},
-        AnyData, DecodeError, EncodeError,
+        AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
     },
     types::{EncodingVersion, RollType, Stat},
 };

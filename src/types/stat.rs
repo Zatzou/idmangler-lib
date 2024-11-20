@@ -36,7 +36,7 @@ impl Stat {
 
 /// Struct representing an identification stat on a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
-pub struct CustomStat {
+pub struct CraftedStat {
     /// id of the identification
     pub kind: u8,
     /// value of the identification while at full durability

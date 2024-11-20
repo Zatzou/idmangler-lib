@@ -1,9 +1,9 @@
 use idmangler_lib::{
+    block::{
+        EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData, StartData,
+        TypeData,
+    },
     encoding::{
-        block::{
-            EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData, StartData,
-            TypeData,
-        },
         string::{decode_string, encode_string},
         DataEncoder,
     },

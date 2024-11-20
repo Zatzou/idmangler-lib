@@ -1,25 +1,24 @@
 use crate::{
     encoding::{
-        traits::{BlockId, DataDecoder, DataEncoder},
         varint::{decode_varint, encode_varint},
-        AnyData, DecodeError, EncodeError,
+        AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
     },
-    types::{CustomStat, EncodingVersion},
+    types::{CraftedStat, EncodingVersion},
 };
 
 use super::DataBlockId;
 
 /// Identifications of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
-pub struct CustomIdentificationData {
-    pub idents: Vec<CustomStat>,
+pub struct CraftedIdentificationData {
+    pub idents: Vec<CraftedStat>,
 }
 
-impl BlockId for CustomIdentificationData {
+impl BlockId for CraftedIdentificationData {
     const BLOCK_ID: u8 = DataBlockId::CustomIdentificationData as u8;
 }
 
-impl DataEncoder for CustomIdentificationData {
+impl DataEncoder for CraftedIdentificationData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
             EncodingVersion::Version1 => {
@@ -44,7 +43,7 @@ impl DataEncoder for CustomIdentificationData {
     }
 }
 
-impl DataDecoder for CustomIdentificationData {
+impl DataDecoder for CraftedIdentificationData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
         ver: EncodingVersion,
@@ -64,7 +63,7 @@ impl DataDecoder for CustomIdentificationData {
                     // value of ident
                     let max = decode_varint(bytes)? as i32;
 
-                    idents.push(CustomStat { kind, max });
+                    idents.push(CraftedStat { kind, max });
                 }
 
                 Ok(Self { idents })
@@ -73,8 +72,8 @@ impl DataDecoder for CustomIdentificationData {
     }
 }
 
-impl From<CustomIdentificationData> for AnyData {
-    fn from(value: CustomIdentificationData) -> Self {
+impl From<CraftedIdentificationData> for AnyData {
+    fn from(value: CraftedIdentificationData) -> Self {
         Self::CustomIdentificationData(value)
     }
 }

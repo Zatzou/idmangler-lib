@@ -1,5 +1,5 @@
-use super::block::{
-    CustomConsumableTypeData, CustomGearTypeData, CustomIdentificationData, DamageData,
+use crate::block::{
+    CraftedGearTypeData, CraftedIdentificationData, CraftedConsumableTypeData, DamageData,
     DefenseData, DurabilityData, EffectsData, EndData, IdentificationData, NameData, PowderData,
     RequirementsData, RerollData, ShinyData, StartData, TypeData, UsesData,
 };
@@ -15,13 +15,13 @@ pub enum AnyData {
     RerollData(RerollData),
     ShinyData(ShinyData),
 
-    CustomTypeData(CustomGearTypeData),
+    CustomTypeData(CraftedGearTypeData),
     DurabilityData(DurabilityData),
     RequirementsData(RequirementsData),
     DamageData(DamageData),
     DefenseData(DefenseData),
-    CustomIdentificationData(CustomIdentificationData),
-    CustomConsumableTypeData(CustomConsumableTypeData),
+    CustomIdentificationData(CraftedIdentificationData),
+    CustomConsumableTypeData(CraftedConsumableTypeData),
     UsesData(UsesData),
     EffectsData(EffectsData),
 

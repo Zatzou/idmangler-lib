@@ -1,5 +1,6 @@
 use idmangler_lib::{
-    encoding::{block::IdentificationData, DataDecoder, DataEncoder},
+    block::IdentificationData,
+    encoding::{DataDecoder, DataEncoder},
     types::{EncodingVersion, RollType, Stat},
 };
 

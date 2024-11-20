@@ -2,15 +2,15 @@
 
 mod customconsutypedata;
 #[doc(inline)]
-pub use customconsutypedata::CustomConsumableTypeData;
+pub use customconsutypedata::CraftedConsumableTypeData;
 
 mod customgeartypedata;
 #[doc(inline)]
-pub use customgeartypedata::CustomGearTypeData;
+pub use customgeartypedata::CraftedGearTypeData;
 
 mod customidentdata;
 #[doc(inline)]
-pub use customidentdata::CustomIdentificationData;
+pub use customidentdata::CraftedIdentificationData;
 
 mod damagedata;
 #[doc(inline)]

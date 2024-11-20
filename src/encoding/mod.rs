@@ -1,11 +1,10 @@
 mod anydata;
 #[doc(inline)]
 pub use anydata::AnyData;
-pub mod block;
 
 mod error;
-use block::{
-    CustomConsumableTypeData, CustomGearTypeData, CustomIdentificationData, DamageData,
+use crate::block::{
+    CraftedGearTypeData, CraftedIdentificationData, CraftedConsumableTypeData, DamageData,
     DefenseData, DurabilityData, EffectsData, EndData, IdentificationData, NameData, PowderData,
     RequirementsData, RerollData, ShinyData, StartData, TypeData, UsesData,
 };
@@ -17,6 +16,7 @@ pub mod string;
 pub(crate) mod varint;
 
 mod traits;
+pub(crate) use traits::BlockId;
 #[doc(inline)]
 pub use traits::{DataDecoder, DataEncoder};
 
@@ -43,13 +43,13 @@ pub fn decode_bytes(bytes: &[u8]) -> Result<Vec<AnyData>, DecodeError> {
             5 => out.push(RerollData::decode_data(bytes, ver)?.into()),
             6 => out.push(ShinyData::decode_data(bytes, ver)?.into()),
 
-            7 => out.push(CustomGearTypeData::decode_data(bytes, ver)?.into()),
+            7 => out.push(CraftedGearTypeData::decode_data(bytes, ver)?.into()),
             8 => out.push(DurabilityData::decode_data(bytes, ver)?.into()),
             9 => out.push(RequirementsData::decode_data(bytes, ver)?.into()),
             10 => out.push(DamageData::decode_data(bytes, ver)?.into()),
             11 => out.push(DefenseData::decode_data(bytes, ver)?.into()),
-            12 => out.push(CustomIdentificationData::decode_data(bytes, ver)?.into()),
-            13 => out.push(CustomConsumableTypeData::decode_data(bytes, ver)?.into()),
+            12 => out.push(CraftedIdentificationData::decode_data(bytes, ver)?.into()),
+            13 => out.push(CraftedConsumableTypeData::decode_data(bytes, ver)?.into()),
             14 => out.push(UsesData::decode_data(bytes, ver)?.into()),
             15 => out.push(EffectsData::decode_data(bytes, ver)?.into()),
 

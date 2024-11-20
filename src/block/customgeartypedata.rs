@@ -1,22 +1,19 @@
 use crate::{
-    encoding::{
-        traits::{BlockId, DataDecoder, DataEncoder},
-        AnyData, DecodeError, EncodeError,
-    },
-    types::{EncodingVersion, GearType},
+    encoding::{AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
+    types::{CraftedGearType, EncodingVersion},
 };
 
 use super::DataBlockId;
 
 /// Sets the gear type of a crafted item
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
-pub struct CustomGearTypeData(pub GearType);
+pub struct CraftedGearTypeData(pub CraftedGearType);
 
-impl BlockId for CustomGearTypeData {
+impl BlockId for CraftedGearTypeData {
     const BLOCK_ID: u8 = DataBlockId::CustomGearType as u8;
 }
 
-impl DataEncoder for CustomGearTypeData {
+impl DataEncoder for CraftedGearTypeData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
             EncodingVersion::Version1 => {
@@ -27,7 +24,7 @@ impl DataEncoder for CustomGearTypeData {
     }
 }
 
-impl DataDecoder for CustomGearTypeData {
+impl DataDecoder for CraftedGearTypeData {
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
         ver: EncodingVersion,
@@ -38,15 +35,15 @@ impl DataDecoder for CustomGearTypeData {
         match ver {
             EncodingVersion::Version1 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
-                let gear = GearType::try_from(id)?;
+                let gear = CraftedGearType::try_from(id)?;
                 Ok(Self(gear))
             }
         }
     }
 }
 
-impl From<CustomGearTypeData> for AnyData {
-    fn from(data: CustomGearTypeData) -> Self {
+impl From<CraftedGearTypeData> for AnyData {
+    fn from(data: CraftedGearTypeData) -> Self {
         AnyData::CustomTypeData(data)
     }
 }

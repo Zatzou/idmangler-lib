@@ -16,7 +16,7 @@ mod version;
 pub use itemtype::ItemType;
 
 #[doc(inline)]
-pub use stat::CustomStat;
+pub use stat::CraftedStat;
 #[doc(inline)]
 pub use stat::RollType;
 #[doc(inline)]
@@ -26,7 +26,7 @@ pub use stat::Stat;
 pub use version::EncodingVersion;
 
 #[doc(inline)]
-pub use geartype::GearType;
+pub use geartype::CraftedGearType;
 
 #[doc(inline)]
 pub use classtype::ClassType;
