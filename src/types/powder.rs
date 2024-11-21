@@ -38,12 +38,17 @@ impl Powder {
     /// # Errors
     /// Setting the tier will fail if the tier is not between 1 and 6
     pub fn set_tier(&mut self, tier: u8) -> Result<(), InvalidPowderTier> {
-        if tier < 1 || tier > 6 {
-            Err(InvalidPowderTier(tier))
-        } else {
+        if Self::valid_tier(tier) {
             self.tier = tier;
             Ok(())
+        } else {
+            Err(InvalidPowderTier(tier))
         }
+    }
+
+    /// Check if the given tier is valid for a powder
+    pub fn valid_tier(tier: u8) -> bool {
+        (1..=6).contains(&tier)
     }
 }
 
@@ -55,11 +60,11 @@ impl TryFrom<(Element, u8)> for Powder {
     type Error = InvalidPowderTier;
 
     fn try_from((element, tier): (Element, u8)) -> Result<Self, Self::Error> {
-        if tier < 1 || tier > 6 {
-            return Err(InvalidPowderTier(tier));
+        if Powder::valid_tier(tier) {
+            Ok(Powder { element, tier })
+        } else {
+            Err(InvalidPowderTier(tier))
         }
-
-        Ok(Powder { element, tier })
     }
 }
 
