@@ -2,7 +2,7 @@ use thiserror::Error;
 
 /// Enum representing the elements
 #[repr(u8)]
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum Element {
     Earth = 0,
     Thunder = 1,

@@ -1,7 +1,7 @@
 use thiserror::Error;
 
 /// Struct representing an effect on an item
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub struct Effect {
     /// Type of the effect
     pub kind: EffectType,
@@ -11,7 +11,7 @@ pub struct Effect {
 
 /// Enum representing the possible types of effects
 #[repr(u8)]
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum EffectType {
     Heal = 0,
     Mana = 1,

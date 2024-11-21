@@ -9,7 +9,7 @@ use crate::{
 use super::DataBlockId;
 
 /// Durability data of a crafted item
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct DurabilityData {
     /// The effect strength of the item is the overall effectiveness of the identifications on the item. (the percentage shown next to the item name)
     pub effect_strenght: u8,

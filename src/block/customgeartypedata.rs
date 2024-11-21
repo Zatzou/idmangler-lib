@@ -6,7 +6,7 @@ use crate::{
 use super::DataBlockId;
 
 /// Sets the gear type of a crafted item
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct CraftedGearTypeData(pub CraftedGearType);
 
 impl BlockId for CraftedGearTypeData {

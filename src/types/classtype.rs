@@ -2,7 +2,7 @@ use thiserror::Error;
 
 /// Enum representing the types of classes
 #[repr(u8)]
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum ClassType {
     Mage = 1,
     Archer = 2,

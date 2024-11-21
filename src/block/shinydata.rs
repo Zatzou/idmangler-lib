@@ -9,7 +9,7 @@ use crate::{
 use super::DataBlockId;
 
 /// The block for shiny data
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct ShinyData {
     /// The id of the Shiny stat
     ///

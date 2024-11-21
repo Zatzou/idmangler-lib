@@ -6,7 +6,7 @@ use crate::{
 use super::DataBlockId;
 
 /// The block for item name data
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct NameData(pub String);
 
 impl BlockId for NameData {

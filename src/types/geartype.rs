@@ -1,7 +1,7 @@
 use thiserror::Error;
 
 /// Enum representing the possible types of gear items
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum CraftedGearType {
     Spear,
     Wand,

@@ -2,7 +2,7 @@ use thiserror::Error;
 
 /// Enum representing the types of skillpoints
 #[repr(u8)]
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum SkillType {
     Strength = 0,
     Dexterity = 1,

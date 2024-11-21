@@ -1,7 +1,7 @@
 use thiserror::Error;
 
 #[repr(u8)]
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum AttackSpeed {
     SuperFast = 0,
     VeryFast = 1,
@@ -37,5 +37,18 @@ impl TryFrom<u8> for AttackSpeed {
 
             _ => Err(BadAttackSpeed(value)),
         }
+    }
+}
+
+impl PartialOrd for AttackSpeed {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for AttackSpeed {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        // Attackspeed ordering is reversed
+        (u8::from(*self)).cmp(&u8::from(*other)).reverse()
     }
 }

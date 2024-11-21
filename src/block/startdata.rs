@@ -6,7 +6,7 @@ use crate::{
 use super::DataBlockId;
 
 /// The start data of the encoding. The start data holds the version of the encoding to be used
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub struct StartData(pub EncodingVersion);
 
 impl BlockId for StartData {

@@ -6,7 +6,7 @@ use crate::{
 use super::DataBlockId;
 
 /// Sets the type of a crafted consumable
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct CraftedConsumableTypeData(pub ConsumableType);
 
 impl BlockId for CraftedConsumableTypeData {

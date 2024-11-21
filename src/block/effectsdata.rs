@@ -9,7 +9,7 @@ use crate::{
 use super::DataBlockId;
 
 /// Effects of a crafted item
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct EffectsData {
     pub effects: Vec<Effect>,
 }

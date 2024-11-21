@@ -2,7 +2,7 @@ use thiserror::Error;
 
 /// Enum for encoding the type of an item the idstring represents
 #[repr(u8)]
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum ItemType {
     Gear = 0,
     Tome = 1,

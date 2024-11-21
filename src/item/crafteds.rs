@@ -78,7 +78,7 @@ impl From<CraftedGear> for GenericItem {
 }
 
 /// Crafted consumable
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct CraftedConsumable {
     /// Consumable type
     pub consumable_type: CraftedConsumableTypeData,

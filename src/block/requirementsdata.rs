@@ -9,7 +9,7 @@ use crate::{
 use super::DataBlockId;
 
 /// Requirements of a crafted item
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct RequirementsData {
     /// Level requirement of the item
     pub level: u8,

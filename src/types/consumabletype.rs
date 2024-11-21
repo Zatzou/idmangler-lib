@@ -2,7 +2,7 @@ use thiserror::Error;
 
 /// Enum representing the possible types of consumables
 #[repr(u8)]
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum ConsumableType {
     Potion = 0,
     Food = 1,

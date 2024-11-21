@@ -6,7 +6,7 @@ use crate::{
 use super::DataBlockId;
 
 /// The block for reroll data
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct RerollData(pub u8);
 
 impl BlockId for RerollData {

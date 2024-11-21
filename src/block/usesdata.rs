@@ -6,7 +6,7 @@ use crate::{
 use super::DataBlockId;
 
 /// Sets the number of uses of a crafted item
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct UsesData {
     /// Uses currently remaining on the item
     pub current: u8,

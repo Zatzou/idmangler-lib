@@ -6,7 +6,7 @@ use crate::{
 use super::DataBlockId;
 
 /// The block for the end data
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct EndData;
 
 impl BlockId for EndData {

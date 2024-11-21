@@ -9,7 +9,7 @@ use crate::{
 use super::DataBlockId;
 
 /// Defense values of a crafted item
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct DefenseData {
     /// Amount of health this item grants
     health: i32,
