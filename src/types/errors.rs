@@ -7,5 +7,6 @@ pub use super::effect::BadEffectType;
 pub use super::element::BadElement;
 pub use super::geartype::BadGearType;
 pub use super::itemtype::BadItemType;
+pub use super::powder::InvalidPowderTier;
 pub use super::skilltype::BadSkillType;
 pub use super::version::UnknownEncodingVersion;

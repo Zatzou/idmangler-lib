@@ -1,17 +1,17 @@
 use crate::{
     encoding::{AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
-    types::{Element, EncodingVersion},
+    types::{Element, EncodingVersion, Powder},
 };
 
 use super::DataBlockId;
 
 /// The block for powder data
-#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Hash, Debug)]
+#[derive(PartialEq, Eq, Clone, Hash, Debug)]
 pub struct PowderData {
     /// The number of powder slots on this item
     pub powder_slots: u8,
     /// The powders on this item along with the tier of the powders (currently unused as wynntils does not encode this data)
-    pub powders: Vec<(Element, u8)>,
+    pub powders: Vec<Powder>,
 }
 
 impl BlockId for PowderData {
@@ -32,13 +32,7 @@ impl DataEncoder for PowderData {
                 let mut powder_data = vec![0u8; total_bits];
 
                 for (i, pow) in self.powders.iter().enumerate() {
-                    let (elem, tier) = {
-                        if pow.1 < 1 || pow.1 > 6 {
-                            return Err(EncodeError::InvalidPowderTier(pow.1));
-                        }
-
-                        (pow.0 as u8, pow.1)
-                    };
+                    let (elem, tier) = (pow.element() as u8, pow.tier());
 
                     // calculate the 5 bit powder value
                     let powder_num = (elem * 6 + tier) & 0b00011111;
@@ -103,7 +97,7 @@ impl DataDecoder for PowderData {
                         } else {
                             ((powder / 6), powder % 6)
                         };
-                        powders.push((Element::try_from(elem)?, tier));
+                        powders.push(Powder::try_from((Element::try_from(elem)?, tier))?);
                     }
                 }
 

@@ -7,7 +7,7 @@ use idmangler_lib::{
         string::{decode_string, encode_string},
         DataEncoder,
     },
-    types::{Element, EncodingVersion, ItemType, RollType, Stat},
+    types::{Element, EncodingVersion, ItemType, Powder, RollType, Stat},
 };
 
 #[test]
@@ -108,7 +108,10 @@ fn complex_item() {
     // powders
     PowderData {
         powder_slots: 3,
-        powders: vec![(Element::Air, 6), (Element::Fire, 6), (Element::Fire, 6)],
+        powders: vec![(Element::Air, 6), (Element::Fire, 6), (Element::Fire, 6)]
+            .into_iter()
+            .map(|e| Powder::try_from(e).unwrap())
+            .collect(),
     }
     .encode(ver, &mut out)
     .unwrap();

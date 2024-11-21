@@ -1,7 +1,7 @@
 use idmangler_lib::{
     block::PowderData,
     encoding::{DataDecoder, DataEncoder},
-    types::{Element, EncodingVersion},
+    types::{Element, EncodingVersion, Powder},
 };
 
 #[test]
@@ -19,7 +19,10 @@ fn powderdata_roundtrip() {
 
     let powders = PowderData {
         powder_slots: 123,
-        powders: pow,
+        powders: pow
+            .into_iter()
+            .map(|e| Powder::try_from(e).unwrap())
+            .collect(),
     };
 
     powders.encode(EncodingVersion::Version1, &mut out).unwrap();

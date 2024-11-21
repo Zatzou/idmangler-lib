@@ -8,6 +8,7 @@ mod element;
 pub mod errors;
 mod geartype;
 mod itemtype;
+mod powder;
 mod skilltype;
 mod stat;
 mod version;
@@ -30,6 +31,9 @@ pub use geartype::CraftedGearType;
 
 #[doc(inline)]
 pub use classtype::ClassType;
+
+#[doc(inline)]
+pub use powder::Powder;
 
 #[doc(inline)]
 pub use skilltype::SkillType;

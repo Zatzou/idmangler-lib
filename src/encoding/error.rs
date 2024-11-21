@@ -2,7 +2,7 @@ use thiserror::Error;
 
 use crate::types::errors::{
     BadAttackSpeed, BadClassType, BadConsumableType, BadEffectType, BadElement, BadGearType,
-    BadItemType, BadSkillType, UnknownEncodingVersion,
+    BadItemType, BadSkillType, InvalidPowderTier, UnknownEncodingVersion,
 };
 
 /// Potential errors thrown during encoding of id strings
@@ -24,9 +24,6 @@ pub enum EncodeError {
     /// More than 255 powders were passed for encoding
     #[error("Cannot encode more than 255 powders per item")]
     TooManyPowders,
-    /// Invalid tier for a powder was passed
-    #[error("Invalid powder tier of {0} was passed")]
-    InvalidPowderTier(u8),
 
     /// Effect strength should be a percentage between 0 and 100
     #[error("Effect strength of {0} is too high, it should be a percentage between 0 and 100")]
@@ -89,6 +86,10 @@ pub enum DecodeError {
     /// An invalid element id was encountered
     #[error("Invalid element id:`{}`", 0.0)]
     BadElement(#[from] BadElement),
+
+    /// An invalid powder tier was encountered
+    #[error("Invalid powder tier id:`{}`", 0.0)]
+    BadPowderTier(#[from] InvalidPowderTier),
 
     /// An invalid consumable type was encountered
     #[error("Invalid consumable type id:`{}`", 0.0)]
