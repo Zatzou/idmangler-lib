@@ -28,7 +28,20 @@ impl DataEncoder for IdentificationData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
             EncodingVersion::Version1 => {
-                if self.identifications.len() > 255 {
+                // wynntils spec allows for an item to have 255 identifications and 255 pre-identified identifications
+                if self
+                    .identifications
+                    .iter()
+                    .filter(|id| id.pre_identified())
+                    .count()
+                    > 255
+                    || self
+                        .identifications
+                        .iter()
+                        .filter(|id| id.pre_identified())
+                        .count()
+                        > 255
+                {
                     return Err(EncodeError::TooManyIdentifications);
                 }
 
