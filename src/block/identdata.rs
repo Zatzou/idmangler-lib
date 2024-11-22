@@ -1,7 +1,7 @@
 use crate::{
     encoding::{
         varint::{decode_varint, encode_varint},
-        AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
+        BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
     },
     types::{EncodingVersion, RollType, Stat},
 };
@@ -21,7 +21,9 @@ pub struct IdentificationData {
 }
 
 impl BlockId for IdentificationData {
-    const BLOCK_ID: u8 = DataBlockId::IdentificationData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::IdentificationData
+    }
 }
 
 impl DataEncoder for IdentificationData {
@@ -185,11 +187,5 @@ impl DataDecoder for IdentificationData {
                 })
             }
         }
-    }
-}
-
-impl From<IdentificationData> for AnyData {
-    fn from(value: IdentificationData) -> Self {
-        Self::IdentificationData(value)
     }
 }

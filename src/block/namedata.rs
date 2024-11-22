@@ -1,5 +1,5 @@
 use crate::{
-    encoding::{AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
+    encoding::{BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
     types::EncodingVersion,
 };
 
@@ -10,7 +10,9 @@ use super::DataBlockId;
 pub struct NameData(pub String);
 
 impl BlockId for NameData {
-    const BLOCK_ID: u8 = DataBlockId::NameData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::NameData
+    }
 }
 
 impl DataEncoder for NameData {
@@ -51,11 +53,5 @@ impl DataDecoder for NameData {
                 ))
             }
         }
-    }
-}
-
-impl From<NameData> for AnyData {
-    fn from(value: NameData) -> Self {
-        Self::NameData(value)
     }
 }

@@ -1,7 +1,7 @@
 use crate::{
     encoding::{
         varint::{decode_varint, encode_varint},
-        AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
+        BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
     },
     types::EncodingVersion,
 };
@@ -20,7 +20,9 @@ pub struct ShinyData {
 }
 
 impl BlockId for ShinyData {
-    const BLOCK_ID: u8 = DataBlockId::ShinyData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::ShinyData
+    }
 }
 
 impl DataEncoder for ShinyData {
@@ -52,11 +54,5 @@ impl DataDecoder for ShinyData {
                 Ok(Self { id, val })
             }
         }
-    }
-}
-
-impl From<ShinyData> for AnyData {
-    fn from(value: ShinyData) -> Self {
-        Self::ShinyData(value)
     }
 }

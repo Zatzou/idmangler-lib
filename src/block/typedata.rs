@@ -1,5 +1,5 @@
 use crate::{
-    encoding::{AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
+    encoding::{BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
     types::{EncodingVersion, ItemType},
 };
 
@@ -10,7 +10,9 @@ use super::DataBlockId;
 pub struct TypeData(pub ItemType);
 
 impl BlockId for TypeData {
-    const BLOCK_ID: u8 = DataBlockId::TypeData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::TypeData
+    }
 }
 
 impl DataEncoder for TypeData {
@@ -38,11 +40,5 @@ impl DataDecoder for TypeData {
                 Ok(Self(ItemType::try_from(b)?))
             }
         }
-    }
-}
-
-impl From<TypeData> for AnyData {
-    fn from(value: TypeData) -> Self {
-        Self::TypeData(value)
     }
 }

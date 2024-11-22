@@ -1,5 +1,5 @@
 use crate::{
-    encoding::{AnyData, BlockId, DataEncoder, DecodeError, EncodeError},
+    encoding::{BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
     types::EncodingVersion,
 };
 
@@ -10,7 +10,9 @@ use super::DataBlockId;
 pub struct StartData(pub EncodingVersion);
 
 impl BlockId for StartData {
-    const BLOCK_ID: u8 = DataBlockId::StartData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::StartData
+    }
 }
 
 impl DataEncoder for StartData {
@@ -20,6 +22,18 @@ impl DataEncoder for StartData {
         }
 
         Ok(())
+    }
+}
+
+impl DataDecoder for StartData {
+    fn decode_data(
+        _bytes: &mut impl Iterator<Item = u8>,
+        _ver: EncodingVersion,
+    ) -> Result<Self, DecodeError>
+    where
+        Self: Sized,
+    {
+        Err(DecodeError::StartReparse)
     }
 }
 
@@ -37,11 +51,5 @@ impl StartData {
         let verbyte = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
         Ok(EncodingVersion::try_from(verbyte)?)
-    }
-}
-
-impl From<StartData> for AnyData {
-    fn from(value: StartData) -> Self {
-        Self::StartData(value)
     }
 }

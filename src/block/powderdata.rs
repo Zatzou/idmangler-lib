@@ -1,5 +1,5 @@
 use crate::{
-    encoding::{AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
+    encoding::{BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
     types::{Element, EncodingVersion, Powder},
 };
 
@@ -15,7 +15,9 @@ pub struct PowderData {
 }
 
 impl BlockId for PowderData {
-    const BLOCK_ID: u8 = DataBlockId::PowderData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::PowderData
+    }
 }
 
 impl DataEncoder for PowderData {
@@ -107,11 +109,5 @@ impl DataDecoder for PowderData {
                 })
             }
         }
-    }
-}
-
-impl From<PowderData> for AnyData {
-    fn from(value: PowderData) -> Self {
-        Self::PowderData(value)
     }
 }

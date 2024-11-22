@@ -41,7 +41,7 @@ fn encode_bad_namedata() {
 
         match res {
             Ok(_) => panic!("Expected an error"),
-            Err(e) => match e {
+            Err(e) => match e.error {
                 EncodeError::NonAsciiString => {}
                 _ => panic!("Expected an BadString error, got {:?}", e),
             },

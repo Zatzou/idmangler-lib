@@ -1,7 +1,7 @@
 use crate::{
     encoding::{
         varint::{decode_varint, encode_varint},
-        AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
+        BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
     },
     types::{Effect, EffectType, EncodingVersion},
 };
@@ -15,7 +15,9 @@ pub struct EffectsData {
 }
 
 impl BlockId for EffectsData {
-    const BLOCK_ID: u8 = DataBlockId::EffectsData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::EffectsData
+    }
 }
 
 impl DataEncoder for EffectsData {
@@ -73,11 +75,5 @@ impl DataDecoder for EffectsData {
                 Ok(Self { effects })
             }
         }
-    }
-}
-
-impl From<EffectsData> for AnyData {
-    fn from(value: EffectsData) -> Self {
-        Self::EffectsData(value)
     }
 }

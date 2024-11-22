@@ -1,8 +1,11 @@
 use thiserror::Error;
 
-use crate::types::errors::{
-    BadAttackSpeed, BadClassType, BadConsumableType, BadEffectType, BadElement, BadGearType,
-    BadItemType, BadSkillType, InvalidPowderTier, UnknownEncodingVersion,
+use crate::{
+    block::{DataBlockId, InvalidBlockId},
+    types::errors::{
+        BadAttackSpeed, BadClassType, BadConsumableType, BadEffectType, BadElement, BadGearType,
+        BadItemType, BadSkillType, InvalidPowderTier, UnknownEncodingVersion,
+    },
 };
 
 use super::string::BadCodepoint;
@@ -10,6 +13,10 @@ use super::string::BadCodepoint;
 /// Potential errors thrown during encoding of id strings
 #[derive(Error, Debug)]
 pub enum EncodeError {
+    /// No start data block was found when encoding
+    #[error("No start data block found")]
+    NoStartBlock,
+
     /// Encoder was given a string with non ascii characters.
     #[error("Cannot encode non ascii string")]
     NonAsciiString,
@@ -48,6 +55,13 @@ pub enum EncodeError {
     TooManyDefences,
 }
 
+#[derive(Error, Debug)]
+#[error("{error} While encoding block {during:?}")]
+pub struct EncoderError {
+    pub error: EncodeError,
+    pub during: DataBlockId,
+}
+
 /// Potential errors thrown while decoding id strings
 #[derive(Error, Debug)]
 pub enum DecodeError {
@@ -61,8 +75,8 @@ pub enum DecodeError {
     #[error("Second start block found in data")]
     StartReparse,
     /// Decoder hit an unknown block which it could not decode
-    #[error("Unknown block id:`{0}` was found")]
-    UnknownBlock(u8),
+    #[error(transparent)]
+    UnknownBlock(#[from] InvalidBlockId),
 
     /// An invalid non ascii/utf-8 string was decoded by the parser
     #[error("Decoder decoded a bad string")]
@@ -107,4 +121,11 @@ pub enum DecodeError {
     /// The decoder hit an invalid codepoint while decoding
     #[error(transparent)]
     BadCodepoint(#[from] BadCodepoint),
+}
+
+#[derive(Error, Debug)]
+#[error("{error} While decoding block {during:?}")]
+pub struct DecoderError {
+    pub error: DecodeError,
+    pub during: Option<DataBlockId>,
 }

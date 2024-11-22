@@ -3,7 +3,7 @@ use std::ops::Range;
 use crate::{
     encoding::{
         varint::{decode_varint, encode_varint},
-        AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
+        BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError,
     },
     types::{AttackSpeed, Element, EncodingVersion},
 };
@@ -22,7 +22,9 @@ pub struct DamageData {
 }
 
 impl BlockId for DamageData {
-    const BLOCK_ID: u8 = DataBlockId::DamageData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::DamageData
+    }
 }
 
 impl DataEncoder for DamageData {
@@ -98,11 +100,5 @@ impl DataDecoder for DamageData {
                 })
             }
         }
-    }
-}
-
-impl From<DamageData> for AnyData {
-    fn from(value: DamageData) -> Self {
-        Self::DamageData(value)
     }
 }

@@ -1,6 +1,6 @@
 use idmangler_lib::{
-    block::StartData,
-    encoding::{decode_bytes, AnyData, DataEncoder, DecodeError},
+    block::{anyblock::AnyBlockVec, StartData},
+    encoding::{DataEncoder, DecodeError},
     types::EncodingVersion,
 };
 
@@ -18,12 +18,12 @@ fn encode_startdata() {
 fn decode_startdata() {
     let bytes: Vec<u8> = Vec::from([0, 0]);
 
-    let ver = decode_bytes(&bytes).unwrap();
+    let ver = AnyBlockVec::decode_bytes(&bytes).unwrap();
     let ver = ver.get(0).unwrap();
 
     assert_eq!(
-        ver,
-        &AnyData::StartData(StartData(EncodingVersion::Version1))
+        ver.as_any().downcast_ref::<StartData>(),
+        Some(&(StartData(EncodingVersion::Version1)))
     );
 }
 
@@ -31,11 +31,11 @@ fn decode_startdata() {
 fn decode_bad_startdata() {
     let bytes: Vec<u8> = Vec::from([0, 255]);
 
-    let ver = decode_bytes(&bytes);
+    let ver = AnyBlockVec::decode_bytes(&bytes);
 
     match ver {
         Ok(_) => panic!("Expected an error"),
-        Err(e) => match e {
+        Err(e) => match e.error {
             DecodeError::UnknownVersion(d) => assert_eq!(d.0, 255),
             _ => panic!("Expected an UnknownVersion error, got {:?}", e),
         },

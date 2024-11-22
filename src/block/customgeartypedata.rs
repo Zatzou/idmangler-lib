@@ -1,5 +1,5 @@
 use crate::{
-    encoding::{AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
+    encoding::{BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
     types::{CraftedGearType, EncodingVersion},
 };
 
@@ -10,7 +10,9 @@ use super::DataBlockId;
 pub struct CraftedGearTypeData(pub CraftedGearType);
 
 impl BlockId for CraftedGearTypeData {
-    const BLOCK_ID: u8 = DataBlockId::CustomGearType as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::CustomGearType
+    }
 }
 
 impl DataEncoder for CraftedGearTypeData {
@@ -39,11 +41,5 @@ impl DataDecoder for CraftedGearTypeData {
                 Ok(Self(gear))
             }
         }
-    }
-}
-
-impl From<CraftedGearTypeData> for AnyData {
-    fn from(data: CraftedGearTypeData) -> Self {
-        AnyData::CustomTypeData(data)
     }
 }

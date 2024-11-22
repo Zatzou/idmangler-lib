@@ -1,5 +1,5 @@
 use crate::{
-    encoding::{AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
+    encoding::{BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
     types::EncodingVersion,
 };
 
@@ -10,7 +10,9 @@ use super::DataBlockId;
 pub struct RerollData(pub u8);
 
 impl BlockId for RerollData {
-    const BLOCK_ID: u8 = DataBlockId::RerollData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::RerollData
+    }
 }
 
 impl DataEncoder for RerollData {
@@ -36,11 +38,5 @@ impl DataDecoder for RerollData {
                 Ok(Self(bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?))
             }
         }
-    }
-}
-
-impl From<RerollData> for AnyData {
-    fn from(value: RerollData) -> Self {
-        Self::RerollData(value)
     }
 }

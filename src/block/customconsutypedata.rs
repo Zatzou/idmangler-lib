@@ -1,5 +1,5 @@
 use crate::{
-    encoding::{AnyData, BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
+    encoding::{BlockId, DataDecoder, DataEncoder, DecodeError, EncodeError},
     types::{ConsumableType, EncodingVersion},
 };
 
@@ -10,7 +10,9 @@ use super::DataBlockId;
 pub struct CraftedConsumableTypeData(pub ConsumableType);
 
 impl BlockId for CraftedConsumableTypeData {
-    const BLOCK_ID: u8 = DataBlockId::CustomConsumableTypeData as u8;
+    fn block_id(&self) -> DataBlockId {
+        DataBlockId::CustomConsumableTypeData
+    }
 }
 
 impl DataEncoder for CraftedConsumableTypeData {
@@ -40,11 +42,5 @@ impl DataDecoder for CraftedConsumableTypeData {
                 Ok(Self(kind))
             }
         }
-    }
-}
-
-impl From<CraftedConsumableTypeData> for AnyData {
-    fn from(value: CraftedConsumableTypeData) -> Self {
-        Self::CustomConsumableTypeData(value)
     }
 }
