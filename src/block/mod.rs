@@ -73,7 +73,7 @@ mod usesdata;
 pub use usesdata::UsesData;
 
 use crate::{
-    encoding::{DataDecoder, DecodeError, DecoderError},
+    encoding::{DataDecoder, DecoderError},
     types::EncodingVersion,
 };
 
@@ -101,89 +101,54 @@ pub enum DataBlockId {
 }
 
 impl DataBlockId {
+    fn decode_block<T: DataDecoder>(
+        &self,
+        bytes: &mut impl Iterator<Item = u8>,
+        ver: EncodingVersion,
+    ) -> Result<T, DecoderError> {
+        T::decode_data(bytes, ver).map_err(|e| DecoderError {
+            error: e,
+            during: Some(*self),
+        })
+    }
+
     pub fn decode(
         &self,
         ver: EncodingVersion,
         bytes: &mut impl Iterator<Item = u8>,
     ) -> Result<AnyBlock, DecoderError> {
-        #[allow(clippy::needless_late_init)]
-        let out: AnyBlock;
-        match self {
-            DataBlockId::TypeData => {
-                out = Box::new(TypeData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
-            DataBlockId::NameData => {
-                out = Box::new(NameData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
+        Ok(match self {
+            DataBlockId::TypeData => Box::new(self.decode_block::<TypeData>(bytes, ver)?),
+            DataBlockId::NameData => Box::new(self.decode_block::<NameData>(bytes, ver)?),
             DataBlockId::IdentificationData => {
-                out = Box::new(
-                    IdentificationData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?,
-                )
+                Box::new(self.decode_block::<IdentificationData>(bytes, ver)?)
             }
-            DataBlockId::PowderData => {
-                out = Box::new(PowderData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
-            DataBlockId::RerollData => {
-                out = Box::new(RerollData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
-            DataBlockId::ShinyData => {
-                out = Box::new(ShinyData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
+            DataBlockId::PowderData => Box::new(self.decode_block::<PowderData>(bytes, ver)?),
+            DataBlockId::RerollData => Box::new(self.decode_block::<RerollData>(bytes, ver)?),
+
+            DataBlockId::ShinyData => Box::new(self.decode_block::<ShinyData>(bytes, ver)?),
             DataBlockId::CustomGearType => {
-                out = Box::new(
-                    CraftedGearTypeData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?,
-                )
+                Box::new(self.decode_block::<CraftedGearTypeData>(bytes, ver)?)
             }
             DataBlockId::DurabilityData => {
-                out = Box::new(
-                    DurabilityData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?,
-                )
+                Box::new(self.decode_block::<DurabilityData>(bytes, ver)?)
             }
             DataBlockId::RequirementsData => {
-                out = Box::new(
-                    RequirementsData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?,
-                )
+                Box::new(self.decode_block::<RequirementsData>(bytes, ver)?)
             }
-            DataBlockId::DamageData => {
-                out = Box::new(DamageData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
-            DataBlockId::DefenseData => {
-                out = Box::new(DefenseData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
+            DataBlockId::DamageData => Box::new(self.decode_block::<DamageData>(bytes, ver)?),
+            DataBlockId::DefenseData => Box::new(self.decode_block::<DefenseData>(bytes, ver)?),
             DataBlockId::CustomIdentificationData => {
-                out = Box::new(
-                    CraftedIdentificationData::decode_data(bytes, ver)
-                        .map_err(|e| err_map(e, *self))?,
-                )
+                Box::new(self.decode_block::<CraftedIdentificationData>(bytes, ver)?)
             }
             DataBlockId::CustomConsumableTypeData => {
-                out = Box::new(
-                    CraftedConsumableTypeData::decode_data(bytes, ver)
-                        .map_err(|e| err_map(e, *self))?,
-                )
+                Box::new(self.decode_block::<CraftedConsumableTypeData>(bytes, ver)?)
             }
-            DataBlockId::UsesData => {
-                out = Box::new(UsesData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
-            DataBlockId::EffectsData => {
-                out = Box::new(EffectsData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
-            DataBlockId::EndData => {
-                out = Box::new(EndData::decode_data(bytes, ver).map_err(|e| err_map(e, *self))?)
-            }
-            DataBlockId::StartData => {
-                return Err(err_map(DecodeError::StartReparse, *self));
-            }
-        };
-
-        Ok(out)
-    }
-}
-
-fn err_map(e: DecodeError, id: DataBlockId) -> DecoderError {
-    DecoderError {
-        error: e,
-        during: Some(id),
+            DataBlockId::UsesData => Box::new(self.decode_block::<UsesData>(bytes, ver)?),
+            DataBlockId::EffectsData => Box::new(self.decode_block::<EffectsData>(bytes, ver)?),
+            DataBlockId::EndData => Box::new(self.decode_block::<EndData>(bytes, ver)?),
+            DataBlockId::StartData => Box::new(self.decode_block::<StartData>(bytes, ver)?),
+        })
     }
 }
 
