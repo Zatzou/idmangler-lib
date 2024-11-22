@@ -5,6 +5,8 @@ use crate::types::errors::{
     BadItemType, BadSkillType, InvalidPowderTier, UnknownEncodingVersion,
 };
 
+use super::string::BadCodepoint;
+
 /// Potential errors thrown during encoding of id strings
 #[derive(Error, Debug)]
 pub enum EncodeError {
@@ -53,7 +55,7 @@ pub enum DecodeError {
     #[error("No start block found")]
     NoStartBlock,
     /// Encoding of an unknown potentially future version was hit
-    #[error("Unknown encoding version: `{}`", 0.0)]
+    #[error(transparent)]
     UnknownVersion(#[from] UnknownEncodingVersion),
     /// Decoder found a second start block in the data
     #[error("Second start block found in data")]
@@ -66,40 +68,43 @@ pub enum DecodeError {
     #[error("Decoder decoded a bad string")]
     BadString,
     /// An invalid type was found
-    #[error("Invalid type of id:`{}` was decoded", 0.0)]
+    #[error(transparent)]
     BadItemType(#[from] BadItemType),
 
-    #[error("Invalid gear type id:`{}` was decoded", 0.0)]
+    #[error(transparent)]
     BadGearType(#[from] BadGearType),
 
     /// An invalid class type was encountered
-    #[error("Invalid class type id:`{}`", 0.0)]
+    #[error(transparent)]
     BadClassType(#[from] BadClassType),
     /// An invalid skill type was encountered
-    #[error("Invalid skill type id:`{}`", 0.0)]
+    #[error(transparent)]
     BadSkillType(#[from] BadSkillType),
 
     /// An invalid attack speed was encountered
-    #[error("Invalid attack speed id:`{}`", 0.0)]
+    #[error(transparent)]
     BadAttackSpeed(#[from] BadAttackSpeed),
 
     /// An invalid element id was encountered
-    #[error("Invalid element id:`{}`", 0.0)]
+    #[error(transparent)]
     BadElement(#[from] BadElement),
 
     /// An invalid powder tier was encountered
-    #[error("Invalid powder tier id:`{}`", 0.0)]
+    #[error(transparent)]
     BadPowderTier(#[from] InvalidPowderTier),
 
     /// An invalid consumable type was encountered
-    #[error("Invalid consumable type id:`{}`", 0.0)]
+    #[error(transparent)]
     BadConsumableType(#[from] BadConsumableType),
 
     /// An invalid effect type was encountered
-    #[error("Invalid effect type id:`{}`", 0.0)]
+    #[error(transparent)]
     BadEffectType(#[from] BadEffectType),
 
     /// The decoder unexpectedly ran out of bytes to decode while decoding
     #[error("Unexpectedly hit end of bytestream while decoding")]
     UnexpectedEndOfBytes,
+    /// The decoder hit an invalid codepoint while decoding
+    #[error(transparent)]
+    BadCodepoint(#[from] BadCodepoint),
 }

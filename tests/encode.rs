@@ -127,7 +127,7 @@ fn complex_item() {
 
     let outstr = encode_string(&out);
 
-    assert_eq!(out, decode_string("󰀀󰄀󰉉󶵭󶽬󶅴󶥯󶸀󰌅󰀘󵄗󴤒󴬄󶘂󳀄󰌃󿘰󰔄󰘆󰃿"));
+    assert_eq!(out, decode_string("󰀀󰄀󰉉󶵭󶽬󶅴󶥯󶸀󰌅󰀘󵄗󴤒󴬄󶘂󳀄󰌃󿘰󰔄󰘆󰃿").unwrap());
     assert_eq!(&outstr, "󰀀󰄀󰉉󶵭󶽬󶅴󶥯󶸀󰌅󰀘󵄗󴤒󴬄󶘂󳀄󰌃󿘰󰔄󰘆󰃿");
 }
 

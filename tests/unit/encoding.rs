@@ -8,7 +8,7 @@ fn roundtrip_allbytes() {
     }
 
     let enc = encode_string(&bytes);
-    let dec = decode_string(&enc);
+    let dec = decode_string(&enc).unwrap();
 
     assert_eq!(bytes, dec);
 }
