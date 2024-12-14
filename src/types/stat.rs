@@ -26,7 +26,7 @@ pub enum RollType {
 
 impl Stat {
     /// Return a boolean depending on if the identification is pre-identified or not
-    pub fn pre_identified(&self) -> bool {
+    pub const fn pre_identified(&self) -> bool {
         match self.roll {
             RollType::Value(_) => false,
             RollType::PreIdentified => true,

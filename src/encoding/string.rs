@@ -25,7 +25,7 @@ pub fn encode_string(data: &[u8]) -> String {
 }
 
 /// Encode a single char using the wynntils private use area encoding scheme
-pub fn encode_char(data: (u8, Option<u8>)) -> char {
+pub const fn encode_char(data: (u8, Option<u8>)) -> char {
     // unwraps here are safe as all the encoded characters can only fall within the private use areas used for the encoding
     match data {
         (0xFF, Some(b)) if b >= 254 => char::from_u32(AREA_B + ((b - 254) as u32)).unwrap(),

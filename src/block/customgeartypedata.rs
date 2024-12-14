@@ -19,7 +19,7 @@ impl DataEncoder for CraftedGearTypeData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
             EncodingVersion::Version1 => {
-                out.push(self.0.get_encode_id());
+                out.push(self.0.into());
                 Ok(())
             }
         }

@@ -18,7 +18,7 @@ impl BlockId for StartData {
 impl DataEncoder for StartData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => out.push(self.0.version()),
+            EncodingVersion::Version1 => out.push(self.0.into()),
         }
 
         Ok(())

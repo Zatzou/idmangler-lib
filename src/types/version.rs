@@ -9,9 +9,9 @@ pub enum EncodingVersion {
     Version1 = 0,
 }
 
-impl EncodingVersion {
-    pub fn version(&self) -> u8 {
-        *self as u8
+impl From<EncodingVersion> for u8 {
+    fn from(value: EncodingVersion) -> Self {
+        value as u8
     }
 }
 

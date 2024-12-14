@@ -1,55 +1,38 @@
 use thiserror::Error;
 
 /// Enum representing the possible types of gear items
+#[repr(u8)]
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum CraftedGearType {
-    Spear,
-    Wand,
-    Dagger,
-    Bow,
-    Relik,
+    Spear = 0,
+    Wand = 1,
+    Dagger = 2,
+    Bow = 3,
+    Relik = 4,
 
     /// Fallback for "signed, crafted gear with a skin"
     ///
     /// <https://github.com/Wynntils/Wynntils/blob/main/common/src/main/java/com/wynntils/models/gear/type/GearType.java#L27>
-    Weapon,
+    Weapon = 12,
     /// Fallback for when specific gear type is not known
-    Accessory,
+    Accessory = 13,
 
-    Ring,
-    Bracelet,
-    Necklace,
+    Ring = 5,
+    Bracelet = 6,
+    Necklace = 7,
 
-    Helmet,
-    Chestplate,
-    Leggings,
-    Boots,
+    Helmet = 8,
+    Chestplate = 9,
+    Leggings = 10,
+    Boots = 11,
     // /// Cannot be encoded thru [`CustomTypeData`]! only provided for
     // MasteryTome,
     // Charm,
 }
 
-impl CraftedGearType {
-    pub fn get_encode_id(&self) -> u8 {
-        match self {
-            CraftedGearType::Spear => 0,
-            CraftedGearType::Wand => 1,
-            CraftedGearType::Dagger => 2,
-            CraftedGearType::Bow => 3,
-            CraftedGearType::Relik => 4,
-
-            CraftedGearType::Weapon => 12,
-            CraftedGearType::Accessory => 13,
-
-            CraftedGearType::Ring => 5,
-            CraftedGearType::Bracelet => 6,
-            CraftedGearType::Necklace => 7,
-
-            CraftedGearType::Helmet => 8,
-            CraftedGearType::Chestplate => 9,
-            CraftedGearType::Leggings => 10,
-            CraftedGearType::Boots => 11,
-        }
+impl From<CraftedGearType> for u8 {
+    fn from(value: CraftedGearType) -> Self {
+        value as u8
     }
 }
 
