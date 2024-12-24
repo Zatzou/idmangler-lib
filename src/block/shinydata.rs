@@ -6,7 +6,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// The block for shiny data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -54,5 +54,11 @@ impl DataDecoder for ShinyData {
                 Ok(Self { id, val })
             }
         }
+    }
+}
+
+impl From<ShinyData> for AnyBlock {
+    fn from(data: ShinyData) -> Self {
+        AnyBlock::ShinyData(data)
     }
 }

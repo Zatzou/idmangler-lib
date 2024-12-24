@@ -6,7 +6,7 @@ use crate::{
     types::{Element, EncodingVersion},
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// Defense values of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -87,5 +87,11 @@ impl DataDecoder for DefenseData {
                 Ok(Self { health, defences })
             }
         }
+    }
+}
+
+impl From<DefenseData> for AnyBlock {
+    fn from(data: DefenseData) -> Self {
+        AnyBlock::DefenseData(data)
     }
 }

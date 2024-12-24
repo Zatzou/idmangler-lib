@@ -1,6 +1,7 @@
-use std::{any::Any, fmt::Debug};
-
-use crate::{block::DataBlockId, types::EncodingVersion};
+use crate::{
+    block::{anyblock::AnyBlock, DataBlockId},
+    types::EncodingVersion,
+};
 
 use super::{DecodeError, EncodeError, EncoderError};
 
@@ -43,7 +44,7 @@ pub trait DataEncoder: BlockId {
 
 /// Trait for decoding data from bytes
 #[allow(private_bounds)]
-pub trait DataDecoder: BlockId {
+pub trait DataDecoder: BlockId + Into<AnyBlock> {
     /// Decode the data from a given byte stream
     fn decode_data(
         bytes: &mut impl Iterator<Item = u8>,
@@ -51,27 +52,4 @@ pub trait DataDecoder: BlockId {
     ) -> Result<Self, DecodeError>
     where
         Self: Sized;
-}
-
-pub trait DataBlock: DataEncoder + DataDecoder + Debug {
-    fn into_any(self: Box<Self>) -> Box<dyn Any>;
-    fn as_any(&self) -> &dyn Any;
-    fn as_any_mut(&mut self) -> &mut dyn Any;
-}
-
-impl<T> DataBlock for T
-where
-    T: DataEncoder + DataDecoder + 'static + Debug,
-{
-    fn into_any(self: Box<Self>) -> Box<dyn Any> {
-        self
-    }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self
-    }
 }

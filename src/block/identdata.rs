@@ -6,7 +6,7 @@ use crate::{
     types::{EncodingVersion, RollType, Stat},
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// The block for identification data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -187,5 +187,11 @@ impl DataDecoder for IdentificationData {
                 })
             }
         }
+    }
+}
+
+impl From<IdentificationData> for AnyBlock {
+    fn from(data: IdentificationData) -> Self {
+        AnyBlock::IdentificationData(data)
     }
 }

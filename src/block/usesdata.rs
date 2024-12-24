@@ -3,7 +3,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// Sets the number of uses of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -51,5 +51,11 @@ impl DataDecoder for UsesData {
                 Ok(Self { current, max })
             }
         }
+    }
+}
+
+impl From<UsesData> for AnyBlock {
+    fn from(data: UsesData) -> Self {
+        AnyBlock::UsesData(data)
     }
 }

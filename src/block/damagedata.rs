@@ -8,7 +8,7 @@ use crate::{
     types::{AttackSpeed, Element, EncodingVersion},
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// Damages of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -100,5 +100,11 @@ impl DataDecoder for DamageData {
                 })
             }
         }
+    }
+}
+
+impl From<DamageData> for AnyBlock {
+    fn from(data: DamageData) -> Self {
+        AnyBlock::DamageData(data)
     }
 }

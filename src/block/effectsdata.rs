@@ -6,7 +6,7 @@ use crate::{
     types::{Effect, EffectType, EncodingVersion},
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// Effects of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -75,5 +75,11 @@ impl DataDecoder for EffectsData {
                 Ok(Self { effects })
             }
         }
+    }
+}
+
+impl From<EffectsData> for AnyBlock {
+    fn from(data: EffectsData) -> Self {
+        AnyBlock::EffectsData(data)
     }
 }

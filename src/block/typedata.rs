@@ -3,7 +3,7 @@ use crate::{
     types::{EncodingVersion, ItemType},
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// The block for the item type data
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
@@ -40,5 +40,11 @@ impl DataDecoder for TypeData {
                 Ok(Self(ItemType::try_from(b)?))
             }
         }
+    }
+}
+
+impl From<TypeData> for AnyBlock {
+    fn from(data: TypeData) -> Self {
+        AnyBlock::TypeData(data)
     }
 }

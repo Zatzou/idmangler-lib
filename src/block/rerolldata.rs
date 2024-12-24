@@ -3,7 +3,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// The block for reroll data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -38,5 +38,11 @@ impl DataDecoder for RerollData {
                 Ok(Self(bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?))
             }
         }
+    }
+}
+
+impl From<RerollData> for AnyBlock {
+    fn from(data: RerollData) -> Self {
+        AnyBlock::RerollData(data)
     }
 }

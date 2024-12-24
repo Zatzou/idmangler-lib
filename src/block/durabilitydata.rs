@@ -6,7 +6,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// Durability data of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -69,5 +69,11 @@ impl DataDecoder for DurabilityData {
                 })
             }
         }
+    }
+}
+
+impl From<DurabilityData> for AnyBlock {
+    fn from(data: DurabilityData) -> Self {
+        AnyBlock::DurabilityData(data)
     }
 }

@@ -1,19 +1,20 @@
 //! Module implementing the data blocks for the encoding of the idstrings
 
 pub mod anyblock;
-
-mod customconsutypedata;
-use anyblock::AnyBlock;
 #[doc(inline)]
-pub use customconsutypedata::CraftedConsumableTypeData;
+pub use anyblock::AnyBlock;
 
-mod customgeartypedata;
+mod craftedconsutypedata;
 #[doc(inline)]
-pub use customgeartypedata::CraftedGearTypeData;
+pub use craftedconsutypedata::CraftedConsumableTypeData;
 
-mod customidentdata;
+mod craftedgeartypedata;
 #[doc(inline)]
-pub use customidentdata::CraftedIdentificationData;
+pub use craftedgeartypedata::CraftedGearTypeData;
+
+mod craftedidentdata;
+#[doc(inline)]
+pub use craftedidentdata::CraftedIdentificationData;
 
 mod damagedata;
 #[doc(inline)]
@@ -118,36 +119,34 @@ impl DataBlockId {
         bytes: &mut impl Iterator<Item = u8>,
     ) -> Result<AnyBlock, DecoderError> {
         Ok(match self {
-            DataBlockId::TypeData => Box::new(self.decode_block::<TypeData>(bytes, ver)?),
-            DataBlockId::NameData => Box::new(self.decode_block::<NameData>(bytes, ver)?),
+            DataBlockId::TypeData => self.decode_block::<TypeData>(bytes, ver)?.into(),
+            DataBlockId::NameData => self.decode_block::<NameData>(bytes, ver)?.into(),
             DataBlockId::IdentificationData => {
-                Box::new(self.decode_block::<IdentificationData>(bytes, ver)?)
+                self.decode_block::<IdentificationData>(bytes, ver)?.into()
             }
-            DataBlockId::PowderData => Box::new(self.decode_block::<PowderData>(bytes, ver)?),
-            DataBlockId::RerollData => Box::new(self.decode_block::<RerollData>(bytes, ver)?),
+            DataBlockId::PowderData => self.decode_block::<PowderData>(bytes, ver)?.into(),
+            DataBlockId::RerollData => self.decode_block::<RerollData>(bytes, ver)?.into(),
 
-            DataBlockId::ShinyData => Box::new(self.decode_block::<ShinyData>(bytes, ver)?),
+            DataBlockId::ShinyData => self.decode_block::<ShinyData>(bytes, ver)?.into(),
             DataBlockId::CustomGearType => {
-                Box::new(self.decode_block::<CraftedGearTypeData>(bytes, ver)?)
+                self.decode_block::<CraftedGearTypeData>(bytes, ver)?.into()
             }
-            DataBlockId::DurabilityData => {
-                Box::new(self.decode_block::<DurabilityData>(bytes, ver)?)
-            }
+            DataBlockId::DurabilityData => self.decode_block::<DurabilityData>(bytes, ver)?.into(),
             DataBlockId::RequirementsData => {
-                Box::new(self.decode_block::<RequirementsData>(bytes, ver)?)
+                self.decode_block::<RequirementsData>(bytes, ver)?.into()
             }
-            DataBlockId::DamageData => Box::new(self.decode_block::<DamageData>(bytes, ver)?),
-            DataBlockId::DefenseData => Box::new(self.decode_block::<DefenseData>(bytes, ver)?),
-            DataBlockId::CustomIdentificationData => {
-                Box::new(self.decode_block::<CraftedIdentificationData>(bytes, ver)?)
-            }
-            DataBlockId::CustomConsumableTypeData => {
-                Box::new(self.decode_block::<CraftedConsumableTypeData>(bytes, ver)?)
-            }
-            DataBlockId::UsesData => Box::new(self.decode_block::<UsesData>(bytes, ver)?),
-            DataBlockId::EffectsData => Box::new(self.decode_block::<EffectsData>(bytes, ver)?),
-            DataBlockId::EndData => Box::new(self.decode_block::<EndData>(bytes, ver)?),
-            DataBlockId::StartData => Box::new(self.decode_block::<StartData>(bytes, ver)?),
+            DataBlockId::DamageData => self.decode_block::<DamageData>(bytes, ver)?.into(),
+            DataBlockId::DefenseData => self.decode_block::<DefenseData>(bytes, ver)?.into(),
+            DataBlockId::CustomIdentificationData => self
+                .decode_block::<CraftedIdentificationData>(bytes, ver)?
+                .into(),
+            DataBlockId::CustomConsumableTypeData => self
+                .decode_block::<CraftedConsumableTypeData>(bytes, ver)?
+                .into(),
+            DataBlockId::UsesData => self.decode_block::<UsesData>(bytes, ver)?.into(),
+            DataBlockId::EffectsData => self.decode_block::<EffectsData>(bytes, ver)?.into(),
+            DataBlockId::EndData => self.decode_block::<EndData>(bytes, ver)?.into(),
+            DataBlockId::StartData => self.decode_block::<StartData>(bytes, ver)?.into(),
         })
     }
 }

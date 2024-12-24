@@ -3,7 +3,7 @@ use crate::{
     types::{Element, EncodingVersion, Powder},
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// The block for powder data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -109,5 +109,11 @@ impl DataDecoder for PowderData {
                 })
             }
         }
+    }
+}
+
+impl From<PowderData> for AnyBlock {
+    fn from(data: PowderData) -> Self {
+        AnyBlock::PowderData(data)
     }
 }

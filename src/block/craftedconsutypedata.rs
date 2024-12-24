@@ -3,7 +3,7 @@ use crate::{
     types::{ConsumableType, EncodingVersion},
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// Sets the type of a crafted consumable
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -42,5 +42,11 @@ impl DataDecoder for CraftedConsumableTypeData {
                 Ok(Self(kind))
             }
         }
+    }
+}
+
+impl From<CraftedConsumableTypeData> for AnyBlock {
+    fn from(data: CraftedConsumableTypeData) -> Self {
+        AnyBlock::CraftedConsumableTypeData(data)
     }
 }

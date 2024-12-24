@@ -1,8 +1,9 @@
 use idmangler_lib::{
     block::{
-        anyblock::AnyBlockVec, EndData, IdentificationData, NameData, PowderData, RerollData,
-        ShinyData, StartData, TypeData,
+        AnyBlock, EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData,
+        StartData, TypeData,
     },
+    decode,
     types::{Element, EncodingVersion, ItemType, Powder, RollType, Stat},
 };
 
@@ -10,23 +11,26 @@ use idmangler_lib::{
 fn simple_item() {
     let input = "󰀀󰄀󰉂󷉥󶕺󶕨󶅮󶑳󰀃󰀁󰉑󰨭󰋿";
 
-    let mut decode = AnyBlockVec::decode(&input).unwrap();
+    let mut decode = decode(&input).unwrap().into_iter();
 
     assert_eq!(
-        decode.take::<StartData>(),
-        Some(StartData(EncodingVersion::Version1))
-    );
-
-    assert_eq!(decode.take::<TypeData>(), Some(TypeData(ItemType::Gear)));
-
-    assert_eq!(
-        decode.take::<NameData>(),
-        Some(NameData(String::from("Breezehands")))
+        decode.next(),
+        Some(AnyBlock::StartData(StartData(EncodingVersion::Version1)))
     );
 
     assert_eq!(
-        decode.take::<IdentificationData>(),
-        Some(IdentificationData {
+        decode.next(),
+        Some(AnyBlock::TypeData(TypeData(ItemType::Gear)))
+    );
+
+    assert_eq!(
+        decode.next(),
+        Some(AnyBlock::NameData(NameData(String::from("Breezehands"))))
+    );
+
+    assert_eq!(
+        decode.next(),
+        Some(AnyBlock::IdentificationData(IdentificationData {
             identifications: vec![
                 Stat {
                     kind: 81,
@@ -40,35 +44,38 @@ fn simple_item() {
                 }
             ],
             extended_encoding: true,
-        })
+        }))
     );
 
-    assert_eq!(decode.take::<EndData>(), Some(EndData));
+    assert_eq!(decode.next(), Some(AnyBlock::EndData(EndData)));
 
-    assert!(decode.is_empty());
+    assert!(decode.next().is_none());
 }
 
 #[test]
 fn complex_item() {
     let input = "󰀀󰄀󰉉󶵭󶽬󶅴󶥯󶸀󰌅󰀘󵄗󴤒󴬄󶘂󳀄󰌃󿘰󰔄󰘆󰃿";
 
-    let mut decode = AnyBlockVec::decode(&input).unwrap();
+    let mut decode = decode(&input).unwrap().into_iter();
 
     assert_eq!(
-        decode.take::<StartData>(),
-        Some(StartData(EncodingVersion::Version1))
-    );
-
-    assert_eq!(decode.take::<TypeData>(), Some(TypeData(ItemType::Gear)));
-
-    assert_eq!(
-        decode.take::<NameData>(),
-        Some(NameData(String::from("Immolation")))
+        decode.next(),
+        Some(AnyBlock::StartData(StartData(EncodingVersion::Version1)))
     );
 
     assert_eq!(
-        decode.take::<IdentificationData>(),
-        Some(IdentificationData {
+        decode.next(),
+        Some(AnyBlock::TypeData(TypeData(ItemType::Gear)))
+    );
+
+    assert_eq!(
+        decode.next(),
+        Some(AnyBlock::NameData(NameData(String::from("Immolation"))))
+    );
+
+    assert_eq!(
+        decode.next(),
+        Some(AnyBlock::IdentificationData(IdentificationData {
             identifications: vec![
                 Stat {
                     kind: 24,
@@ -97,54 +104,57 @@ fn complex_item() {
                 },
             ],
             extended_encoding: false,
-        })
+        }))
     );
 
     assert_eq!(
-        decode.take::<PowderData>(),
-        Some(PowderData {
+        decode.next(),
+        Some(AnyBlock::PowderData(PowderData {
             powder_slots: 3,
             powders: vec![
                 Powder::try_from((Element::Air, 6)).unwrap(),
                 Powder::try_from((Element::Fire, 6)).unwrap(),
                 Powder::try_from((Element::Fire, 6)).unwrap(),
             ],
-        })
+        }))
     );
 
-    assert_eq!(decode.take::<RerollData>(), Some(RerollData(4)));
+    assert_eq!(decode.next(), Some(AnyBlock::RerollData(RerollData(4))));
 
     assert_eq!(
-        decode.take::<ShinyData>(),
-        Some(ShinyData { id: 6, val: 0 })
+        decode.next(),
+        Some(AnyBlock::ShinyData(ShinyData { id: 6, val: 0 }))
     );
 
-    assert_eq!(decode.take::<EndData>(), Some(EndData));
+    assert_eq!(decode.next(), Some(AnyBlock::EndData(EndData)));
 
-    assert!(decode.is_empty());
+    assert!(decode.next().is_none());
 }
 
 #[test]
 fn negative_ids() {
     let input = "󰀀󰄀󰉇󶡯󷍴󶱹󲁃󶅰󰀃󰌁󰀣󰡽󳶂󰄬󲄋󷸄󰈀􏿮";
 
-    let mut decode = AnyBlockVec::decode(&input).unwrap();
+    let mut decode = decode(&input).unwrap().into_iter();
 
     assert_eq!(
-        decode.take::<StartData>(),
-        Some(StartData(EncodingVersion::Version1))
-    );
-
-    assert_eq!(decode.take::<TypeData>(), Some(TypeData(ItemType::Gear)));
-
-    assert_eq!(
-        decode.take::<NameData>(),
-        Some(NameData(String::from("Ghostly Cap")))
+        decode.next(),
+        Some(AnyBlock::StartData(StartData(EncodingVersion::Version1)))
     );
 
     assert_eq!(
-        decode.take::<IdentificationData>(),
-        Some(IdentificationData {
+        decode.next(),
+        Some(AnyBlock::TypeData(TypeData(ItemType::Gear)))
+    );
+
+    assert_eq!(
+        decode.next(),
+        Some(AnyBlock::NameData(NameData(String::from("Ghostly Cap"))))
+    );
+
+    assert_eq!(
+        decode.next(),
+        Some(AnyBlock::IdentificationData(IdentificationData {
             identifications: vec![
                 Stat {
                     kind: 35,
@@ -163,18 +173,18 @@ fn negative_ids() {
                 },
             ],
             extended_encoding: true,
-        })
+        }))
     );
 
     assert_eq!(
-        decode.take::<PowderData>(),
-        Some(PowderData {
+        decode.next(),
+        Some(AnyBlock::PowderData(PowderData {
             powder_slots: 2,
             powders: Vec::new(),
-        })
+        }))
     );
 
-    assert_eq!(decode.take::<EndData>(), Some(EndData));
+    assert_eq!(decode.next(), Some(AnyBlock::EndData(EndData)));
 
-    assert!(decode.is_empty());
+    assert!(decode.next().is_none());
 }

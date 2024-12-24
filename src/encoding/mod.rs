@@ -9,4 +9,4 @@ pub(crate) mod varint;
 
 mod traits;
 #[doc(inline)]
-pub use traits::{BlockId, DataBlock, DataDecoder, DataEncoder};
+pub use traits::{BlockId, DataDecoder, DataEncoder};

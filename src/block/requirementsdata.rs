@@ -6,7 +6,7 @@ use crate::{
     types::{ClassType, EncodingVersion, SkillType},
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// Requirements of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -96,5 +96,11 @@ impl DataDecoder for RequirementsData {
                 })
             }
         }
+    }
+}
+
+impl From<RequirementsData> for AnyBlock {
+    fn from(data: RequirementsData) -> Self {
+        AnyBlock::RequirementsData(data)
     }
 }

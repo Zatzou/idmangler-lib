@@ -3,7 +3,7 @@ use crate::{
     types::{CraftedGearType, EncodingVersion},
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// Sets the gear type of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -41,5 +41,11 @@ impl DataDecoder for CraftedGearTypeData {
                 Ok(Self(gear))
             }
         }
+    }
+}
+
+impl From<CraftedGearTypeData> for AnyBlock {
+    fn from(data: CraftedGearTypeData) -> Self {
+        AnyBlock::CraftedGearType(data)
     }
 }

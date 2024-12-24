@@ -3,7 +3,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// The start data of the encoding. The start data holds the version of the encoding to be used
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
@@ -51,5 +51,11 @@ impl StartData {
         let verbyte = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
         Ok(EncodingVersion::try_from(verbyte)?)
+    }
+}
+
+impl From<StartData> for AnyBlock {
+    fn from(data: StartData) -> Self {
+        AnyBlock::StartData(data)
     }
 }

@@ -3,7 +3,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::DataBlockId;
+use super::{anyblock::AnyBlock, DataBlockId};
 
 /// The block for the end data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -32,5 +32,11 @@ impl DataDecoder for EndData {
     {
         // end data is always empty
         Ok(Self)
+    }
+}
+
+impl From<EndData> for AnyBlock {
+    fn from(data: EndData) -> Self {
+        AnyBlock::EndData(data)
     }
 }
