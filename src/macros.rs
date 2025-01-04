@@ -73,18 +73,3 @@ macro_rules! numbered_enum {
 }
 
 pub(crate) use numbered_enum;
-
-numbered_enum! {
-    /// test
-    ///
-    /// asdasd
-    #[repr(u8)]
-    pub enum TestType2 {
-        A = 0,
-        B = 1,
-        C = 2,
-    }
-
-    #[error("Invalid e id:`{0}` was decoded")]
-    etype TestType2Error;
-}
