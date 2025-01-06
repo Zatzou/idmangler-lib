@@ -12,6 +12,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// Damages of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct DamageData {
     /// Attack speed of the item
     pub attack_speed: AttackSpeed,

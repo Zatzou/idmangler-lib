@@ -17,6 +17,7 @@ pub use id_items::*;
 
 /// Type representing any item with any item data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct GenericItem {
     // generic fields
     /// The type of the item

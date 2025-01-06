@@ -4,6 +4,8 @@ use super::Element;
 
 /// Struct representing a powder
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(try_from = "(Element, u8)"))]
 pub struct Powder {
     element: Element,
     tier: u8,

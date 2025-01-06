@@ -10,6 +10,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// Defense values of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct DefenseData {
     /// Amount of health this item grants
     health: i32,

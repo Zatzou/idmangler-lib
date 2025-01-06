@@ -7,6 +7,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// Sets the type of a crafted consumable
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct CraftedConsumableTypeData(pub ConsumableType);
 
 impl BlockId for CraftedConsumableTypeData {

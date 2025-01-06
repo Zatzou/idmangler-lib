@@ -40,6 +40,7 @@ macro_rules! numbered_enum {
         $(#[doc = $enumdoc])?
         #[repr($enum_type)]
         #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+        #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
         $enumvis enum $name {
 
             $(

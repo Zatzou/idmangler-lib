@@ -7,6 +7,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// The block for reroll data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct RerollData(pub u8);
 
 impl BlockId for RerollData {

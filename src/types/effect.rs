@@ -2,6 +2,7 @@ use crate::macros::numbered_enum;
 
 /// Struct representing an effect on an item
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Effect {
     /// Type of the effect
     pub kind: EffectType,

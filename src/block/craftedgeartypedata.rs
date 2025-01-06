@@ -7,6 +7,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// Sets the gear type of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct CraftedGearTypeData(pub CraftedGearType);
 
 impl BlockId for CraftedGearTypeData {

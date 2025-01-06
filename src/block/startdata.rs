@@ -7,6 +7,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// The start data of the encoding. The start data holds the version of the encoding to be used
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct StartData(pub EncodingVersion);
 
 impl BlockId for StartData {

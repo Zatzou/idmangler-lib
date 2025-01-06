@@ -10,6 +10,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// The block for identification data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct IdentificationData {
     /// The identifications
     pub identifications: Vec<Stat>,

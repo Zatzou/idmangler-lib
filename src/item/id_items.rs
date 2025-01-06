@@ -7,6 +7,7 @@ use super::{error::ItemConvertError, GenericItem};
 
 /// Struct Representing an Gear Item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct GearItem {
     /// Name of the gear item
     pub name: String,
@@ -59,6 +60,7 @@ impl From<GearItem> for GenericItem {
 
 /// Struct Representing a Tome Item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct TomeItem {
     /// Name of the tome item
     pub name: String,
@@ -103,6 +105,7 @@ impl From<TomeItem> for GenericItem {
 
 /// Struct Representing a Charm Item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct CharmItem {
     /// Name of the charm item
     pub name: String,

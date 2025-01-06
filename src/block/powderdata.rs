@@ -7,6 +7,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// The block for powder data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct PowderData {
     /// The number of powder slots on this item
     pub powder_slots: u8,

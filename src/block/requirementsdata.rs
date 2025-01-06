@@ -10,6 +10,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// Requirements of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct RequirementsData {
     /// Level requirement of the item
     pub level: u8,

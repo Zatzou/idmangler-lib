@@ -7,6 +7,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// Sets the number of uses of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct UsesData {
     /// Uses currently remaining on the item
     pub current: u8,

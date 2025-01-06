@@ -10,6 +10,7 @@ use super::{error::ItemConvertError, GenericItem};
 
 /// Crafted gear item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct CraftedGear {
     /// The type of the crafted item
     gear_type: CraftedGearTypeData,
@@ -79,6 +80,7 @@ impl From<CraftedGear> for GenericItem {
 
 /// Crafted consumable
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct CraftedConsumable {
     /// Consumable type
     pub consumable_type: CraftedConsumableTypeData,

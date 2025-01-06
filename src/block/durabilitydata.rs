@@ -10,6 +10,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// Durability data of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct DurabilityData {
     /// The effect strength of the item is the overall effectiveness of the identifications on the item. (the percentage shown next to the item name)
     pub effect_strenght: u8,

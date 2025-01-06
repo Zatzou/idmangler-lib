@@ -7,6 +7,7 @@ use super::{AnyBlock, DataBlockId};
 
 /// The block for the item type data
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct TypeData(pub ItemType);
 
 impl BlockId for TypeData {
