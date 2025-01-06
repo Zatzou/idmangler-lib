@@ -1,10 +1,20 @@
+//! Module containing the item types and functions for decoding and encoding items
+//!
+//! This module provides types for representing items encodable in the wynntils idstring format. These types have functions for decoding and encoding the items from and to strings.
+//!
+//! [`GenericItem`] is the main type for representing items. This type can represent any item with any data. The more specific types are used for representing specific item types.
+//!
+//! This module should generally be used over the block module for decoding and encoding items when low level block manipulation is not required.
+
 use crate::{
     block::{
-        CraftedConsumableTypeData, CraftedGearTypeData, CraftedIdentificationData, DamageData,
-        DefenseData, DurabilityData, EffectsData, IdentificationData, PowderData, RequirementsData,
-        RerollData, ShinyData, UsesData,
+        AnyBlock, CraftedConsumableTypeData, CraftedGearTypeData, CraftedIdentificationData,
+        DamageData, DataBlockId, DefenseData, DurabilityData, EffectsData, EndData,
+        IdentificationData, NameData, PowderData, RequirementsData, RerollData, ShinyData,
+        StartData, TypeData, UsesData,
     },
-    types::ItemType,
+    encoding::{string::decode_string, EncoderError},
+    types::{EncodingVersion, ItemType},
 };
 
 mod crafteds;
@@ -12,6 +22,7 @@ mod crafteds;
 pub use crafteds::*;
 pub mod error;
 mod id_items;
+use error::ItemDecodeError;
 #[doc(inline)]
 pub use id_items::*;
 
@@ -81,5 +92,107 @@ impl Default for GenericItem {
             crafted_uses: Default::default(),
             crafted_effects: Default::default(),
         }
+    }
+}
+
+impl GenericItem {
+    /// Decode a generic item from a list of blocks
+    ///
+    /// This function will attempt to decode a generic item from a list of blocks. This function will return an error if any required blocks are missing.
+    pub fn from_blocks(blocks: Vec<AnyBlock>) -> Result<Self, ItemDecodeError> {
+        let mut out = Self::default();
+        let mut kind = None;
+
+        for block in blocks {
+            match block {
+                AnyBlock::StartData(_) | AnyBlock::EndData(_) => {}
+
+                AnyBlock::TypeData(type_data) => kind = Some(type_data.0),
+                AnyBlock::NameData(name_data) => out.name = Some(name_data.0),
+                AnyBlock::IdentificationData(identification_data) => {
+                    out.identifications = Some(identification_data)
+                }
+                AnyBlock::PowderData(powder_data) => out.powders = Some(powder_data),
+                AnyBlock::RerollData(reroll_data) => out.rerolls = Some(reroll_data),
+                AnyBlock::ShinyData(shiny_data) => out.shiny = Some(shiny_data),
+                AnyBlock::CraftedGearType(crafted_gear_type_data) => {
+                    out.crafted_type = Some(crafted_gear_type_data)
+                }
+                AnyBlock::DurabilityData(durability_data) => {
+                    out.crafted_durability = Some(durability_data)
+                }
+                AnyBlock::RequirementsData(requirements_data) => {
+                    out.crafted_reqs = Some(requirements_data)
+                }
+                AnyBlock::DamageData(damage_data) => out.crafted_damage = Some(damage_data),
+                AnyBlock::DefenseData(defense_data) => out.crafted_defense = Some(defense_data),
+                AnyBlock::CraftedIdentificationData(crafted_identification_data) => {
+                    out.crafted_identifications = Some(crafted_identification_data)
+                }
+                AnyBlock::CraftedConsumableTypeData(crafted_consumable_type_data) => {
+                    out.crafted_consumable_type = Some(crafted_consumable_type_data)
+                }
+                AnyBlock::UsesData(uses_data) => out.crafted_uses = Some(uses_data),
+                AnyBlock::EffectsData(effects_data) => out.crafted_effects = Some(effects_data),
+            }
+        }
+
+        if let Some(kind) = kind {
+            out.kind = kind;
+        } else {
+            return Err(ItemDecodeError::MissingBlock(DataBlockId::TypeData));
+        }
+
+        todo!()
+    }
+
+    /// Decode a generic item from a string
+    ///
+    /// This function will attempt to decode a generic item from a string. This function will return an error if any required blocks are missing.
+    /// This function will also error if an error occurs while decoding the blocks.
+    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+        let blocks = AnyBlock::decode(&mut decode_string(input)?.into_iter())?;
+        Self::from_blocks(blocks)
+    }
+
+    /// Convert the generic item into a list of blocks
+    ///
+    /// This function will convert the generic item into a list of blocks. The list of blocks will contain all the data from the generic item.
+    /// The list however will not contain any start or end blocks, which are required for a full idstring.
+    pub fn into_blocks(self) -> Vec<AnyBlock> {
+        [
+            Some(TypeData(self.kind).into()),
+            self.name.map(|n| NameData(n).into()),
+            self.identifications.map(|i| i.into()),
+            self.powders.map(|p| p.into()),
+            self.rerolls.map(|r| r.into()),
+            self.shiny.map(|s| s.into()),
+            self.crafted_type.map(|t| t.into()),
+            self.crafted_durability.map(|d| d.into()),
+            self.crafted_reqs.map(|r| r.into()),
+            self.crafted_damage.map(|d| d.into()),
+            self.crafted_defense.map(|d| d.into()),
+            self.crafted_identifications.map(|i| i.into()),
+            self.crafted_consumable_type.map(|t| t.into()),
+            self.crafted_uses.map(|u| u.into()),
+            self.crafted_effects.map(|e| e.into()),
+        ]
+        .into_iter()
+        .flatten()
+        .collect::<Vec<_>>()
+    }
+
+    /// Encode the generic item into a string
+    ///
+    /// This function will encode the generic item into a string. This function will return an error if an error occurs while encoding the blocks.
+    /// The string will contain all the data from the generic item and will be a valid idstring.
+    pub fn encode(self, ver: EncodingVersion) -> Result<String, EncoderError> {
+        let mut blocks = vec![StartData(ver).into()];
+
+        blocks.append(&mut self.into_blocks());
+
+        blocks.push(EndData.into());
+
+        crate::block::encode_blocks_str(ver, &blocks)
     }
 }

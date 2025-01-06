@@ -1,9 +1,13 @@
 use crate::{
-    block::{IdentificationData, PowderData, RerollData, ShinyData},
-    types::ItemType,
+    block::{AnyBlock, IdentificationData, PowderData, RerollData, ShinyData},
+    encoding::EncoderError,
+    types::{EncodingVersion, ItemType},
 };
 
-use super::{error::ItemConvertError, GenericItem};
+use super::{
+    error::{ItemConvertError, ItemDecodeError},
+    GenericItem,
+};
 
 /// Struct Representing an Gear Item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -58,6 +62,32 @@ impl From<GearItem> for GenericItem {
     }
 }
 
+impl GearItem {
+    /// See [`GenericItem::from_blocks`]
+    pub fn from_blocks(blocks: Vec<AnyBlock>) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::from_blocks(blocks)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::decode_string`]
+    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::decode_string(input)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::into_blocks`]
+    pub fn into_blocks(self) -> Vec<AnyBlock> {
+        GenericItem::from(self).into_blocks()
+    }
+
+    /// See [`GenericItem::encode`]
+    pub fn encode(self, ver: EncodingVersion) -> Result<String, EncoderError> {
+        GenericItem::from(self).encode(ver)
+    }
+}
+
 /// Struct Representing a Tome Item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -103,6 +133,32 @@ impl From<TomeItem> for GenericItem {
     }
 }
 
+impl TomeItem {
+    /// See [`GenericItem::from_blocks`]
+    pub fn from_blocks(blocks: Vec<AnyBlock>) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::from_blocks(blocks)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::decode_string`]
+    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::decode_string(input)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::into_blocks`]
+    pub fn into_blocks(self) -> Vec<AnyBlock> {
+        GenericItem::from(self).into_blocks()
+    }
+
+    /// See [`GenericItem::encode`]
+    pub fn encode(self, ver: EncodingVersion) -> Result<String, EncoderError> {
+        GenericItem::from(self).encode(ver)
+    }
+}
+
 /// Struct Representing a Charm Item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -145,5 +201,31 @@ impl From<CharmItem> for GenericItem {
             rerolls: value.rerolls,
             ..Default::default()
         }
+    }
+}
+
+impl CharmItem {
+    /// See [`GenericItem::from_blocks`]
+    pub fn from_blocks(blocks: Vec<AnyBlock>) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::from_blocks(blocks)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::decode_string`]
+    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::decode_string(input)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::into_blocks`]
+    pub fn into_blocks(self) -> Vec<AnyBlock> {
+        GenericItem::from(self).into_blocks()
+    }
+
+    /// See [`GenericItem::encode`]
+    pub fn encode(self, ver: EncodingVersion) -> Result<String, EncoderError> {
+        GenericItem::from(self).encode(ver)
     }
 }

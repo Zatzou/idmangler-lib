@@ -1,12 +1,17 @@
 use crate::{
     block::{
-        CraftedConsumableTypeData, CraftedGearTypeData, CraftedIdentificationData, DamageData,
-        DefenseData, DurabilityData, EffectsData, PowderData, RequirementsData, UsesData,
+        AnyBlock, CraftedConsumableTypeData, CraftedGearTypeData, CraftedIdentificationData,
+        DamageData, DefenseData, DurabilityData, EffectsData, PowderData, RequirementsData,
+        UsesData,
     },
-    types::ItemType,
+    encoding::EncoderError,
+    types::{EncodingVersion, ItemType},
 };
 
-use super::{error::ItemConvertError, GenericItem};
+use super::{
+    error::{ItemConvertError, ItemDecodeError},
+    GenericItem,
+};
 
 /// Crafted gear item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -78,6 +83,32 @@ impl From<CraftedGear> for GenericItem {
     }
 }
 
+impl CraftedGear {
+    /// See [`GenericItem::from_blocks`]
+    pub fn from_blocks(blocks: Vec<AnyBlock>) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::from_blocks(blocks)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::decode_string`]
+    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::decode_string(input)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::into_blocks`]
+    pub fn into_blocks(self) -> Vec<AnyBlock> {
+        GenericItem::from(self).into_blocks()
+    }
+
+    /// See [`GenericItem::encode`]
+    pub fn encode(self, ver: EncodingVersion) -> Result<String, EncoderError> {
+        GenericItem::from(self).encode(ver)
+    }
+}
+
 /// Crafted consumable
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -135,5 +166,31 @@ impl From<CraftedConsumable> for GenericItem {
             crafted_identifications: value.identifications,
             ..Default::default()
         }
+    }
+}
+
+impl CraftedConsumable {
+    /// See [`GenericItem::from_blocks`]
+    pub fn from_blocks(blocks: Vec<AnyBlock>) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::from_blocks(blocks)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::decode_string`]
+    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+        let generic = GenericItem::decode_string(input)?;
+
+        Ok(Self::try_from(generic)?)
+    }
+
+    /// See [`GenericItem::into_blocks`]
+    pub fn into_blocks(self) -> Vec<AnyBlock> {
+        GenericItem::from(self).into_blocks()
+    }
+
+    /// See [`GenericItem::encode`]
+    pub fn encode(self, ver: EncodingVersion) -> Result<String, EncoderError> {
+        GenericItem::from(self).encode(ver)
     }
 }
