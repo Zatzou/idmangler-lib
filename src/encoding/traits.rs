@@ -1,5 +1,5 @@
 use crate::{
-    block::{anyblock::AnyBlock, DataBlockId},
+    block::{AnyBlock, DataBlockId},
     types::EncodingVersion,
 };
 

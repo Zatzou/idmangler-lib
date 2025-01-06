@@ -3,7 +3,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// The start data of the encoding. The start data holds the version of the encoding to be used
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
@@ -39,8 +39,8 @@ impl DataDecoder for StartData {
 
 impl StartData {
     /// Special case function for parsing the start bytes
-    pub(crate) fn decode_start_bytes<B: Iterator<Item = u8>>(
-        bytes: &mut B,
+    pub(crate) fn decode_start_bytes(
+        bytes: &mut impl Iterator<Item = u8>,
     ) -> Result<EncodingVersion, DecodeError> {
         let idbyte = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 

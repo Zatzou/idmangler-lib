@@ -6,7 +6,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// Durability data of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]

@@ -6,7 +6,7 @@ use crate::{
     types::{CraftedStat, EncodingVersion},
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// Identifications of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
@@ -16,7 +16,7 @@ pub struct CraftedIdentificationData {
 
 impl BlockId for CraftedIdentificationData {
     fn block_id(&self) -> DataBlockId {
-        DataBlockId::CustomIdentificationData
+        DataBlockId::CraftedIdentificationData
     }
 }
 

@@ -1,9 +1,5 @@
 //! Module implementing the data blocks for the encoding of the idstrings
 
-pub mod anyblock;
-#[doc(inline)]
-pub use anyblock::AnyBlock;
-
 mod craftedconsutypedata;
 #[doc(inline)]
 pub use craftedconsutypedata::CraftedConsumableTypeData;
@@ -74,116 +70,173 @@ mod usesdata;
 pub use usesdata::UsesData;
 
 use crate::{
-    encoding::{DataDecoder, DecoderError},
+    encoding::{DataDecoder, DataEncoder, DecodeError, DecoderError, EncoderError},
     types::EncodingVersion,
 };
 
-/// Enum representing the ids of the blocks
-#[repr(u8)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum DataBlockId {
-    StartData = 0,
-    TypeData = 1,
-    NameData = 2,
-    IdentificationData = 3,
-    PowderData = 4,
-    RerollData = 5,
-    ShinyData = 6,
-    CustomGearType = 7,
-    DurabilityData = 8,
-    RequirementsData = 9,
-    DamageData = 10,
-    DefenseData = 11,
-    CustomIdentificationData = 12,
-    CustomConsumableTypeData = 13,
-    UsesData = 14,
-    EffectsData = 15,
-    EndData = 255,
-}
-
-impl DataBlockId {
-    fn decode_block<T: DataDecoder>(
-        &self,
-        bytes: &mut impl Iterator<Item = u8>,
-        ver: EncodingVersion,
-    ) -> Result<T, DecoderError> {
-        T::decode_data(bytes, ver).map_err(|e| DecoderError {
-            error: e,
-            during: Some(*self),
-        })
-    }
-
-    pub fn decode(
-        &self,
-        ver: EncodingVersion,
-        bytes: &mut impl Iterator<Item = u8>,
-    ) -> Result<AnyBlock, DecoderError> {
-        Ok(match self {
-            DataBlockId::TypeData => self.decode_block::<TypeData>(bytes, ver)?.into(),
-            DataBlockId::NameData => self.decode_block::<NameData>(bytes, ver)?.into(),
-            DataBlockId::IdentificationData => {
-                self.decode_block::<IdentificationData>(bytes, ver)?.into()
-            }
-            DataBlockId::PowderData => self.decode_block::<PowderData>(bytes, ver)?.into(),
-            DataBlockId::RerollData => self.decode_block::<RerollData>(bytes, ver)?.into(),
-
-            DataBlockId::ShinyData => self.decode_block::<ShinyData>(bytes, ver)?.into(),
-            DataBlockId::CustomGearType => {
-                self.decode_block::<CraftedGearTypeData>(bytes, ver)?.into()
-            }
-            DataBlockId::DurabilityData => self.decode_block::<DurabilityData>(bytes, ver)?.into(),
-            DataBlockId::RequirementsData => {
-                self.decode_block::<RequirementsData>(bytes, ver)?.into()
-            }
-            DataBlockId::DamageData => self.decode_block::<DamageData>(bytes, ver)?.into(),
-            DataBlockId::DefenseData => self.decode_block::<DefenseData>(bytes, ver)?.into(),
-            DataBlockId::CustomIdentificationData => self
-                .decode_block::<CraftedIdentificationData>(bytes, ver)?
-                .into(),
-            DataBlockId::CustomConsumableTypeData => self
-                .decode_block::<CraftedConsumableTypeData>(bytes, ver)?
-                .into(),
-            DataBlockId::UsesData => self.decode_block::<UsesData>(bytes, ver)?.into(),
-            DataBlockId::EffectsData => self.decode_block::<EffectsData>(bytes, ver)?.into(),
-            DataBlockId::EndData => self.decode_block::<EndData>(bytes, ver)?.into(),
-            DataBlockId::StartData => self.decode_block::<StartData>(bytes, ver)?.into(),
-        })
-    }
-}
-
-impl From<DataBlockId> for u8 {
-    fn from(id: DataBlockId) -> u8 {
-        id as u8
-    }
-}
-
-#[derive(Error, Debug)]
-#[error("Invalid block id: {0}")]
-pub struct InvalidBlockId(pub u8);
-
-impl TryFrom<u8> for DataBlockId {
-    type Error = InvalidBlockId;
-
-    fn try_from(value: u8) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(DataBlockId::StartData),
-            1 => Ok(DataBlockId::TypeData),
-            2 => Ok(DataBlockId::NameData),
-            3 => Ok(DataBlockId::IdentificationData),
-            4 => Ok(DataBlockId::PowderData),
-            5 => Ok(DataBlockId::RerollData),
-            6 => Ok(DataBlockId::ShinyData),
-            7 => Ok(DataBlockId::CustomGearType),
-            8 => Ok(DataBlockId::DurabilityData),
-            9 => Ok(DataBlockId::RequirementsData),
-            10 => Ok(DataBlockId::DamageData),
-            11 => Ok(DataBlockId::DefenseData),
-            12 => Ok(DataBlockId::CustomIdentificationData),
-            13 => Ok(DataBlockId::CustomConsumableTypeData),
-            14 => Ok(DataBlockId::UsesData),
-            15 => Ok(DataBlockId::EffectsData),
-            255 => Ok(DataBlockId::EndData),
-            _ => Err(InvalidBlockId(value)),
+macro_rules! datablock_defs {
+    (
+        $(($name:ident, $id:expr, $ty:ty),)+
+    ) => {
+        /// Enum representing the ids of the data blocks
+        #[repr(u8)]
+        #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Hash, Debug)]
+        pub enum DataBlockId {
+            $(
+                $name = $id,
+            )+
         }
-    }
+
+        impl From<DataBlockId> for u8 {
+            fn from(id: DataBlockId) -> u8 {
+                id as u8
+            }
+        }
+
+        #[derive(Error, Debug)]
+        #[error("Invalid block id: {0}")]
+        pub struct InvalidBlockId(pub u8);
+
+        impl TryFrom<u8> for DataBlockId {
+            type Error = InvalidBlockId;
+
+            fn try_from(value: u8) -> Result<Self, Self::Error> {
+                match value {
+                    $(
+                        $id => Ok(DataBlockId::$name),
+                    )+
+                    _ => Err(InvalidBlockId(value)),
+                }
+            }
+        }
+
+        impl DataBlockId {
+            /// Attempt to decode a block with assumed type using the given decoder
+            fn decode_with<T: DataDecoder>(
+                &self,
+                bytes: &mut impl Iterator<Item = u8>,
+                ver: EncodingVersion,
+            ) -> Result<T, DecoderError> {
+                T::decode_data(bytes, ver).map_err(|e| DecoderError {
+                    error: e,
+                    during: Some(*self),
+                })
+            }
+
+            /// Try to decode a block with the type of this block id
+            pub fn decode(&self, ver: EncodingVersion, bytes: &mut impl Iterator<Item = u8>) -> Result<AnyBlock, DecoderError> {
+                Ok(match self {
+                    $(
+                        DataBlockId::$name => self.decode_with::<$ty>(bytes, ver)?.into(),
+                    )+
+                })
+            }
+        }
+
+        /// Enum representing any of the data blocks
+        #[derive(Debug, Clone, PartialEq, Eq)]
+        pub enum AnyBlock {
+            $(
+                $name($ty),
+            )+
+        }
+
+        impl From<AnyBlock> for DataBlockId {
+            fn from(block: AnyBlock) -> DataBlockId {
+                match block {
+                    $(
+                        AnyBlock::$name(_) => DataBlockId::$name,
+                    )+
+                }
+            }
+        }
+
+        impl From<AnyBlock> for u8 {
+            fn from(block: AnyBlock) -> u8 {
+                DataBlockId::from(block) as u8
+            }
+        }
+
+        impl AnyBlock {
+            /// Encode this block into the given output buffer
+            ///
+            /// This will encode the block id and the data of the block and append it to the output buffer
+            pub fn encode(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncoderError> {
+                match self {
+                    $(
+                        AnyBlock::$name(data) => data.encode(ver, out),
+                    )+
+                }
+            }
+
+            /// Decode a block from the given byte stream
+            ///
+            /// This will read the block id and then decode the data of the block
+            pub fn decode_one(ver: EncodingVersion, bytes: &mut impl Iterator<Item = u8>) -> Result<Self, DecoderError> {
+                // read the id of the block
+                let id = bytes.next().ok_or(DecoderError { error: DecodeError::UnexpectedEndOfBytes, during: None })?;
+                let block_id = DataBlockId::try_from(id).map_err(|e| DecoderError { error: DecodeError::UnknownBlock(e), during: None })?;
+
+                // decode using the decoder for the block id
+                block_id.decode(ver, bytes)
+            }
+
+            /// Decode all blocks from the given byte stream
+            ///
+            /// This will read blocks from the byte stream until the end block is reached
+            pub fn decode_all(ver: EncodingVersion, bytes: &mut impl Iterator<Item = u8>) -> Result<Vec<Self>, DecoderError> {
+                let mut blocks = Vec::new();
+                let mut cont = true;
+                while cont {
+                    // read block
+                    let block = Self::decode_one(ver, bytes)?;
+
+                    // if we reached the end block, stop
+                    if let AnyBlock::EndData(_) = block {
+                        cont = false;
+                    }
+
+                    blocks.push(block);
+                }
+                Ok(blocks)
+            }
+
+            /// Decode a fully formed idstring from the given byte stream
+            ///
+            /// This function assumes that the byte stream is a valid idstring which starts with a start block and ends with an end block
+            pub fn decode(bytes: &mut impl Iterator<Item = u8>) -> Result<Vec<Self>, DecoderError> {
+                // read the start data
+                let start = StartData::decode_start_bytes(bytes).map_err(|e| DecoderError { error: e, during: Some(DataBlockId::StartData) })?;
+
+                // create the output buffer with the start data so we also return the start data
+                let mut out = vec![StartData(start).into()];
+
+                // decode the rest of the blocks
+                out.append(&mut Self::decode_all(start, bytes)?);
+
+                Ok(out)
+            }
+
+        }
+    };
+}
+
+datablock_defs! {
+    (StartData, 0, StartData),
+    (TypeData, 1, TypeData),
+    (NameData, 2, NameData),
+    (IdentificationData, 3, IdentificationData),
+    (PowderData, 4, PowderData),
+    (RerollData, 5, RerollData),
+    (ShinyData, 6, ShinyData),
+    (CraftedGearType, 7, CraftedGearTypeData),
+    (DurabilityData, 8, DurabilityData),
+    (RequirementsData, 9, RequirementsData),
+    (DamageData, 10, DamageData),
+    (DefenseData, 11, DefenseData),
+    (CraftedIdentificationData, 12, CraftedIdentificationData),
+    (CraftedConsumableTypeData, 13, CraftedConsumableTypeData),
+    (UsesData, 14, UsesData),
+    (EffectsData, 15, EffectsData),
+    (EndData, 255, EndData),
 }

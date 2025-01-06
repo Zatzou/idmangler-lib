@@ -6,7 +6,7 @@ use crate::{
     types::{Effect, EffectType, EncodingVersion},
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// Effects of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]

@@ -6,7 +6,7 @@ use crate::{
     types::{Element, EncodingVersion},
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// Defense values of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]

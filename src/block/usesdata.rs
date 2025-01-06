@@ -3,7 +3,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// Sets the number of uses of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]

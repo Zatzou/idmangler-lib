@@ -6,7 +6,7 @@ use crate::{
     types::{ClassType, EncodingVersion, SkillType},
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// Requirements of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]

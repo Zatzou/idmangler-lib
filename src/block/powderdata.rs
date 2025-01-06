@@ -3,7 +3,7 @@ use crate::{
     types::{Element, EncodingVersion, Powder},
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// The block for powder data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]

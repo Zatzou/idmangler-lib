@@ -6,7 +6,7 @@ use crate::{
     types::{EncodingVersion, RollType, Stat},
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// The block for identification data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]

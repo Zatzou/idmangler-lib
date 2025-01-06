@@ -3,7 +3,7 @@ use crate::{
     types::EncodingVersion,
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// The block for the end data
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]

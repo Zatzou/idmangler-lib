@@ -8,7 +8,7 @@ use crate::{
     types::{AttackSpeed, Element, EncodingVersion},
 };
 
-use super::{anyblock::AnyBlock, DataBlockId};
+use super::{AnyBlock, DataBlockId};
 
 /// Damages of a crafted item
 #[derive(PartialEq, Eq, Clone, Hash, Debug)]
