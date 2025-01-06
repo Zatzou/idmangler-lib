@@ -1,3 +1,8 @@
+//! Module for encoding utilities
+//!
+//! This module provides the main utilities for encoding and decoding data to and from the wynntils idstring private use area format.
+//! This module also contains the primary encoding and decoding traits and their associated error types.
+
 mod error;
 
 #[doc(inline)]

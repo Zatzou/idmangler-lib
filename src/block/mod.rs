@@ -1,4 +1,11 @@
 //! Module implementing the data blocks for the encoding of the idstrings
+//!
+//! This module contains the definitions for the data blocks used in the encoding of the idstrings.
+//! These blocks are used to represent the data of the items in the idstrings.
+//!
+//! Blocks can be encoded and decoded using the functions provided in this module and the methods provided by [`AnyBlock`] and [`DataBlockId`].
+//!
+//! In general the item module of this crate should be used for decoding and encoding items when low level block manipulation is not required.
 
 mod functions;
 #[doc(inline)]

@@ -55,10 +55,15 @@ pub enum EncodeError {
     TooManyDefences,
 }
 
+/// Error thrown when encoding multiple blocks
+///
+/// This errors main purpose is to provide a way to track which block caused the error
 #[derive(Error, Debug)]
 #[error("{error} While encoding block {during:?}")]
 pub struct EncoderError {
+    /// The error that was thrown
     pub error: EncodeError,
+    /// The block that caused the error
     pub during: DataBlockId,
 }
 
@@ -123,9 +128,14 @@ pub enum DecodeError {
     BadCodepoint(#[from] BadCodepoint),
 }
 
+/// Error thrown when decoding multiple blocks
+///
+/// This errors main purpose is to provide a way to track which block caused the error
 #[derive(Error, Debug)]
 #[error("{error} While decoding block {during:?}")]
 pub struct DecoderError {
+    /// The error that was thrown
     pub error: DecodeError,
+    /// The block that caused the error
     pub during: Option<DataBlockId>,
 }
