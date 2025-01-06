@@ -1,9 +1,8 @@
 use idmangler_lib::{
     block::{
-        AnyBlock, EndData, IdentificationData, NameData, PowderData, RerollData, ShinyData,
-        StartData, TypeData,
+        decode_str, AnyBlock, EndData, IdentificationData, NameData, PowderData, RerollData,
+        ShinyData, StartData, TypeData,
     },
-    decode,
     types::{Element, EncodingVersion, ItemType, Powder, RollType, Stat},
 };
 
@@ -11,7 +10,7 @@ use idmangler_lib::{
 fn simple_item() {
     let input = "󰀀󰄀󰉂󷉥󶕺󶕨󶅮󶑳󰀃󰀁󰉑󰨭󰋿";
 
-    let mut decode = decode(&input).unwrap().into_iter();
+    let mut decode = decode_str(&input).unwrap().into_iter();
 
     assert_eq!(
         decode.next(),
@@ -56,7 +55,7 @@ fn simple_item() {
 fn complex_item() {
     let input = "󰀀󰄀󰉉󶵭󶽬󶅴󶥯󶸀󰌅󰀘󵄗󴤒󴬄󶘂󳀄󰌃󿘰󰔄󰘆󰃿";
 
-    let mut decode = decode(&input).unwrap().into_iter();
+    let mut decode = decode_str(&input).unwrap().into_iter();
 
     assert_eq!(
         decode.next(),
@@ -135,7 +134,7 @@ fn complex_item() {
 fn negative_ids() {
     let input = "󰀀󰄀󰉇󶡯󷍴󶱹󲁃󶅰󰀃󰌁󰀣󰡽󳶂󰄬󲄋󷸄󰈀􏿮";
 
-    let mut decode = decode(&input).unwrap().into_iter();
+    let mut decode = decode_str(&input).unwrap().into_iter();
 
     assert_eq!(
         decode.next(),

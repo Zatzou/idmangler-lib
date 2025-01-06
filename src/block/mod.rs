@@ -1,5 +1,9 @@
 //! Module implementing the data blocks for the encoding of the idstrings
 
+mod functions;
+#[doc(inline)]
+pub use functions::*;
+
 mod craftedconsutypedata;
 #[doc(inline)]
 pub use craftedconsutypedata::CraftedConsumableTypeData;
