@@ -143,7 +143,7 @@ impl GenericItem {
             return Err(ItemDecodeError::MissingBlock(DataBlockId::TypeData));
         }
 
-        todo!()
+        Ok(out)
     }
 
     /// Decode a generic item from a string
