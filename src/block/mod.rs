@@ -98,12 +98,6 @@ macro_rules! datablock_defs {
             )+
         }
 
-        impl From<DataBlockId> for u8 {
-            fn from(id: DataBlockId) -> u8 {
-                id as u8
-            }
-        }
-
         #[derive(Error, Debug)]
         #[error("Invalid block id: {0}")]
         pub struct InvalidBlockId(pub u8);
@@ -122,18 +116,6 @@ macro_rules! datablock_defs {
         }
 
         impl DataBlockId {
-            /// Attempt to decode a block with assumed type using the given decoder
-            fn decode_with<T: DataDecoder>(
-                &self,
-                bytes: &mut impl Iterator<Item = u8>,
-                ver: EncodingVersion,
-            ) -> Result<T, DecoderError> {
-                T::decode_data(bytes, ver).map_err(|e| DecoderError {
-                    error: e,
-                    during: Some(*self),
-                })
-            }
-
             /// Try to decode a block with the type of this block id
             pub fn decode(&self, ver: EncodingVersion, bytes: &mut impl Iterator<Item = u8>) -> Result<AnyBlock, DecoderError> {
                 Ok(match self {
@@ -162,12 +144,6 @@ macro_rules! datablock_defs {
             }
         }
 
-        impl From<AnyBlock> for u8 {
-            fn from(block: AnyBlock) -> u8 {
-                DataBlockId::from(block) as u8
-            }
-        }
-
         impl AnyBlock {
             /// Encode this block into the given output buffer
             ///
@@ -180,54 +156,14 @@ macro_rules! datablock_defs {
                 }
             }
 
-            /// Decode a block from the given byte stream
-            ///
-            /// This will read the block id and then decode the data of the block
-            pub fn decode_one(ver: EncodingVersion, bytes: &mut impl Iterator<Item = u8>) -> Result<Self, DecoderError> {
-                // read the id of the block
-                let id = bytes.next().ok_or(DecoderError { error: DecodeError::UnexpectedEndOfBytes, during: None })?;
-                let block_id = DataBlockId::try_from(id).map_err(|e| DecoderError { error: DecodeError::UnknownBlock(e), during: None })?;
-
-                // decode using the decoder for the block id
-                block_id.decode(ver, bytes)
-            }
-
-            /// Decode all blocks from the given byte stream
-            ///
-            /// This will read blocks from the byte stream until the end block is reached
-            pub fn decode_all(ver: EncodingVersion, bytes: &mut impl Iterator<Item = u8>) -> Result<Vec<Self>, DecoderError> {
-                let mut blocks = Vec::new();
-                let mut cont = true;
-                while cont {
-                    // read block
-                    let block = Self::decode_one(ver, bytes)?;
-
-                    // if we reached the end block, stop
-                    if let AnyBlock::EndData(_) = block {
-                        cont = false;
-                    }
-
-                    blocks.push(block);
+            /// Get the id of this block without consuming it
+            pub fn as_id(&self) -> DataBlockId {
+                match self {
+                    $(
+                        AnyBlock::$name(_) => DataBlockId::$name,
+                    )+
                 }
-                Ok(blocks)
             }
-
-            /// Decode a fully formed idstring from the given byte stream
-            ///
-            /// This function assumes that the byte stream is a valid idstring which starts with a start block and ends with an end block
-            pub fn decode(bytes: &mut impl Iterator<Item = u8>) -> Result<Vec<Self>, DecoderError> {
-                // read the start data
-                let start = StartData::decode_start_bytes(bytes).map_err(|e| DecoderError { error: e, during: Some(DataBlockId::StartData) })?;
-
-                // create the output buffer with the start data so we also return the start data
-                let mut out = vec![StartData(start).into()];
-
-                // decode the rest of the blocks
-                out.append(&mut Self::decode_all(start, bytes)?);
-
-                Ok(out)
-            }
-
         }
     };
 }
@@ -250,4 +186,97 @@ datablock_defs! {
     (UsesData, 14, UsesData),
     (EffectsData, 15, EffectsData),
     (EndData, 255, EndData),
+}
+
+// do impls that dont need the macro outside of it to make rust-analyzer happy
+impl From<DataBlockId> for u8 {
+    fn from(id: DataBlockId) -> u8 {
+        id as u8
+    }
+}
+
+impl DataBlockId {
+    /// Attempt to decode a block with assumed type using the given decoder
+    fn decode_with<T: DataDecoder>(
+        &self,
+        bytes: &mut impl Iterator<Item = u8>,
+        ver: EncodingVersion,
+    ) -> Result<T, DecoderError> {
+        T::decode_data(bytes, ver).map_err(|e| DecoderError {
+            error: e,
+            during: Some(*self),
+        })
+    }
+}
+
+// anyblock impls that dont need the macro
+impl From<AnyBlock> for u8 {
+    fn from(block: AnyBlock) -> u8 {
+        DataBlockId::from(block) as u8
+    }
+}
+
+impl AnyBlock {
+    /// Decode a block from the given byte stream
+    ///
+    /// This will read the block id and then decode the data of the block
+    pub fn decode_one(
+        ver: EncodingVersion,
+        bytes: &mut impl Iterator<Item = u8>,
+    ) -> Result<Self, DecoderError> {
+        // read the id of the block
+        let id = bytes.next().ok_or(DecoderError {
+            error: DecodeError::UnexpectedEndOfBytes,
+            during: None,
+        })?;
+        let block_id = DataBlockId::try_from(id).map_err(|e| DecoderError {
+            error: DecodeError::UnknownBlock(e),
+            during: None,
+        })?;
+
+        // decode using the decoder for the block id
+        block_id.decode(ver, bytes)
+    }
+
+    /// Decode all blocks from the given byte stream
+    ///
+    /// This will read blocks from the byte stream until the end block is reached
+    pub fn decode_all(
+        ver: EncodingVersion,
+        bytes: &mut impl Iterator<Item = u8>,
+    ) -> Result<Vec<Self>, DecoderError> {
+        let mut blocks = Vec::new();
+        let mut cont = true;
+        while cont {
+            // read block
+            let block = Self::decode_one(ver, bytes)?;
+
+            // if we reached the end block, stop
+            if let AnyBlock::EndData(_) = block {
+                cont = false;
+            }
+
+            blocks.push(block);
+        }
+        Ok(blocks)
+    }
+
+    /// Decode a fully formed idstring from the given byte stream
+    ///
+    /// This function assumes that the byte stream is a valid idstring which starts with a start block and ends with an end block
+    pub fn decode(bytes: &mut impl Iterator<Item = u8>) -> Result<Vec<Self>, DecoderError> {
+        // read the start data
+        let start = StartData::decode_start_bytes(bytes).map_err(|e| DecoderError {
+            error: e,
+            during: Some(DataBlockId::StartData),
+        })?;
+
+        // create the output buffer with the start data so we also return the start data
+        let mut out = vec![StartData(start).into()];
+
+        // decode the rest of the blocks
+        out.append(&mut Self::decode_all(start, bytes)?);
+
+        Ok(out)
+    }
 }
