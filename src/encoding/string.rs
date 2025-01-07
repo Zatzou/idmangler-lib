@@ -60,7 +60,7 @@ pub fn decode_chars(data: impl Iterator<Item = char>) -> Result<Vec<u8>, BadCode
 }
 
 /// Type representing the output of a single char decode operation. This type is an iterator over 1 or 2 bytes. The None variant is used to signal that the iterator is empty.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub enum OutputByte {
     /// Only used internally to signal that the iterator is empty
     None,
@@ -75,13 +75,13 @@ impl Iterator for OutputByte {
 
     fn next(&mut self) -> Option<Self::Item> {
         match *self {
-            OutputByte::None => None,
-            OutputByte::One(x) => {
-                *self = OutputByte::None;
+            Self::None => None,
+            Self::One(x) => {
+                *self = Self::None;
                 Some(x)
             }
-            OutputByte::Two(a, b) => {
-                *self = OutputByte::One(b);
+            Self::Two(a, b) => {
+                *self = Self::One(b);
                 Some(a)
             }
         }
@@ -89,16 +89,16 @@ impl Iterator for OutputByte {
 
     fn size_hint(&self) -> (usize, Option<usize>) {
         match *self {
-            OutputByte::None => (0, Some(0)),
-            OutputByte::One(_) => (1, Some(1)),
-            OutputByte::Two(_, _) => (2, Some(2)),
+            Self::None => (0, Some(0)),
+            Self::One(_) => (1, Some(1)),
+            Self::Two(_, _) => (2, Some(2)),
         }
     }
 }
 
 /// Decode a single char from the wynntils private use area encoding scheme. This function returns 1 or 2 bytes or an error if the codepoint is not valid within the encoding scheme.
 pub fn decode_char(data: char) -> Result<OutputByte, BadCodepoint> {
-    use OutputByte::*;
+    use OutputByte::{One, Two};
     let n = u32::from(data);
 
     if !(AREA_A..=(AREA_B + 0xFFFF)).contains(&n) {

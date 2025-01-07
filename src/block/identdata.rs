@@ -55,7 +55,7 @@ impl DataEncoder for IdentificationData {
                     .count() as u8;
 
                 out.push(encoded_id_count);
-                out.push(self.extended_encoding as u8);
+                out.push(u8::from(self.extended_encoding));
 
                 self.encode_individual_idents(out)?;
 
@@ -97,12 +97,12 @@ impl IdentificationData {
 
                 // then add the basevalue
                 bytes.append(&mut encode_varint(
-                    stat.base.ok_or(EncodeError::NoBasevalueGiven(stat.kind))? as i64,
+                    stat.base.ok_or(EncodeError::NoBasevalueGiven(stat.kind))?,
                 ));
             }
         }
 
-        for ident in self.identifications.iter() {
+        for ident in &self.identifications {
             // only handle non preids since preids are encoded using the earlier system
             if let RollType::Value(roll_val) = ident.roll {
                 // add id of the ident
@@ -113,8 +113,7 @@ impl IdentificationData {
                     bytes.append(&mut encode_varint(
                         ident
                             .base
-                            .ok_or(EncodeError::NoBasevalueGiven(ident.kind))?
-                            as i64,
+                            .ok_or(EncodeError::NoBasevalueGiven(ident.kind))?,
                     ));
                 }
 
@@ -144,11 +143,12 @@ impl DataDecoder for IdentificationData {
                 // second byte is whether or not extended coding is used
                 let extended_encoding = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)? == 1;
 
-                let mut preid_count = 0;
-                if extended_encoding {
+                let preid_count = if extended_encoding {
                     // count of preid idents
-                    preid_count = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
-                }
+                    bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?
+                } else {
+                    0
+                };
 
                 for i in 0..(ident_count + preid_count) {
                     // id of the ident

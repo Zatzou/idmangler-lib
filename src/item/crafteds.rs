@@ -41,19 +41,17 @@ impl TryFrom<GenericItem> for CraftedGear {
     type Error = ItemConvertError;
 
     fn try_from(value: GenericItem) -> Result<Self, Self::Error> {
-        if let ItemType::CraftedGear = value.kind {
+        if value.kind == ItemType::CraftedGear {
             Ok(Self {
                 gear_type: value
                     .crafted_type
-                    .ok_or(ItemConvertError::MissingField("crafted_type".to_string()))?,
-                durability: value
-                    .crafted_durability
-                    .ok_or(ItemConvertError::MissingField(
-                        "crafted_durability".to_string(),
-                    ))?,
+                    .ok_or_else(|| ItemConvertError::MissingField("crafted_type".to_string()))?,
+                durability: value.crafted_durability.ok_or_else(|| {
+                    ItemConvertError::MissingField("crafted_durability".to_string())
+                })?,
                 requirements: value
                     .crafted_reqs
-                    .ok_or(ItemConvertError::MissingField("crafted_reqs".to_string()))?,
+                    .ok_or_else(|| ItemConvertError::MissingField("crafted_reqs".to_string()))?,
                 name: value.name,
                 damage: value.crafted_damage,
                 defense: value.crafted_defense,
@@ -133,17 +131,17 @@ impl TryFrom<GenericItem> for CraftedConsumable {
     type Error = ItemConvertError;
 
     fn try_from(value: GenericItem) -> Result<Self, Self::Error> {
-        if let ItemType::CraftedConsu = value.kind {
+        if value.kind == ItemType::CraftedConsu {
             Ok(Self {
-                consumable_type: value.crafted_consumable_type.ok_or(
-                    ItemConvertError::MissingField("crafted_consumable_type".to_string()),
-                )?,
+                consumable_type: value.crafted_consumable_type.ok_or_else(|| {
+                    ItemConvertError::MissingField("crafted_consumable_type".to_string())
+                })?,
                 uses: value
                     .crafted_uses
-                    .ok_or(ItemConvertError::MissingField("crafted_uses".to_string()))?,
+                    .ok_or_else(|| ItemConvertError::MissingField("crafted_uses".to_string()))?,
                 requirements: value
                     .crafted_reqs
-                    .ok_or(ItemConvertError::MissingField("crafted_reqs".to_string()))?,
+                    .ok_or_else(|| ItemConvertError::MissingField("crafted_reqs".to_string()))?,
                 name: value.name,
                 effects: value.crafted_effects,
                 identifications: value.crafted_identifications,

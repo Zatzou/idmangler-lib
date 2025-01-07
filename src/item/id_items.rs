@@ -32,11 +32,11 @@ impl TryFrom<GenericItem> for GearItem {
     type Error = ItemConvertError;
 
     fn try_from(value: GenericItem) -> Result<Self, Self::Error> {
-        if let ItemType::Gear = value.kind {
+        if value.kind == ItemType::Gear {
             Ok(Self {
                 name: value
                     .name
-                    .ok_or(ItemConvertError::MissingField("name".to_string()))?,
+                    .ok_or_else(|| ItemConvertError::MissingField("name".to_string()))?,
                 identifications: value.identifications,
                 powders: value.powders,
                 shiny: value.shiny,
@@ -107,11 +107,11 @@ impl TryFrom<GenericItem> for TomeItem {
     type Error = ItemConvertError;
 
     fn try_from(value: GenericItem) -> Result<Self, Self::Error> {
-        if let ItemType::Tome = value.kind {
+        if value.kind == ItemType::Tome {
             Ok(Self {
                 name: value
                     .name
-                    .ok_or(ItemConvertError::MissingField("name".to_string()))?,
+                    .ok_or_else(|| ItemConvertError::MissingField("name".to_string()))?,
                 identifications: value.identifications,
                 rerolls: value.rerolls,
             })
@@ -178,11 +178,11 @@ impl TryFrom<GenericItem> for CharmItem {
     type Error = ItemConvertError;
 
     fn try_from(value: GenericItem) -> Result<Self, Self::Error> {
-        if let ItemType::Charm = value.kind {
+        if value.kind == ItemType::Charm {
             Ok(Self {
                 name: value
                     .name
-                    .ok_or(ItemConvertError::MissingField("name".to_string()))?,
+                    .ok_or_else(|| ItemConvertError::MissingField("name".to_string()))?,
                 identifications: value.identifications,
                 rerolls: value.rerolls,
             })

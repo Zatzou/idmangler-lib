@@ -151,7 +151,7 @@ macro_rules! datablock_defs {
             }
 
             /// Get the id of this block without consuming it
-            pub fn as_id(&self) -> DataBlockId {
+            pub const fn as_id(&self) -> DataBlockId {
                 match self {
                     $(
                         AnyBlock::$name(_) => DataBlockId::$name,
@@ -192,13 +192,13 @@ impl From<DataBlockId> for u8 {
 impl DataBlockId {
     /// Attempt to decode a block with assumed type using the given decoder
     fn decode_with<T: DataDecoder>(
-        &self,
+        self,
         bytes: &mut impl Iterator<Item = u8>,
         ver: EncodingVersion,
     ) -> Result<T, DecoderError> {
         T::decode_data(bytes, ver).map_err(|e| DecoderError {
             error: e,
-            during: Some(*self),
+            during: Some(self),
         })
     }
 }
@@ -252,7 +252,7 @@ impl AnyBlock {
             let block = Self::decode_one(ver, bytes)?;
 
             // if we reached the end block, stop
-            if let AnyBlock::EndData(_) = block {
+            if let Self::EndData(_) = block {
                 cont = false;
             }
 

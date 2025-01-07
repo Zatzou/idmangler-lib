@@ -25,9 +25,8 @@ impl DataEncoder for PowderData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
             EncodingVersion::Version1 => {
-                if self.powders.len() > 255 {
-                    return Err(EncodeError::TooManyPowders);
-                }
+                let powders_len =
+                    u8::try_from(self.powders.len()).map_err(|_| EncodeError::TooManyPowders)?;
 
                 let bits_needed = self.powders.len() * 5;
                 let total_bits = (bits_needed + 7) / 8;
@@ -53,7 +52,7 @@ impl DataEncoder for PowderData {
                 }
 
                 out.push(self.powder_slots);
-                out.push(self.powders.len() as u8);
+                out.push(powders_len);
 
                 out.append(&mut powder_data);
             }
@@ -94,14 +93,14 @@ impl DataDecoder for PowderData {
                     if powder == 0 {
                         // ignore empty powders
                         continue;
-                    } else {
-                        let (elem, tier) = if powder % 6 == 0 {
-                            ((powder / 6) - 1, 6)
-                        } else {
-                            ((powder / 6), powder % 6)
-                        };
-                        powders.push(Powder::try_from((Element::try_from(elem)?, tier))?);
                     }
+
+                    let (elem, tier) = if powder % 6 == 0 {
+                        ((powder / 6) - 1, 6)
+                    } else {
+                        ((powder / 6), powder % 6)
+                    };
+                    powders.push(Powder::try_from((Element::try_from(elem)?, tier))?);
                 }
 
                 Ok(Self {

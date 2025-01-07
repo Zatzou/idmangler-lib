@@ -17,7 +17,7 @@ impl Powder {
     /// # Errors
     /// Creating a powder will fail if the tier is not between 1 and 6
     pub fn new(element: Element, tier: u8) -> Result<Self, InvalidPowderTier> {
-        Powder::try_from((element, tier))
+        Self::try_from((element, tier))
     }
 
     /// Get the element type of this powder
@@ -62,8 +62,8 @@ impl TryFrom<(Element, u8)> for Powder {
     type Error = InvalidPowderTier;
 
     fn try_from((element, tier): (Element, u8)) -> Result<Self, Self::Error> {
-        if Powder::valid_tier(tier) {
-            Ok(Powder { element, tier })
+        if Self::valid_tier(tier) {
+            Ok(Self { element, tier })
         } else {
             Err(InvalidPowderTier(tier))
         }

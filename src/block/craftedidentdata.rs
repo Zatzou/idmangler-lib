@@ -25,19 +25,18 @@ impl DataEncoder for CraftedIdentificationData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
             EncodingVersion::Version1 => {
-                if self.idents.len() > 255 {
-                    return Err(EncodeError::TooManyIdentifications);
-                }
+                let ident_len = u8::try_from(self.idents.len())
+                    .map_err(|_| EncodeError::TooManyIdentifications)?;
 
                 // number of idents
-                out.push(self.idents.len() as u8);
+                out.push(ident_len);
 
-                for ident in self.idents.iter() {
+                for ident in &self.idents {
                     // ident id
                     out.push(ident.kind);
 
                     // ident value
-                    out.append(&mut encode_varint(ident.max as i64));
+                    out.append(&mut encode_varint(ident.max));
                 }
 
                 Ok(())

@@ -37,7 +37,7 @@ impl DataEncoder for EffectsData {
                     out.push(effect.kind as u8);
 
                     // effect value
-                    out.append(&mut encode_varint(effect.value as i64));
+                    out.append(&mut encode_varint(effect.value));
                 }
 
                 Ok(())

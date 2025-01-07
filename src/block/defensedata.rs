@@ -29,21 +29,20 @@ impl DataEncoder for DefenseData {
         match ver {
             EncodingVersion::Version1 => {
                 // health value
-                out.append(&mut encode_varint(self.health as i64));
+                out.append(&mut encode_varint(self.health));
 
-                if self.defences.len() > 255 {
-                    return Err(EncodeError::TooManyDefences);
-                }
+                let def_len =
+                    u8::try_from(self.defences.len()).map_err(|_| EncodeError::TooManyDefences)?;
 
                 // number of defences
-                out.push(self.defences.len() as u8);
+                out.push(def_len);
 
-                for (element, value) in self.defences.iter() {
+                for (element, value) in &self.defences {
                     // element id
                     out.push((*element).into());
 
                     // defence value
-                    out.append(&mut encode_varint(*value as i64));
+                    out.append(&mut encode_varint(*value));
                 }
             }
         }

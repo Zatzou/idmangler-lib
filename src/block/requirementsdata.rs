@@ -39,19 +39,18 @@ impl DataEncoder for RequirementsData {
                 let class = self.class.map_or(0, Into::into);
                 out.push(class);
 
-                if self.skills.len() > 255 {
-                    return Err(EncodeError::TooManySkills);
-                }
+                let skills_len =
+                    u8::try_from(self.skills.len()).map_err(|_| EncodeError::TooManySkills)?;
 
                 // encode number of skill requirements
-                out.push(self.skills.len() as u8);
+                out.push(skills_len);
 
-                for (skill, value) in self.skills.iter() {
+                for (skill, value) in &self.skills {
                     // skill id
                     out.push((*skill).into());
 
                     // skill requirement value
-                    out.append(&mut encode_varint(*value as i64));
+                    out.append(&mut encode_varint(*value));
                 }
 
                 Ok(())

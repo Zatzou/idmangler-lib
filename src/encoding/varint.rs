@@ -1,7 +1,9 @@
 use super::DecodeError;
 
 /// Encode an integer of variable size (up to i64) into bytes using the format which wynntils uses
-pub(crate) fn encode_varint(value: i64) -> Vec<u8> {
+pub(crate) fn encode_varint(value: impl Into<i64>) -> Vec<u8> {
+    let value = value.into();
+
     // zigzag encoding magic
     // removes sign bit so values are only positive
     let value = ((value << 1) ^ (value >> 63)) as u64;
@@ -48,7 +50,7 @@ pub(crate) fn decode_varint(bytes: &mut impl Iterator<Item = u8>) -> Result<i64,
     }
 
     for (i, n) in data.into_iter().enumerate() {
-        value |= ((n & 0b01111111) as i64) << (7 * i);
+        value |= i64::from(n & 0b01111111) << (7 * i);
     }
 
     Ok((value as u64 >> 1) as i64 ^ -(value & 1))

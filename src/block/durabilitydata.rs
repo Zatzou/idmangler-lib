@@ -38,9 +38,9 @@ impl DataEncoder for DurabilityData {
 
                 out.push(self.effect_strenght);
 
-                out.append(&mut encode_varint(self.max as i64));
+                out.append(&mut encode_varint(self.max));
 
-                out.append(&mut encode_varint(self.current as i64));
+                out.append(&mut encode_varint(self.current));
 
                 Ok(())
             }

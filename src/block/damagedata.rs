@@ -35,24 +35,19 @@ impl DataEncoder for DamageData {
                 // attack speed
                 out.push(self.attack_speed as u8);
 
-                if self.damages.len() > 255 {
-                    return Err(EncodeError::TooManyDamageValues);
-                }
+                let dmg_count = u8::try_from(self.damages.len())
+                    .map_err(|_| EncodeError::TooManyDamageValues)?;
 
                 // number of damage values
-                out.push(self.damages.len() as u8);
+                out.push(dmg_count);
 
-                for (damage_type, damage_value) in self.damages.iter() {
+                for (damage_type, damage_value) in &self.damages {
                     // damage type
-                    out.push(if let Some(e) = damage_type {
-                        *e as u8
-                    } else {
-                        5
-                    });
+                    out.push(damage_type.as_ref().map_or(5, |e| (*e).into()));
 
                     // damage value range
-                    out.append(&mut encode_varint(damage_value.start as i64));
-                    out.append(&mut encode_varint(damage_value.end as i64));
+                    out.append(&mut encode_varint(damage_value.start));
+                    out.append(&mut encode_varint(damage_value.end));
                 }
 
                 Ok(())
