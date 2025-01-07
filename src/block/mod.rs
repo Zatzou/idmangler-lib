@@ -85,6 +85,10 @@ use crate::{
     types::EncodingVersion,
 };
 
+/// Macro for defining the enums for dealing with the data blocks
+///
+/// This macro will define the data block id enum and the any block enum for the given data blocks.
+/// This mainly saves a lot of work writing these manually.
 macro_rules! datablock_defs {
     (
         $(($name:ident, $id:expr, $ty:ty),)+
