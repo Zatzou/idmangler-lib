@@ -138,16 +138,6 @@ macro_rules! datablock_defs {
             )+
         }
 
-        impl From<AnyBlock> for DataBlockId {
-            fn from(block: AnyBlock) -> DataBlockId {
-                match block {
-                    $(
-                        AnyBlock::$name(_) => DataBlockId::$name,
-                    )+
-                }
-            }
-        }
-
         impl AnyBlock {
             /// Encode this block into the given output buffer
             ///
@@ -214,6 +204,12 @@ impl DataBlockId {
 }
 
 // anyblock impls that dont need the macro
+impl From<AnyBlock> for DataBlockId {
+    fn from(block: AnyBlock) -> DataBlockId {
+        block.as_id()
+    }
+}
+
 impl From<AnyBlock> for u8 {
     fn from(block: AnyBlock) -> u8 {
         DataBlockId::from(block) as u8
