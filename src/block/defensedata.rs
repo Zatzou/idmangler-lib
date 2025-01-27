@@ -13,9 +13,9 @@ use super::{AnyBlock, DataBlockId};
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct DefenseData {
     /// Amount of health this item grants
-    health: i32,
+    pub health: i32,
     /// Defenses against elements
-    defences: Vec<(Element, i32)>,
+    pub defences: Vec<(Element, i32)>,
 }
 
 impl BlockId for DefenseData {
