@@ -60,7 +60,7 @@ pub fn decode_chars(data: impl Iterator<Item = char>) -> Result<Vec<u8>, BadCode
 }
 
 /// Type representing the output of a single char decode operation. This type is an iterator over 1 or 2 bytes. The None variant is used to signal that the iterator is empty.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)] // TODO: Remove Copy in the next breaking release
 pub enum OutputByte {
     /// Only used internally to signal that the iterator is empty
     None,
