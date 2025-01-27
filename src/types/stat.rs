@@ -29,10 +29,19 @@ pub enum RollType {
 impl Stat {
     /// Return a boolean depending on if the identification is pre-identified or not
     pub const fn pre_identified(&self) -> bool {
-        match self.roll {
-            RollType::Value(_) => false,
-            RollType::PreIdentified => true,
-        }
+        self.roll.is_pre_identified()
+    }
+
+    /// Check if this identification contains extended data for encoding the base value
+    pub const fn contains_extended(&self) -> bool {
+        self.base.is_some()
+    }
+}
+
+impl RollType {
+    /// Return a boolean depending on if the roll is pre-identified or not
+    pub const fn is_pre_identified(&self) -> bool {
+        matches!(self, RollType::PreIdentified)
     }
 }
 
