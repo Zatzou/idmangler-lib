@@ -16,7 +16,7 @@ use super::AnyBlock;
 /// Format version is decoded from the start of the idstring.
 ///
 /// For decoding an already decoded byte stream, use [`AnyBlock::decode`] instead.
-pub fn decode_str(input: &str) -> Result<Vec<AnyBlock>, encoding::DecoderError> {
+pub fn decode_str(input: impl AsRef<str>) -> Result<Vec<AnyBlock>, encoding::DecoderError> {
     AnyBlock::decode(
         &mut decode_string(input)
             .map_err(|e| encoding::DecoderError {

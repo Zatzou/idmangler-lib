@@ -150,7 +150,7 @@ impl GenericItem {
     ///
     /// This function will attempt to decode a generic item from a string. This function will return an error if any required blocks are missing.
     /// This function will also error if an error occurs while decoding the blocks.
-    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+    pub fn decode_string(input: impl AsRef<str>) -> Result<Self, ItemDecodeError> {
         let blocks = AnyBlock::decode(&mut decode_string(input)?.into_iter())?;
         Self::from_blocks(blocks)
     }

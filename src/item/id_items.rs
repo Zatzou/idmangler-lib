@@ -71,7 +71,7 @@ impl GearItem {
     }
 
     /// See [`GenericItem::decode_string`]
-    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+    pub fn decode_string(input: impl AsRef<str>) -> Result<Self, ItemDecodeError> {
         let generic = GenericItem::decode_string(input)?;
 
         Ok(Self::try_from(generic)?)
@@ -142,7 +142,7 @@ impl TomeItem {
     }
 
     /// See [`GenericItem::decode_string`]
-    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+    pub fn decode_string(input: impl AsRef<str>) -> Result<Self, ItemDecodeError> {
         let generic = GenericItem::decode_string(input)?;
 
         Ok(Self::try_from(generic)?)
@@ -213,7 +213,7 @@ impl CharmItem {
     }
 
     /// See [`GenericItem::decode_string`]
-    pub fn decode_string(input: &str) -> Result<Self, ItemDecodeError> {
+    pub fn decode_string(input: impl AsRef<str>) -> Result<Self, ItemDecodeError> {
         let generic = GenericItem::decode_string(input)?;
 
         Ok(Self::try_from(generic)?)

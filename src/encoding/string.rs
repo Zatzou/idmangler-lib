@@ -44,8 +44,8 @@ pub struct BadCodepoint(pub u32);
 /// This function does not check whether or not the encoded data is valid
 ///
 /// <https://github.com/Wynntils/Wynntils/blob/main/common/src/main/java/com/wynntils/utils/EncodedByteBuffer.java#L33>
-pub fn decode_string(data: &str) -> Result<Vec<u8>, BadCodepoint> {
-    decode_chars(data.chars())
+pub fn decode_string(data: impl AsRef<str>) -> Result<Vec<u8>, BadCodepoint> {
+    decode_chars(data.as_ref().chars())
 }
 
 /// Decodes the bytes of a wynntils private area encoded string from an iterator of chars
