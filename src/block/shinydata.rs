@@ -16,10 +16,12 @@ pub struct ShinyData {
     ///
     /// The ids can be found on <https://github.com/Wynntils/Static-Storage/blob/main/Data-Storage/shiny_stats.json>
     pub id: u8,
+    /// (V2 ONLY)
+    /// The value of the number of shiny tracker rerolls
+    pub rr: Option<u8>,
     /// The value of the given shiny stat
     pub val: i64,
-    /// The value of the number of shiny tracker rerolls
-    pub rr: Option<u8>
+
 }
 
 impl BlockId for ShinyData {
@@ -52,8 +54,8 @@ impl DataDecoder for ShinyData {
         match ver {
             EncodingVersion::V1 | EncodingVersion::V2 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
-                let val = decode_varint(bytes)?;
                 let rr = None;
+                let val = decode_varint(bytes)?;
                 Ok(Self { id, val, rr })
             }
         }
