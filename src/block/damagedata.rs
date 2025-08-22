@@ -31,7 +31,7 @@ impl BlockId for DamageData {
 impl DataEncoder for DamageData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 // attack speed
                 out.push(self.attack_speed as u8);
 
@@ -65,7 +65,7 @@ impl DataDecoder for DamageData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 // attack speed
                 let attack_speed =
                     AttackSpeed::try_from(bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?)?;

@@ -24,7 +24,7 @@ impl BlockId for PowderData {
 impl DataEncoder for PowderData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 let powders_len =
                     u8::try_from(self.powders.len()).map_err(|_| EncodeError::TooManyPowders)?;
 
@@ -71,7 +71,7 @@ impl DataDecoder for PowderData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 let slots = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let powder_count = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)? as usize;
 

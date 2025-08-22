@@ -24,7 +24,7 @@ impl BlockId for EffectsData {
 impl DataEncoder for EffectsData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 if self.effects.len() > 255 {
                     return Err(EncodeError::TooManyEffects);
                 }
@@ -55,7 +55,7 @@ impl DataDecoder for EffectsData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 let effect_count = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
                 let mut effects = Vec::with_capacity(effect_count as usize);

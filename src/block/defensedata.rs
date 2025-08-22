@@ -27,7 +27,7 @@ impl BlockId for DefenseData {
 impl DataEncoder for DefenseData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 // health value
                 out.append(&mut encode_varint(self.health));
 
@@ -64,7 +64,7 @@ impl DataDecoder for DefenseData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 // health value
                 let health = decode_varint(bytes)? as i32;
 

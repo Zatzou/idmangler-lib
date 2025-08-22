@@ -30,7 +30,7 @@ impl BlockId for IdentificationData {
 impl DataEncoder for IdentificationData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 // wynntils spec allows for an item to have 255 identifications and 255 pre-identified identifications
                 if self
                     .identifications
@@ -66,7 +66,7 @@ impl DataEncoder for IdentificationData {
 
     fn should_encode_data(&self, ver: EncodingVersion) -> bool {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 if self.extended_encoding {
                     !self.identifications.is_empty()
                 } else {
@@ -134,7 +134,7 @@ impl DataDecoder for IdentificationData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 let mut idents = Vec::new();
 
                 // first byte is the number of identifications

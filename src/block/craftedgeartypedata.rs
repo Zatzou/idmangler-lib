@@ -19,7 +19,7 @@ impl BlockId for CraftedGearTypeData {
 impl DataEncoder for CraftedGearTypeData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 out.push(self.0.into());
                 Ok(())
             }
@@ -36,7 +36,7 @@ impl DataDecoder for CraftedGearTypeData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::V1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let gear = CraftedGearType::try_from(id)?;
                 Ok(Self(gear))
