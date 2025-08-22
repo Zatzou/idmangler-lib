@@ -86,7 +86,7 @@ impl DataDecoder for PowderData {
 
                     for i in 0..5 {
                         let idx = (powder_idx * 5) + i;
-                        let bit = bytes[idx / 8] >> (7 - (idx % 8)) & 0b1;
+                        let bit = (bytes[idx / 8] >> (7 - (idx % 8))) & 0b1;
                         powder |= bit << (4 - i);
                     }
 
