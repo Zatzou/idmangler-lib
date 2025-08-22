@@ -52,7 +52,13 @@ impl DataDecoder for ShinyData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::V1 | EncodingVersion::V2 => {
+            EncodingVersion::V1 => {
+                let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
+                let rr = None;
+                let val = decode_varint(bytes)?;
+                Ok(Self { id, val, rr })
+            },
+            EncodingVersion::V2 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let rr = None;
                 let val = decode_varint(bytes)?;
