@@ -13,7 +13,7 @@ use idmangler_lib::{
 #[test]
 fn simple_item() {
     let mut out = Vec::new();
-    let ver = EncodingVersion::Version1;
+    let ver = EncodingVersion::V1;
 
     // start data
     StartData(ver).encode(ver, &mut out).unwrap();
@@ -58,7 +58,7 @@ fn simple_item() {
 #[test]
 fn complex_item() {
     let mut out = Vec::new();
-    let ver = EncodingVersion::Version1;
+    let ver = EncodingVersion::V1;
 
     // start data
     StartData(ver).encode(ver, &mut out).unwrap();
@@ -120,7 +120,7 @@ fn complex_item() {
     RerollData(4).encode(ver, &mut out).unwrap();
 
     // Shiny
-    ShinyData { id: 6, val: 0 }.encode(ver, &mut out).unwrap();
+    ShinyData { id: 6, val: 0, rr: 0 }.encode(ver, &mut out).unwrap();
 
     // end data
     EndData.encode(ver, &mut out).unwrap();
@@ -134,7 +134,7 @@ fn complex_item() {
 #[test]
 fn negative_ids() {
     let mut out = Vec::new();
-    let ver = EncodingVersion::Version1;
+    let ver = EncodingVersion::V1;
 
     // start data
     StartData(ver).encode(ver, &mut out).unwrap();

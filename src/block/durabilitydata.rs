@@ -30,7 +30,7 @@ impl BlockId for DurabilityData {
 impl DataEncoder for DurabilityData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 // Wynntils does not check this invariant during decoding. So lets just ignore it for fun
                 // if self.effect_strenght > 100 {
                 //     return Err(EncodeError::EffectStrengthTooHigh(self.effect_strenght));
@@ -57,7 +57,7 @@ impl DataDecoder for DurabilityData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 let effect_strenght = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
                 let max = decode_varint(bytes)? as i32;

@@ -10,11 +10,11 @@ use idmangler_lib::{
 fn simple_item() {
     let input = "󰀀󰄀󰉂󷉥󶕺󶕨󶅮󶑳󰀃󰀁󰉑󰨭󰋿";
 
-    let mut decode = decode_str(&input).unwrap().into_iter();
+    let mut decode = decode_str(input).unwrap().into_iter();
 
     assert_eq!(
         decode.next(),
-        Some(AnyBlock::StartData(StartData(EncodingVersion::Version1)))
+        Some(AnyBlock::StartData(StartData(EncodingVersion::V1)))
     );
 
     assert_eq!(
@@ -55,11 +55,11 @@ fn simple_item() {
 fn complex_item() {
     let input = "󰀀󰄀󰉉󶵭󶽬󶅴󶥯󶸀󰌅󰀘󵄗󴤒󴬄󶘂󳀄󰌃󿘰󰔄󰘆󰃿";
 
-    let mut decode = decode_str(&input).unwrap().into_iter();
+    let mut decode = decode_str(input).unwrap().into_iter();
 
     assert_eq!(
         decode.next(),
-        Some(AnyBlock::StartData(StartData(EncodingVersion::Version1)))
+        Some(AnyBlock::StartData(StartData(EncodingVersion::V1)))
     );
 
     assert_eq!(
@@ -122,7 +122,7 @@ fn complex_item() {
 
     assert_eq!(
         decode.next(),
-        Some(AnyBlock::ShinyData(ShinyData { id: 6, val: 0 }))
+        Some(AnyBlock::ShinyData(ShinyData { id: 6, val: 0, rr: 0 }))
     );
 
     assert_eq!(decode.next(), Some(AnyBlock::EndData(EndData)));
@@ -134,11 +134,11 @@ fn complex_item() {
 fn negative_ids() {
     let input = "󰀀󰄀󰉇󶡯󷍴󶱹󲁃󶅰󰀃󰌁󰀣󰡽󳶂󰄬󲄋󷸄󰈀􏿮";
 
-    let mut decode = decode_str(&input).unwrap().into_iter();
+    let mut decode = decode_str(input).unwrap().into_iter();
 
     assert_eq!(
         decode.next(),
-        Some(AnyBlock::StartData(StartData(EncodingVersion::Version1)))
+        Some(AnyBlock::StartData(StartData(EncodingVersion::V1)))
     );
 
     assert_eq!(

@@ -16,8 +16,12 @@ pub struct ShinyData {
     ///
     /// The ids can be found on <https://github.com/Wynntils/Static-Storage/blob/main/Data-Storage/shiny_stats.json>
     pub id: u8,
+    /// (V2 ONLY)
+    /// The value of the number of shiny tracker rerolls
+    pub rr: u8,
     /// The value of the given shiny stat
     pub val: i64,
+
 }
 
 impl BlockId for ShinyData {
@@ -29,8 +33,14 @@ impl BlockId for ShinyData {
 impl DataEncoder for ShinyData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => {
+            // V2 adds reroll value as the second byte
+            EncodingVersion::V1 => {
                 out.push(self.id);
+                out.append(&mut encode_varint(self.val));
+            },
+            EncodingVersion::V2 => {
+                out.push(self.id);
+                out.push(self.rr);
                 out.append(&mut encode_varint(self.val));
             }
         }
@@ -48,11 +58,18 @@ impl DataDecoder for ShinyData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
+                let rr = 0;
                 let val = decode_varint(bytes)?;
-
-                Ok(Self { id, val })
+                Ok(Self { id, val, rr })
+            },
+            EncodingVersion::V2 => {
+                let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
+                // V2 adds reroll value as the second byte, thats the only change from V1
+                let rr = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
+                let val = decode_varint(bytes)?;
+                Ok(Self { id, val, rr })
             }
         }
     }

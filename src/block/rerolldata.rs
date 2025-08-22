@@ -19,7 +19,7 @@ impl BlockId for RerollData {
 impl DataEncoder for RerollData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => out.push(self.0),
+            EncodingVersion::V1 | EncodingVersion::V2 => out.push(self.0),
         }
 
         Ok(())
@@ -35,7 +35,7 @@ impl DataDecoder for RerollData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 Ok(Self(bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?))
             }
         }

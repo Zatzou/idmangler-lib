@@ -25,10 +25,10 @@ fn powderdata_roundtrip() {
             .collect(),
     };
 
-    powders.encode(EncodingVersion::Version1, &mut out).unwrap();
+    powders.encode(EncodingVersion::V1, &mut out).unwrap();
 
     let mut iter = out.iter().copied().skip(1);
-    let decoded = PowderData::decode_data(&mut iter, EncodingVersion::Version1).unwrap();
+    let decoded = PowderData::decode_data(&mut iter, EncodingVersion::V1).unwrap();
 
     assert_eq!(powders, decoded);
 }

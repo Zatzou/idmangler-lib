@@ -17,11 +17,11 @@ fn typedata_roundtrip() {
         let mut buf = Vec::new();
 
         // encode the data
-        td.encode(EncodingVersion::Version1, &mut buf).unwrap();
+        td.encode(EncodingVersion::V1, &mut buf).unwrap();
 
         // decode the data
         let mut iter = buf.iter().copied().skip(1); // skip the block id as we are not doing full decodes
-        let td2 = TypeData::decode_data(&mut iter, EncodingVersion::Version1).unwrap();
+        let td2 = TypeData::decode_data(&mut iter, EncodingVersion::V1).unwrap();
 
         // check the results
         assert_eq!(td, td2);
@@ -33,7 +33,7 @@ fn typedata_roundtrip() {
 fn decode_bad_typedata() {
     let bytes: Vec<u8> = Vec::from([255]);
 
-    let ver = TypeData::decode_data(&mut bytes.iter().copied(), EncodingVersion::Version1);
+    let ver = TypeData::decode_data(&mut bytes.iter().copied(), EncodingVersion::V1);
 
     match ver {
         Ok(_) => panic!("Expected an error"),

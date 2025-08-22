@@ -31,7 +31,7 @@ impl BlockId for RequirementsData {
 impl DataEncoder for RequirementsData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 // level requirement
                 out.push(self.level);
 
@@ -68,7 +68,7 @@ impl DataDecoder for RequirementsData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 let level = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
                 let class = match bytes.next() {

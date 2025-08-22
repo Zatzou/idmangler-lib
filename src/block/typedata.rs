@@ -19,7 +19,7 @@ impl BlockId for TypeData {
 impl DataEncoder for TypeData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => out.push(self.0.into()),
+            EncodingVersion::V1 | EncodingVersion::V2 => out.push(self.0.into()),
         }
 
         Ok(())
@@ -35,7 +35,7 @@ impl DataDecoder for TypeData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 | EncodingVersion::V2 => {
                 let b = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 
                 Ok(Self(ItemType::try_from(b)?))

@@ -24,12 +24,12 @@ fn identdata_roundtrip() {
         };
 
         identdata
-            .encode(EncodingVersion::Version1, &mut out)
+            .encode(EncodingVersion::V1, &mut out)
             .unwrap();
 
         let mut iter = out.iter().copied().skip(1);
         let decoded =
-            IdentificationData::decode_data(&mut iter, EncodingVersion::Version1).unwrap();
+            IdentificationData::decode_data(&mut iter, EncodingVersion::V1).unwrap();
 
         assert_eq!(identdata, decoded);
     }
@@ -46,9 +46,8 @@ fn identdata_noencode() {
         }],
     };
 
-    assert_eq!(
-        identdata.should_encode_data(EncodingVersion::Version1),
-        false
+    assert!(
+        !identdata.should_encode_data(EncodingVersion::V1)
     );
 }
 
@@ -56,7 +55,7 @@ fn identdata_noencode() {
 fn bad_identdata() {
     // first byte is the number of identifications, but array contains less than 100 so this should fail
     let mut iter = [100, 0, 0, 0].iter().copied();
-    assert!(IdentificationData::decode_data(&mut iter, EncodingVersion::Version1).is_err());
+    assert!(IdentificationData::decode_data(&mut iter, EncodingVersion::V1).is_err());
 
     // extended coding always requires base to be present
     let mut out = Vec::new();
@@ -70,6 +69,6 @@ fn bad_identdata() {
     };
 
     assert!(identdata
-        .encode(EncodingVersion::Version1, &mut out)
+        .encode(EncodingVersion::V1, &mut out)
         .is_err());
 }
