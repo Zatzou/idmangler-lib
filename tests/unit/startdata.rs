@@ -7,7 +7,7 @@ use idmangler_lib::{
 #[test]
 fn encode_startdata() {
     let mut out = Vec::new();
-    let ver = EncodingVersion::Version1;
+    let ver = EncodingVersion::V1;
 
     StartData(ver).encode(ver, &mut out).unwrap();
 

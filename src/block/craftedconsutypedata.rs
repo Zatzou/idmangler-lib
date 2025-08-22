@@ -19,7 +19,7 @@ impl BlockId for CraftedConsumableTypeData {
 impl DataEncoder for CraftedConsumableTypeData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 | EncodingVersion::Version2 => {
                 out.push(self.0.into());
                 Ok(())
             }
@@ -36,7 +36,7 @@ impl DataDecoder for CraftedConsumableTypeData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 => {
                 let kind = ConsumableType::try_from(
                     bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?,
                 )?;

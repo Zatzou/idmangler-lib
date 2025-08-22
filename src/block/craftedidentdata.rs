@@ -24,7 +24,7 @@ impl BlockId for CraftedIdentificationData {
 impl DataEncoder for CraftedIdentificationData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 => {
                 let ident_len = u8::try_from(self.idents.len())
                     .map_err(|_| EncodeError::TooManyIdentifications)?;
 
@@ -54,7 +54,7 @@ impl DataDecoder for CraftedIdentificationData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 => {
                 // ident count
                 let count = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let mut idents = Vec::with_capacity(count as usize);

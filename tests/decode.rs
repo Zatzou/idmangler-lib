@@ -14,7 +14,7 @@ fn simple_item() {
 
     assert_eq!(
         decode.next(),
-        Some(AnyBlock::StartData(StartData(EncodingVersion::Version1)))
+        Some(AnyBlock::StartData(StartData(EncodingVersion::V1)))
     );
 
     assert_eq!(
@@ -59,7 +59,7 @@ fn complex_item() {
 
     assert_eq!(
         decode.next(),
-        Some(AnyBlock::StartData(StartData(EncodingVersion::Version1)))
+        Some(AnyBlock::StartData(StartData(EncodingVersion::V1)))
     );
 
     assert_eq!(
@@ -138,7 +138,7 @@ fn negative_ids() {
 
     assert_eq!(
         decode.next(),
-        Some(AnyBlock::StartData(StartData(EncodingVersion::Version1)))
+        Some(AnyBlock::StartData(StartData(EncodingVersion::V1)))
     );
 
     assert_eq!(

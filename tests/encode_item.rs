@@ -6,7 +6,7 @@ use idmangler_lib::{
 
 #[test]
 fn simple_item() {
-    let ver = EncodingVersion::Version1;
+    let ver = EncodingVersion::V1;
 
     let out = GenericItem {
         kind: ItemType::Gear,
@@ -37,7 +37,7 @@ fn simple_item() {
 
 #[test]
 fn complex_item() {
-    let ver = EncodingVersion::Version1;
+    let ver = EncodingVersion::V1;
 
     let out = GenericItem {
         kind: ItemType::Gear,
@@ -92,7 +92,7 @@ fn complex_item() {
 
 #[test]
 fn negative_ids() {
-    let ver = EncodingVersion::Version1;
+    let ver = EncodingVersion::V1;
 
     let out = GenericItem {
         kind: ItemType::Gear,

@@ -19,7 +19,7 @@ impl BlockId for NameData {
 impl DataEncoder for NameData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 => {
                 // check that the string is valid ascii
                 if !self.0.is_ascii() {
                     return Err(EncodeError::NonAsciiString);
@@ -45,7 +45,7 @@ impl DataDecoder for NameData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 => {
                 let b: Vec<u8> = bytes.take_while(|b| *b != 0).collect();
 
                 // UTF-8 and ASCII share the same set of characters

@@ -24,7 +24,7 @@ impl BlockId for UsesData {
 impl DataEncoder for UsesData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 => {
                 // first the current amount left
                 out.push(self.current);
                 // then the max amount
@@ -45,7 +45,7 @@ impl DataDecoder for UsesData {
         Self: Sized,
     {
         match ver {
-            EncodingVersion::Version1 => {
+            EncodingVersion::V1 => {
                 let current = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let max = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
 

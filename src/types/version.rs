@@ -7,7 +7,8 @@ numbered_enum! {
     #[repr(u8)]
     pub enum EncodingVersion {
         /// Represents the version 1 of the wynntils encoding scheme
-        Version1 = 0,
+        V1 = 0,
+        V2 = 1,
     }
 
     #[error("Unknown encoding version: {0}")]
