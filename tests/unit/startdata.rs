@@ -1,6 +1,6 @@
 use idmangler_lib::{
-    block::{AnyBlock, StartData},
-    encoding::{DataEncoder, DecodeError},
+    block::StartData,
+    encoding::DataEncoder,
     types::EncodingVersion,
 };
 

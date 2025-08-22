@@ -46,9 +46,8 @@ fn identdata_noencode() {
         }],
     };
 
-    assert_eq!(
-        identdata.should_encode_data(EncodingVersion::V1),
-        false
+    assert!(
+        !identdata.should_encode_data(EncodingVersion::V1)
     );
 }
 
