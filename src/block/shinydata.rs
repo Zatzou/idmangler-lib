@@ -18,6 +18,8 @@ pub struct ShinyData {
     pub id: u8,
     /// The value of the given shiny stat
     pub val: i64,
+    /// The value of the number of shiny tracker rerolls
+    pub rr: Option<u8>
 }
 
 impl BlockId for ShinyData {
@@ -51,8 +53,8 @@ impl DataDecoder for ShinyData {
             EncodingVersion::V1 | EncodingVersion::V2 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let val = decode_varint(bytes)?;
-
-                Ok(Self { id, val })
+                let rr = None;
+                Ok(Self { id, val, rr })
             }
         }
     }
