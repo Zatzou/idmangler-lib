@@ -81,7 +81,7 @@ fn complex_item() {
             ],
         }),
         rerolls: Some(RerollData(4)),
-        shiny: Some(ShinyData { id: 6, val: 0 }),
+        shiny: Some(ShinyData { id: 6, val: 0, rr: 0 }),
         ..Default::default()
     }
     .encode(ver)
@@ -127,4 +127,38 @@ fn negative_ids() {
     .unwrap();
 
     assert_eq!(&out, "󰀀󰄀󰉇󶡯󷍴󶱹󲁃󶅰󰀃󰌁󰀣󰡽󳶂󰄬󲄋󷸄󰈀􏿮");
+}
+
+#[test]
+fn v2_shiny() {
+    let ver = EncodingVersion::V2;
+    let out = GenericItem { 
+        kind: ItemType::Gear, 
+        name: Some("Warp".to_owned()), 
+        powders: Some(PowderData { 
+            powder_slots: 3, powders: [].to_vec() 
+        }), 
+        identifications: Some(IdentificationData { 
+            identifications: vec![
+                Stat { kind: 41, base: Some(25), roll: RollType::PreIdentified }, 
+                Stat { kind: 69, base: Some(90), roll: RollType::Value(113) }, 
+                Stat { kind: 17, base: Some(50), roll: RollType::Value(101) }, 
+                Stat { kind: 34, base: Some(-45), roll: RollType::Value(99) }, 
+                Stat { kind: 24, base: Some(-200), roll: RollType::Value(77) }, 
+                Stat { kind: 25, base: Some(-600), roll: RollType::Value(75) }, 
+                Stat { kind: 23, base: Some(-30), roll: RollType::Value(112) }, 
+                Stat { kind: 4, base: Some(15), roll: RollType::Value(117) }, 
+                Stat { kind: 81, base: Some(180), roll: RollType::Value(80) }, 
+                Stat { kind: 38, base: Some(299), roll: RollType::Value(89) }
+            ], 
+            extended_encoding: true }
+        ), 
+        rerolls: Some(RerollData(5)), 
+        shiny: Some(ShinyData { id: 6, rr: 2, val: 0 }), 
+        ..Default::default()
+    }
+    .encode(ver)
+    .unwrap();
+
+    assert_eq!(&out,"󰀁󰄀󰉗󶅲󷀀󰌉󰄁󲤲󴖴󰅱󱅤󶔢󵥣󱢏󰍍󱦯󰥋󱜻󷀄󱹵󵇨󰉐󲛖󰑙󰐃󰀅󰔆󰘂󰃿")
 }

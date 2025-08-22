@@ -122,7 +122,7 @@ fn complex_item() {
 
     assert_eq!(
         decode.next(),
-        Some(AnyBlock::ShinyData(ShinyData { id: 6, val: 0 }))
+        Some(AnyBlock::ShinyData(ShinyData { id: 6, val: 0, rr: 0 }))
     );
 
     assert_eq!(decode.next(), Some(AnyBlock::EndData(EndData)));

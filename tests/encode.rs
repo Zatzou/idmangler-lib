@@ -120,7 +120,7 @@ fn complex_item() {
     RerollData(4).encode(ver, &mut out).unwrap();
 
     // Shiny
-    ShinyData { id: 6, val: 0 }.encode(ver, &mut out).unwrap();
+    ShinyData { id: 6, val: 0, rr: 0 }.encode(ver, &mut out).unwrap();
 
     // end data
     EndData.encode(ver, &mut out).unwrap();
