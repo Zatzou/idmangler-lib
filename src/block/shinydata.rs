@@ -33,7 +33,11 @@ impl BlockId for ShinyData {
 impl DataEncoder for ShinyData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
-            EncodingVersion::V1 | EncodingVersion::V2 => {
+            EncodingVersion::V1 => {
+                out.push(self.id);
+                out.append(&mut encode_varint(self.val));
+            },
+            EncodingVersion::V2 => {
                 out.push(self.id);
                 out.push(self.rr);
                 out.append(&mut encode_varint(self.val));
