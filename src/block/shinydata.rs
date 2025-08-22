@@ -33,6 +33,7 @@ impl BlockId for ShinyData {
 impl DataEncoder for ShinyData {
     fn encode_data(&self, ver: EncodingVersion, out: &mut Vec<u8>) -> Result<(), EncodeError> {
         match ver {
+            // V2 adds reroll value as the second byte
             EncodingVersion::V1 => {
                 out.push(self.id);
                 out.append(&mut encode_varint(self.val));
@@ -65,6 +66,7 @@ impl DataDecoder for ShinyData {
             },
             EncodingVersion::V2 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
+                // V2 adds reroll value as the second byte, thats the only change from V1
                 let rr = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let val = decode_varint(bytes)?;
                 Ok(Self { id, val, rr })
