@@ -18,7 +18,7 @@ pub struct ShinyData {
     pub id: u8,
     /// (V2 ONLY)
     /// The value of the number of shiny tracker rerolls
-    pub rr: Option<u8>,
+    pub rr: u8,
     /// The value of the given shiny stat
     pub val: i64,
 
@@ -35,7 +35,7 @@ impl DataEncoder for ShinyData {
         match ver {
             EncodingVersion::V1 | EncodingVersion::V2 => {
                 out.push(self.id);
-                out.push(self.rr.unwrap_or(0));
+                out.push(self.rr);
                 out.append(&mut encode_varint(self.val));
             }
         }
@@ -55,13 +55,13 @@ impl DataDecoder for ShinyData {
         match ver {
             EncodingVersion::V1 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
-                let rr = None;
+                let rr = 0;
                 let val = decode_varint(bytes)?;
                 Ok(Self { id, val, rr })
             },
             EncodingVersion::V2 => {
                 let id = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
-                let rr = None;
+                let rr = bytes.next().ok_or(DecodeError::UnexpectedEndOfBytes)?;
                 let val = decode_varint(bytes)?;
                 Ok(Self { id, val, rr })
             }
