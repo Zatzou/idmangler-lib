@@ -35,6 +35,7 @@ impl DataEncoder for ShinyData {
         match ver {
             EncodingVersion::V1 | EncodingVersion::V2 => {
                 out.push(self.id);
+                out.push(self.rr.unwrap_or(0));
                 out.append(&mut encode_varint(self.val));
             }
         }
